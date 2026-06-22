@@ -30,6 +30,8 @@
       --mint-ink: #3f6c5c;
       --teal: #d9ecef;
       --teal-ink: #3f6970;
+      --sage: #e1eadc;
+      --sage-ink: #56694d;
       --red-soft: #f7dfd4;
       --red-ink: #9a4e34;
       --green-soft: #deecd9;
@@ -348,6 +350,12 @@
     .tag-chip.teal {
       background: var(--teal);
       color: var(--teal-ink);
+    }
+
+    .item-chip.sage,
+    .tag-chip.sage {
+      background: var(--sage);
+      color: var(--sage-ink);
     }
 
     .tier-chip.tier-a {
@@ -1162,7 +1170,7 @@
   <script>
     const FX_USD_KRW = 1512;
     const STORAGE_KEY = "hair-mist-board-v7";
-    const LAYOUT_VERSION = 6;
+    const LAYOUT_VERSION = 7;
     const WORLD_DEFAULT = { x: 28, y: 24, scale: 0.64 };
 
     const sections = [
@@ -1192,9 +1200,15 @@
       },
       {
         id: "salon-based",
-        title: "더마/살롱 오리진 신뢰형",
-        blurb: "브랜드 출발점이 더마·약국 또는 헤어살롱·헤어드레서·salon professional인 점 자체가 신뢰 포인트로 작동하는 SKU입니다. ChaHong·AYUNCHE·PHYTO·Drybar·Oribe·Kérastase처럼 오리진 서사가 실제 비교구매에 같이 개입하는 제품들을 모았습니다.",
+        title: "살롱 오리진",
+        blurb: "헤어살롱, 헤어드레서, salon professional에서 출발한 브랜드라서 더 믿고 보는 SKU입니다. 기능은 달라도 '살롱에서 쓰는 느낌' 자체가 비교구매 이유가 되는 제품들을 모았습니다.",
         x: 1930, y: 5170, w: 1460, h: 3945
+      },
+      {
+        id: "derma-pharmacy",
+        title: "더마/약국 신뢰형",
+        blurb: "약국·더마 채널 신뢰, 성분 설명, 저자극·기능 검증 톤이 구매 이유에 직접 개입하는 SKU입니다. 현재 헤어미스트 시장에서는 플레이어 수가 적지만, 오히려 그래서 별도 트랙으로 보는 가치가 있습니다.",
+        x: 1930, y: 9225, w: 1460, h: 1420
       },
       {
         id: "scent-led",
@@ -1214,8 +1228,8 @@
       {
         id: "note-how",
         title: "먼저 볼 것",
-        body: "1) 이번 개편의 기준은 기본적으로 `왜 사는가`입니다.\\n2) 다만 사용자가 계속 헷갈렸던 비교 장바구니 흐름을 반영해서 `더마/살롱 오리진`만은 별도 세그로 분리했습니다.\\n3) 그래서 지금 구조는 `기능 중심 세그 + 브랜드 오리진 신뢰가 강한 세그`의 혼합형입니다.\\n4) `약국/더마 포지션`, `프리미엄 살롱 비교군` 같은 맥락은 보조 태그로 계속 읽을 수 있게 남겼습니다.",
-        footer: "즉 완전히 교과서식 기능 분류라기보다, 실제 비교구매 맥락이 잘 보이게 재편한 작업 프레임입니다.",
+        body: "1) 이번 개편의 기준은 기본적으로 `왜 사는가`입니다.\\n2) 다만 오리진 신뢰가 중요한 경우는 `살롱 오리진`과 `더마/약국 신뢰형`으로 아예 분리했습니다.\\n3) 그래서 지금 구조는 `기능 중심 세그 + 오리진 신뢰 세그`의 혼합형입니다.\\n4) 같은 살롱 브랜드라도 실제 구매 이유가 quick-dry, heat care처럼 기능이면 기능 세그로 보내고, 오리진은 보조 태그로만 남길 수 있습니다.",
+        footer: "즉 브랜드 출신은 참고하되, 최종 세그는 소비자가 실제로 무엇 때문에 사는지에 더 맞췄습니다.",
         x: 70, y: 120, w: 310, h: 280
       },
       {
@@ -1235,8 +1249,8 @@
       {
         id: "note-thesis",
         title: "현재 가설",
-        body: "쭈드레님이 3-bond 스토리를 제대로 세우면, 메인 경쟁은 여전히 `본딩·구조복구 히어로형`과 `본딩+리브인 확장형`에서 잡는 게 맞습니다.\\n\\n다만 실제 비교구매군은 여기서 끝나지 않고, Olaplex를 보는 소비자가 Moroccanoil · Kérastase · Oribe · PHYTO · Drybar 같은 `더마/살롱 오리진` SKU까지 함께 보는 흐름도 분명히 존재합니다.",
-        footer: "즉 기능 세그와 별개로, 오리진 신뢰가 강한 비교 장바구니를 따로 보는 게 사용자 이해에는 더 자연스럽습니다.",
+        body: "쭈드레님이 3-bond 스토리를 제대로 세우면, 메인 경쟁은 여전히 `본딩·구조복구 히어로형`과 `본딩+리브인 확장형`에서 잡는 게 맞습니다.\\n\\n다만 실제 비교구매군은 여기서 끝나지 않고, Olaplex를 보는 소비자가 Moroccanoil · Kérastase · Oribe · AMOS 같은 `살롱 오리진` SKU를 같이 보고, 반대로 PHYTO처럼 `더마/약국 신뢰형`을 별도로 신뢰하는 흐름도 존재합니다.",
+        footer: "즉 살롱 신뢰와 더마 신뢰는 비슷해 보여도 소비자 머릿속에서는 다른 종류의 믿음으로 작동합니다.",
         x: 70, y: 1030, w: 310, h: 250
       },
       {
@@ -1249,14 +1263,14 @@
       {
         id: "note-segments",
         title: "세그 정의",
-        body: "본딩·구조복구 히어로형 = 본딩 자체가 메인인 제품\\n본딩+리브인/스타일링 확장형 = 본딩 기술을 얹은 기능형 리브인\\n컨디셔닝·세럼형 데일리 리페어 = 본딩보다 머릿결·윤기 관리가 메인인 세럼/밀크형\\n열보호·엉킴·윤기 데일리 케어형 = 지금 당장 정돈해주는 체감 효익형\\n더마/살롱 오리진 신뢰형 = 브랜드가 어디서 출발했는지가 같이 팔리는 제품\\n향 중심 헤어 퍼퓸형 = 케어보다 향과 무드가 먼저 읽히는 제품\\n글로벌 럭셔리 향수 브랜드형 = 명품·향수 브랜드 확장으로 보는 제품",
+        body: "본딩·구조복구 히어로형 = 본딩 자체가 메인인 제품\\n본딩+리브인/스타일링 확장형 = 본딩 기술을 얹은 기능형 리브인\\n컨디셔닝·세럼형 데일리 리페어 = 본딩보다 머릿결·윤기 관리가 메인인 세럼/밀크형\\n열보호·엉킴·윤기 데일리 케어형 = 지금 당장 정돈해주는 체감 효익형\\n살롱 오리진 = 살롱에서 출발한 브랜드라서 신뢰하는 제품\\n더마/약국 신뢰형 = 약국·더마 채널 신뢰가 먼저 읽히는 제품\\n향 중심 헤어 퍼퓸형 = 케어보다 향과 무드가 먼저 읽히는 제품\\n글로벌 럭셔리 향수 브랜드형 = 명품·향수 브랜드 확장으로 보는 제품",
         footer: "즉 같은 브랜드여도 fragrance extension처럼 오리진보다 향이 먼저 읽히는 SKU는 다른 세그에 남을 수 있습니다.",
         x: 70, y: 1600, w: 310, h: 360
       },
       {
         id: "note-domestic-refresh",
         title: "이번 보강",
-        body: "1) 세그 구조를 다시 손봐서 총 72개 SKU를 7개 세그로 재배치했습니다.\\n2) 이번 라운드 신규 추가는 PHYTO · It's a 10 · UNITE Hair · R+Co · Davines에 더해 Briogeo · Moroccanoil Perfect Defense · Rahua · Drunk Elephant · Drybar까지 포함합니다.\\n3) Moroccanoil · Kérastase · AYUNCHE · Oribe · OUAI · PHYTO 같은 SKU는 `더마/살롱 오리진` 세그로 다시 읽히게 정리했습니다.\\n4) `추가 요청 반영 SKU` 같은 임시 영역은 없애고, 모든 제품을 실제 세그 안으로 다시 배치했습니다.",
+        body: "1) 세그 구조를 다시 손봐서 총 71개 SKU를 8개 세그로 재배치했습니다.\\n2) `살롱 오리진`과 `더마/약국 신뢰형`을 분리해, 비슷해 보이지만 다른 신뢰 논리가 섞이지 않게 정리했습니다.\\n3) AMOS Quick Bond는 살롱 오리진으로 옮겼고, Jennyhouse 퀵 드라이는 실제 구매 이유가 기능형에 가까워 데일리 기능 세그에 남겼습니다.\\n4) 현재 판매중 여부가 불명확한 Elastine 바이오본드 17 본딩 앰플은 보드에서 제외했습니다.",
         footer: "가격은 공식몰/주요 리테일 현재가를 우선 썼고, 해외 SKU oz 표기는 ml당 단가 비교를 위해 환산했습니다.",
         x: 70, y: 1990, w: 310, h: 320
       }
@@ -1472,36 +1486,36 @@
         id: "quickbond",
         no: "06",
         cluster: "domestic-bond",
-        clusterLabel: "salon bond",
+        clusterLabel: "salon pro bond",
         tone: "olive",
-        title: "AMOS Quick Bond 노워시 헤어 에센스",
-        productLabel: "salon bond",
+        title: "AMOS 살롱 마스터 퀵본드",
+        productLabel: "salon process bond",
         brand: "AMOS",
         brandKo: "아모스프로페셔널",
-        form: "노워시 에센스",
+        form: "살롱 시술 보조 본딩 케어",
         productName: "살롱 마스터 퀵 본드",
-        volumeMl: 150,
+        volumeMl: 300,
         priceListDisplay: "45,000원",
-        priceSaleDisplay: "29,790원",
-        priceSaleKrw: 29790,
-        unitPriceKrwMl: 198.6,
+        priceSaleDisplay: "45,000원",
+        priceSaleKrw: 45000,
+        unitPriceKrwMl: 150,
         claimDepth: 4.5,
-        concept: "살롱 본딩, 1-CUP 케어, 염색/탈색 손상",
+        concept: "염색·탈색·펌 시술에 함께 쓰는 살롱 본딩 케어",
         manufacturer: "아모스프로페셔널",
-        note: "공식가 45,000원 / 다나와 최저가 29,790원",
+        note: "아모스프로페셔널 공식몰 현재 노출 기준",
         url: "https://amospro.amoshair.co.kr/prd/dtl/list?anpPrdCd=PD2024000217IJZW",
         keyIngredients: "케라틴, 콜라겐, 실크, PEG-12 디메치콘",
         alcohol: "O",
         silicone: "O",
         uspIngredients: "Hydrolyzed Keratin/Collagen/Silk + PEG-12 Dimethicone",
         ewg: "미확인",
-        performance: "공식몰 대표 SKU, 가격비교 노출",
+        performance: "공식몰 300ml / 45,000원, 본딩케어·1-CUP케어 노출",
         tier: "A",
-        memoPlaceholder: "미스트는 아니지만 본딩 서사의 상단 가격 앵커",
+        memoPlaceholder: "consumer leave-in보다 살롱 시술용 본딩 기준점에 가까움",
         evidence: [
-          "아모스 공식몰 정가 45,000원 확인",
-          "다나와 최저가 29,790원 노출",
-          "공식 INCI에 단백질류 + 에탄올 + PEG-12 디메치콘 확인"
+          "아모스프로페셔널 공식 페이지에 살롱 마스터 퀵본드 300ML / 45,000원 현재 노출이 확인됩니다.",
+          "공식 Description에 염색, 탈색, 펌으로 인한 모발 손상을 케어하는 퀵 본드라고 명시됩니다.",
+          "공식 Recommend/Feature에 본딩케어와 1-CUP케어가 직접 노출돼 소비자용 미스트보다 살롱 시술 보조재 성격이 더 강합니다."
         ],
         sources: [
           { label: "AMOS", url: "https://amospro.amoshair.co.kr/prd/dtl/list?anpPrdCd=PD2024000217IJZW" }
@@ -3256,48 +3270,6 @@
         defaultPos: { x: 2220, y: 560 }
       },
       {
-        id: "elastine-biobond17",
-        no: "49",
-        cluster: "domestic-bond",
-        clusterLabel: "keratin bond ampoule",
-        tone: "olive",
-        title: "Elastine 바이오본드 17 케라틴 본딩 앰플",
-        productLabel: "keratin bond",
-        brand: "Elastine",
-        brandKo: "엘라스틴",
-        form: "본딩 앰플",
-        productName: "바이오본드 17 케라틴 본딩 앰플",
-        volumeMl: 200,
-        priceListDisplay: "22,000원",
-        priceSaleDisplay: "22,000원",
-        priceListKrw: 22000,
-        priceSaleKrw: 22000,
-        unitPriceKrwMl: 110,
-        claimDepth: 4.1,
-        concept: "프로페셔널 단백질 본딩케어, 17종 아미노산·케라틴",
-        manufacturer: "LG생활건강",
-        note: "한국경제 기사 권장소비자가격 기준",
-        url: "https://www.hankyung.com/article/202301251390P",
-        keyIngredients: "17종 아미노산, 케라틴, 본딩 케어",
-        alcohol: "?",
-        silicone: "?",
-        uspIngredients: "케라틴 + 17종 아미노산 + 본딩케어 서사",
-        ewg: "미확인",
-        performance: "국내 대형 유통 입점 기사 확인",
-        tier: "B",
-        memoPlaceholder: "국내 대중가 본딩 앰플 라인 참고",
-        evidence: [
-          "한국경제 기사에 본딩 앰플 200ml / 권장소비자가격 2만2000원 명시",
-          "실크테라피와 공동 개발한 프로페셔널 단백질 본딩케어 라인으로 소개됩니다.",
-          "GS SHOP, 대형마트, 올리브영 등 판매 채널 언급이 확인됩니다."
-        ],
-        sources: [
-          { label: "한국경제", url: "https://www.hankyung.com/article/202301251390P" }
-        ],
-        image: "",
-        defaultPos: { x: 1520, y: 900 }
-      },
-      {
         id: "pinkghost",
         no: "50",
         cluster: "scent-led",
@@ -3487,22 +3459,22 @@
         priceSaleKrw: 15900,
         unitPriceKrwMl: 79.5,
         claimDepth: 3.5,
-        concept: "69% 건조 시간 단축, 열 손상 보호, 살롱 무드",
+        concept: "69% 건조 시간 단축과 열 손상 보호를 파는 기능형 미스트",
         manufacturer: "미확인",
         note: "공식몰 현재가 기준",
         url: "https://jennyhouse.com/product/%EC%A0%9C%EB%8B%88%ED%95%98%EC%9A%B0%EC%8A%A4-%ED%9E%88%ED%8C%85%EC%BC%80%EC%96%B4-%ED%80%B5-%EB%93%9C%EB%9D%BC%EC%9D%B4-%ED%97%A4%EC%96%B4-%EB%AF%B8%EC%8A%A4%ED%8A%B8-200ml/16/",
         keyIngredients: "퀵 드라이, 열 손상 보호",
         alcohol: "?",
         silicone: "?",
-        uspIngredients: "quick-dry + heat care + salon story",
+        uspIngredients: "quick-dry + heat care + 데일리 사용 편의",
         ewg: "미확인",
         performance: "공식몰/올영 동시 노출",
         tier: "A",
-        memoPlaceholder: "기능 효익이 명확한 국내 살롱형 미스트",
+        memoPlaceholder: "브랜드는 살롱이지만 구매 이유는 quick-dry/heat care 쪽이 더 선명",
         evidence: [
           "공식몰에 소비자가 19,000원 / 판매가 15,900원 확인",
           "공식 메타 설명에 69% 건조 시간 단축과 열 손상 보호가 명시됩니다.",
-          "올리브영에서도 동일 200ml SKU가 별도 판매됩니다."
+          "올리브영에서도 동일 200ml SKU가 별도 판매돼, 실제 소비자에게는 살롱 전용품보다 데일리 기능형으로 읽힐 가능성이 큽니다."
         ],
         sources: [
           { label: "Jennyhouse", url: "https://jennyhouse.com/product/%EC%A0%9C%EB%8B%88%ED%95%98%EC%9A%B0%EC%8A%A4-%ED%9E%88%ED%8C%85%EC%BC%80%EC%96%B4-%ED%80%B5-%EB%93%9C%EB%9D%BC%EC%9D%B4-%ED%97%A4%EC%96%B4-%EB%AF%B8%EC%8A%A4%ED%8A%B8-200ml/16/" },
@@ -4405,13 +4377,6 @@
         ],
         image: "https://img.danuri.io/catalog-image/770/059/019/6fc464c52c794af59abee075ed44cf8c.jpg"
       },
-      "elastine-biobond17": {
-        url: "https://www.coupang.com/vp/products/8170642940",
-        sources: [
-          { label: "LG생활건강 보도자료", url: "https://www.lghnh.com/m/news/press/view.jsp?seq=3754&title=" }
-        ],
-        image: "https://thumbnail.coupangcdn.com/thumbnails/remote/492x492ex/image/vendor_inventory/6c3f/a1e44bb3caeca8c9268386978a1ef53d6eb52e60f303d1f0d4f7ad086b3f.jpg"
-      },
       pinkghost: {
         image: "https://img.danuri.io/catalog-image/257/108/066/76d107601afc400f913befe3c10faf45.jpg?shrink=160:160&_v=20260416205518"
       }
@@ -4432,7 +4397,7 @@
       "ogx-bond", "nym-toughlove", "sheamoisture-bond", "sauce-beauty", "aromatica",
       "ratedgreen", "tocobo", "leviemer", "ayunche", "thesaem", "rikera", "kundal-collagen",
       "bifidolab", "sw19-3pm", "sw19-midnight", "doterra", "silktherapy-bond",
-      "elastine-biobond17", "daleaf-hairpack-mist", "jennyhouse-quickdry",
+      "daleaf-hairpack-mist", "jennyhouse-quickdry",
       "silktherapy-silkmist", "chahong-keratin-mist", "oribe-runthrough", "bumble-hio-primer",
       "ouai-leave-in", "phyto-heat-protection", "itsa10-miracle-leave-in", "unite-7seconds",
       "randco-sun-catcher", "davines-oi-milk", "briogeo-rosarco-milk",
@@ -4446,6 +4411,7 @@
       "repair-serum": "sky",
       "daily-functional": "amber",
       "salon-based": "teal",
+      "derma-pharmacy": "sage",
       "scent-led": "rose",
       "luxury-fragrance": "violet"
     };
@@ -4455,7 +4421,8 @@
       "bond-extended": "본딩 확장",
       "repair-serum": "컨디셔닝 리페어",
       "daily-functional": "데일리 기능",
-      "salon-based": "더마/살롱 오리진",
+      "salon-based": "살롱 오리진",
+      "derma-pharmacy": "더마/약국 신뢰형",
       "scent-led": "향 중심",
       "luxury-fragrance": "글로벌 럭셔리"
     };
@@ -4465,7 +4432,8 @@
       "bond-extended": "본딩 기술을 얹은 기능형 리브인 (본딩은 조연, 다른 기능이 주인공)",
       "repair-serum": "본딩보다 머릿결·윤기 관리가 메인인 세럼/밀크형",
       "daily-functional": "열보호·엉킴·윤기처럼 지금 당장 체감되는 효익이 메인인 제품",
-      "salon-based": "브랜드가 어디서 출발했는지가 같이 팔리는 제품 (더마·살롱 오리진 신뢰형)",
+      "salon-based": "살롱에서 출발한 브랜드라서 더 믿고 보는 제품",
+      "derma-pharmacy": "약국·더마 채널 신뢰와 기능 검증 톤이 먼저 읽히는 제품",
       "scent-led": "케어보다 향과 무드가 먼저 읽히는 헤어 퍼퓸형",
       "luxury-fragrance": "명품·향수 브랜드 확장으로 읽히는 헤어 미스트"
     };
@@ -4501,6 +4469,12 @@
         band: "rgba(217, 236, 239, 0.52)",
         headerBg: "rgba(247, 252, 252, 0.98)"
       },
+      "derma-pharmacy": {
+        bg: "rgba(225, 234, 220, 0.42)",
+        line: "rgba(88, 108, 79, 0.22)",
+        band: "rgba(225, 234, 220, 0.52)",
+        headerBg: "rgba(249, 252, 247, 0.98)"
+      },
       "scent-led": {
         bg: "rgba(243, 221, 225, 0.42)",
         line: "rgba(140, 75, 87, 0.2)",
@@ -4524,8 +4498,8 @@
 
     const segmentAssignments = {
       "bond-hero": [
-        "hairplus", "quickbond", "vamood", "olaplex", "livingproof", "k18", "epres",
-        "silktherapy-bond", "elastine-biobond17"
+        "hairplus", "vamood", "olaplex", "livingproof", "k18", "epres",
+        "silktherapy-bond"
       ],
       "bond-extended": [
         "miseen", "alterna", "bondiboost", "ogx-bond", "nym-toughlove",
@@ -4537,14 +4511,17 @@
       ],
       "daily-functional": [
         "healingbird", "headspa7", "tricell", "ratedgreen", "tocobo", "rikera",
-        "growus-nowash", "daleaf-hairpack-mist", "silktherapy-silkmist",
+        "growus-nowash", "daleaf-hairpack-mist", "silktherapy-silkmist", "jennyhouse-quickdry",
         "briogeo-rosarco-milk", "rahua-hydration-detangler", "drunkelephant-wild-marula"
       ],
       "salon-based": [
-        "redken", "aveda", "wella", "kerastase", "sebastian", "matrix", "ayunche",
-        "jennyhouse-quickdry", "chahong-keratin-mist", "oribe-runthrough", "bumble-hio-primer",
+        "quickbond", "redken", "aveda", "wella", "kerastase", "sebastian", "matrix", "ayunche",
+        "chahong-keratin-mist", "oribe-runthrough", "bumble-hio-primer",
         "ouai-leave-in", "unite-7seconds", "randco-sun-catcher", "davines-oi-milk",
-        "moroccanoil-perfect-defense", "phyto-heat-protection", "drybar-hot-toddy"
+        "moroccanoil-perfect-defense", "drybar-hot-toddy"
+      ],
+      "derma-pharmacy": [
+        "phyto-heat-protection"
       ],
       "scent-led": [
         "roundaround", "bodyholic-potion", "bodyholic-staynudie", "tone28", "anillo",
@@ -4560,6 +4537,7 @@
       olaplex: ["프리미엄 살롱 비교군"],
       livingproof: ["프리미엄 살롱 비교군"],
       k18: ["프리미엄 살롱 비교군"],
+      quickbond: ["살롱 프로페셔널"],
       redken: ["살롱 프로페셔널", "프리미엄 살롱 비교군"],
       aveda: ["살롱 프로페셔널", "프리미엄 살롱 비교군"],
       wella: ["살롱 프로페셔널", "프리미엄 살롱 비교군"],
@@ -4587,6 +4565,7 @@
       "repair-serum": { cols: 4, insetX: 42, insetTop: 210, gapX: 350, gapY: 760 },
       "daily-functional": { cols: 4, insetX: 42, insetTop: 210, gapX: 350, gapY: 780 },
       "salon-based": { cols: 4, insetX: 42, insetTop: 210, gapX: 350, gapY: 760 },
+      "derma-pharmacy": { cols: 2, insetX: 42, insetTop: 210, gapX: 350, gapY: 760 },
       "scent-led": { cols: 4, insetX: 42, insetTop: 210, gapX: 350, gapY: 760 },
       "luxury-fragrance": { cols: 2, insetX: 42, insetTop: 210, gapX: 350, gapY: 760 }
     };
@@ -5511,21 +5490,6 @@
           "현재는 '단백질 기반 살롱 본딩' 서사로 읽는 편이 안전합니다."
         ]
       },
-      "elastine-biobond17": {
-        ingredientsStatus: "missing",
-        fullIngredientsSource: "한국경제 기사",
-        fullIngredientsNote: "기사 기준으로 가격·용량·케라틴/17종 아미노산·본딩케어 포인트를 우선 반영했습니다.",
-        reviewHighlights: [
-          "국내 대형 유통 채널로 확장되는 대중형 본딩 앰플의 사례로 볼 수 있습니다."
-        ],
-        bondMechanismType: "공식 결합 타입 미공개",
-        bondMechanismConfidence: "본딩케어 수준",
-        bondMechanismSource: "한국경제 기사",
-        bondMechanismSummary: "엘라스틴은 바이오본드 17 라인을 프로페셔널 단백질 본딩케어로 설명하지만, 결합 타입 자체는 현재 공개면에서 구체화하지 않습니다.",
-        bondMechanismDetails: [
-          "케라틴 + 17종 아미노산을 앞세운 대중형 본딩 앰플 문법으로 해석하는 편이 적절합니다."
-        ]
-      },
       "oribe-runthrough": {
         ingredientsStatus: "partial",
         fullIngredientsSource: "Oribe 공식 PDP",
@@ -5560,7 +5524,7 @@
         ],
         reviewHighlights: [
           "소비자에게는 multi-bond repair보다는 450°F 열보호, frizz-free finish, salon blowout 유지 보조재로 먼저 읽힐 가능성이 큽니다.",
-          "즉 기능형 heat protect이면서도 브랜드 오리진 신뢰 때문에 더마/살롱 오리진 세그 안에 두는 편이 자연스럽습니다."
+          "즉 기능형 heat protect이면서도 브랜드 오리진 신뢰 때문에 살롱 오리진 세그 안에 두는 편이 자연스럽습니다."
         ]
       },
       "itsa10-miracle-leave-in": {
@@ -5634,7 +5598,7 @@
         ],
         reviewHighlights: [
           "공식 메시지는 heat protection, dry aerosol 사용성, argan-oil care에 집중돼 있어 본딩 히어로보다 prep/finish 보조재 역할이 더 선명합니다.",
-          "즉 더마/살롱 오리진 세그 안에서 비교구매형 anchor로 읽는 것이 가장 자연스럽습니다."
+          "즉 살롱 오리진 세그 안에서 비교구매형 anchor로 읽는 것이 가장 자연스럽습니다."
         ]
       },
       "rahua-hydration-detangler": {
@@ -5998,7 +5962,7 @@
         "hairplus", "quickbond", "vamood", "olaplex", "livingproof", "redken",
         "k18", "epres", "aveda", "wella", "alterna", "sebastian",
         "bondiboost", "matrix", "ogx-bond", "nym-toughlove",
-        "sheamoisture-bond", "sauce-beauty", "silktherapy-bond", "elastine-biobond17"
+        "sheamoisture-bond", "sauce-beauty", "silktherapy-bond"
       ]);
       if (!bondRelevantIds.has(product.id) && !catalog.bondMechanismSummary) return null;
       return {
@@ -6290,6 +6254,7 @@
         mint: "#4c7f70",
         amber: "#b27a2c",
         teal: "#3f6970",
+        sage: "#6d825d",
         rose: "#b66377",
         violet: "#7e63a2"
       };
