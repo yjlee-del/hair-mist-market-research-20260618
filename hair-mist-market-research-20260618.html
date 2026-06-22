@@ -1050,6 +1050,7 @@
   <script>
     const FX_USD_KRW = 1512;
     const STORAGE_KEY = "hair-mist-board-v7";
+    const LAYOUT_VERSION = 2;
     const WORLD_DEFAULT = { x: 28, y: 24, scale: 0.64 };
 
     const sections = [
@@ -1096,10 +1097,10 @@
         x: 430, y: 3600, w: 2490, h: 980
       },
       {
-        id: "request-additional",
-        title: "추가 요청 반영 SKU",
-        blurb: "이번 요청 리스트 중 이미 들어 있던 어노브·미쟝센·헤드스파7·케라스타즈는 그대로 두고, 빠져 있던 8개만 현재 열리는 PDP 기준으로 보강했습니다. SOOO는 이번 턴 기준 공식 헤어미스트 PDP를 확인하지 못해 보류 메모로 남겼습니다.",
-        x: 430, y: 4600, w: 2490, h: 980
+        id: "domestic-functional",
+        title: "국내 기능성 리페어/열보호",
+        blurb: "이 구간은 bond direct보다는 열보호·퀵드라이·노워시·엉킴 개선처럼 사용 장면 효익이 먼저 읽히는 국내 기능성 리페어 SKU입니다. 즉각적인 사용감과 드라이 루틴 효익으로 팔리는 제품을 따로 분리해, 성분 서사형이나 본딩형과 헷갈리지 않게 보려는 구간입니다.",
+        x: 430, y: 4600, w: 980, h: 980
       }
     ];
 
@@ -1142,14 +1143,14 @@
       {
         id: "note-segments",
         title: "세그 정의",
-        body: "국내 성분-서사 확장 = 세라마이드·히알루론산·펩타이드·콜라겐·비피다처럼 스킨케어 익숙 성분을 헤어미스트에 차용한 편집 묶음\\n국내 본딩/살롱 리페어 = 본드·단백질·살롱 케어를 앞세운 국내 직접 경쟁군\\n국내 퍼퓸/클린 = 향·무드·실리콘 프리·감성 문법으로 가격을 만드는 구간\\n글로벌 direct = bond repair 자체가 주인공인 히어로 SKU\\n글로벌 adjacent = bond가 중요하지만 다른 효익과 함께 파는 구간",
+        body: "국내 성분-서사 확장 = 세라마이드·히알루론산·펩타이드·콜라겐·비피다처럼 스킨케어 익숙 성분을 헤어미스트에 차용한 편집 묶음\\n국내 본딩/살롱 리페어 = 본드·단백질·살롱 케어를 앞세운 국내 직접 경쟁군\\n국내 기능성 리페어/열보호 = 열보호·퀵드라이·노워시처럼 사용 장면 효익이 먼저 읽히는 구간\\n국내 퍼퓸/클린 = 향·무드·실리콘 프리·감성 문법으로 가격을 만드는 구간\\n글로벌 direct = bond repair 자체가 주인공인 히어로 SKU\\n글로벌 adjacent = bond가 중요하지만 다른 효익과 함께 파는 구간",
         footer: "즉 세그는 시장 공식 분류라기보다, 어떤 메시지로 팔리는지 읽기 위한 작업용 프레임입니다.",
         x: 70, y: 1600, w: 310, h: 360
       },
       {
         id: "note-domestic-refresh",
         title: "이번 보강",
-        body: "1) 이전 보강 12개에 이번 요청 8개를 더해 총 58개까지 확장했습니다.\\n2) 이번에는 나르카·달바·그로우어스·제니하우스·센녹·달리프·케라시스·실크테라피 실크 미스트를 보강했습니다.\\n3) 어노브·미쟝센·헤드스파7·케라스타즈는 이미 포함되어 있었고, SOOO는 공식 헤어미스트 PDP 미확보로 보류했습니다.",
+        body: "1) 이전 보강 12개에 이번 요청 8개를 더해 총 58개까지 확장했습니다.\\n2) 이번에는 나르카·달바·그로우어스·제니하우스·센녹·달리프·케라시스·실크테라피 실크 미스트를 보강했습니다.\\n3) 어노브·미쟝센·헤드스파7·케라스타즈는 이미 포함되어 있었고, SOOO는 공식 헤어미스트 PDP 미확보로 보류했습니다.\\n4) 이번 수정에서 추가 제품을 별도 요청 구역이 아니라 실제 세그로 다시 배치했습니다.",
         footer: "가격은 공식몰/주요 리테일 현재가를 우선 쓰고, 미표기 값은 추정으로 메우지 않았습니다.",
         x: 70, y: 1990, w: 310, h: 320
       }
@@ -3263,7 +3264,6 @@
         performance: "시코르 평점 5.0 / 리뷰 17",
         tier: "A",
         memoPlaceholder: "향 중심 국내 감성 미스트 비교군",
-        boardSectionId: "request-additional",
         evidence: [
           "시코르 상품 페이지에 80ml / 19,200원 / 17,280원 노출",
           "시코르 모바일 헤어미스트 카테고리에도 동일 SKU가 반복 노출됩니다.",
@@ -3274,7 +3274,7 @@
           { label: "CHICOR mobile", url: "https://m.chicor.com/goods?dscatNo=147" }
         ],
         image: "https://cdn.chicor.com/images/product/20251231165645352.jpg?d=360x360",
-        defaultPos: { x: 470, y: 4720 }
+        defaultPos: { x: 470, y: 3440 }
       },
       {
         id: "dalba-hair-serum",
@@ -3307,7 +3307,6 @@
         performance: "공식몰 운영, 올영/컬리 동시 노출",
         tier: "A",
         memoPlaceholder: "소용량 프리미엄 향/윤기 세럼 미스트 비교군",
-        boardSectionId: "request-additional",
         evidence: [
           "공식몰 상품 페이지에 KRW21,000 현재가 확인",
           "제품 페이지에 50ml, 100ml 구성이 함께 노출됩니다.",
@@ -3318,12 +3317,12 @@
           { label: "Olive Young", url: "https://ma.oliveyoung.co.kr/m/G.do?goodsNo=A000000190275" }
         ],
         image: "https://godomall.speedycdn.net/95803ed2b538f43d548bda9185c01365/goods/1000000080/image/detail/1000000080_detail_032.png",
-        defaultPos: { x: 820, y: 4720 }
+        defaultPos: { x: 1825, y: 3100 }
       },
       {
         id: "growus-nowash",
         no: "53",
-        cluster: "domestic-repair",
+        cluster: "domestic-functional",
         clusterLabel: "heat-protect no-wash",
         tone: "sky",
         title: "Growus 데미지 테라피 노워시 트리트먼트 EX",
@@ -3351,7 +3350,6 @@
         performance: "공식몰 reviewRate 4.4 / 옵션 판매수 1,369 노출",
         tier: "A",
         memoPlaceholder: "대용량 데일리 손상케어 비교군",
-        boardSectionId: "request-additional",
         evidence: [
           "공식 페이지 옵션 JSON에 250ml 단품 buyPrice 20,800 확인",
           "공식 상품 설명 스니펫에 열 손상 보호와 윤기 케어가 명시됩니다.",
@@ -3362,12 +3360,12 @@
           { label: "Growus categories", url: "https://m.growus.kr/categories/465315" }
         ],
         image: "https://shopby-images.cdn-nhncommerce.com/Mall-No-rEpM/20240318/183058.882544000/GROWUS_%EC%8D%B8%EB%84%A4%EC%9D%BC_1000x1000_01.jpg",
-        defaultPos: { x: 1170, y: 4720 }
+        defaultPos: { x: 470, y: 4720 }
       },
       {
         id: "jennyhouse-quickdry",
         no: "54",
-        cluster: "domestic-repair",
+        cluster: "domestic-functional",
         clusterLabel: "quick-dry heat care",
         tone: "sky",
         title: "Jennyhouse 히팅케어 퀵 드라이 헤어 미스트",
@@ -3395,7 +3393,6 @@
         performance: "공식몰/올영 동시 노출",
         tier: "A",
         memoPlaceholder: "기능 효익이 명확한 국내 살롱형 미스트",
-        boardSectionId: "request-additional",
         evidence: [
           "공식몰에 소비자가 19,000원 / 판매가 15,900원 확인",
           "공식 메타 설명에 69% 건조 시간 단축과 열 손상 보호가 명시됩니다.",
@@ -3406,7 +3403,7 @@
           { label: "Olive Young", url: "https://m.oliveyoung.co.kr/m/G.do?goodsNo=A000000164957" }
         ],
         image: "https://jennyhouse.com/web/product/big/202604/06172451ca3351d689adb97e8b23bb8f.jpg",
-        defaultPos: { x: 1520, y: 4720 }
+        defaultPos: { x: 820, y: 4720 }
       },
       {
         id: "sennok-babyblusher",
@@ -3439,7 +3436,6 @@
         performance: "공식몰 24,000원 확인",
         tier: "A",
         memoPlaceholder: "향과 보습을 동시에 미는 프리미엄 퍼퓸 미스트",
-        boardSectionId: "request-additional",
         evidence: [
           "공식몰 상품 페이지에 60ml / 24,000원 확인",
           "상세 설명에 2중 레이어링 케어, 오일 코팅, 미세 분사 제형이 명시됩니다.",
@@ -3449,12 +3445,12 @@
           { label: "SENNOK", url: "https://sennok.co.kr/product/sennok-%EC%84%BC%EB%85%B9-%ED%97%A4%EC%96%B4-%ED%8D%BC%ED%93%B8-%EB%AF%B8%EC%8A%A4%ED%8A%B8-%EB%B2%A0%EC%9D%B4%EB%B9%84-%EB%B8%94%EB%9F%AC%EC%85%94-202-fl-oz-60ml/83/" }
         ],
         image: "https://sennok.co.kr/web/product/big/202507/d462ab89f338f40501a7f51a3d42ae89.jpg",
-        defaultPos: { x: 1870, y: 4720 }
+        defaultPos: { x: 820, y: 3440 }
       },
       {
         id: "daleaf-hairpack-mist",
         no: "56",
-        cluster: "domestic-repair",
+        cluster: "domestic-functional",
         clusterLabel: "cream mist repair",
         tone: "sky",
         title: "Dalief 글램 헤어팩 인 미스트",
@@ -3482,7 +3478,6 @@
         performance: "다나와 최저가 12,600원, 쿠팡 리뷰 6,789 노출",
         tier: "A",
         memoPlaceholder: "대중가 손상케어 미스트의 강한 가격 경쟁군",
-        boardSectionId: "request-additional",
         evidence: [
           "공식 모바일 PDP 검색 스니펫에 200ml / 정가 25,000원 / 판매가 12,600원 확인",
           "다나와 1개 상품 페이지에서도 최저가 12,600원이 현재 노출됩니다.",
@@ -3526,7 +3521,6 @@
         performance: "글로우픽 리뷰 1, 다나와 스펙 페이지 확인",
         tier: "B",
         memoPlaceholder: "레거시 매스 퍼퓸/오일 미스트 비교군",
-        boardSectionId: "request-additional",
         evidence: [
           "글로우픽 제품 페이지에 100ml / 13,500원 노출",
           "다나와 요약정보에 캐비어 영양 오일층과 수분층의 2층 구조가 명시됩니다.",
@@ -3537,12 +3531,12 @@
           { label: "다나와", url: "https://prod.danawa.com/info/?pcode=4026742" }
         ],
         image: "https://img.danuri.io/catalog-image/742/026/004/5853c3eb8b4b42e0abbc311a29d3f178.jpg?shrink=160:160&_v=20180822164646",
-        defaultPos: { x: 820, y: 5080 }
+        defaultPos: { x: 1170, y: 3440 }
       },
       {
         id: "silktherapy-silkmist",
         no: "58",
-        cluster: "domestic-repair",
+        cluster: "domestic-functional",
         clusterLabel: "silk leave-in mist",
         tone: "sky",
         title: "Silk Therapy 실크 미스트",
@@ -3570,7 +3564,6 @@
         performance: "LG생활건강 가족몰 4.8점 / 159건 리뷰",
         tier: "A",
         memoPlaceholder: "본딩 앰플과 구분되는 실사용 미스트 SKU",
-        boardSectionId: "request-additional",
         evidence: [
           "LG생활건강 가족몰에 실크 미스트 200ml / 19,500원 확인",
           "동일 페이지에 평점 4.8, 리뷰 159건이 노출됩니다.",
@@ -3580,7 +3573,7 @@
           { label: "LG생활건강 가족몰", url: "https://www.lgcaremall.com/product/detail/S10019108" }
         ],
         image: "https://de89qjx90gu7m.cloudfront.net/familymall_prod/product/35f3f14e-0a43-4a9a-9381-205aee29bf20.jpg",
-        defaultPos: { x: 1170, y: 5080 }
+        defaultPos: { x: 820, y: 5080 }
       }
     ];
 
@@ -3772,6 +3765,7 @@
     const clusterToneMap = {
       "domestic-repair": "sky",
       "domestic-bond": "olive",
+      "domestic-functional": "amber",
       "global-direct": "mint",
       "global-adjacent": "amber",
       "global-mass-bond": "amber",
@@ -3782,6 +3776,7 @@
     const clusterLabelMap = {
       "domestic-repair": "국내 성분-서사 확장",
       "domestic-bond": "국내 본딩/살롱 리페어",
+      "domestic-functional": "국내 기능성 리페어/열보호",
       "global-direct": "글로벌 본딩 direct",
       "global-adjacent": "글로벌 본딩 adjacent",
       "global-mass-bond": "글로벌 매스 본딩/리페어 확장",
@@ -3801,6 +3796,12 @@
         line: "rgba(71, 113, 60, 0.22)",
         band: "rgba(222, 236, 217, 0.52)",
         headerBg: "rgba(248, 252, 245, 0.98)"
+      },
+      "domestic-functional": {
+        bg: "rgba(244, 232, 214, 0.4)",
+        line: "rgba(143, 103, 42, 0.2)",
+        band: "rgba(244, 232, 214, 0.5)",
+        headerBg: "rgba(255, 251, 245, 0.98)"
       },
       "global-direct": {
         bg: "rgba(216, 236, 228, 0.42)",
@@ -3831,12 +3832,6 @@
         line: "rgba(102, 80, 127, 0.2)",
         band: "rgba(232, 222, 241, 0.52)",
         headerBg: "rgba(251, 248, 255, 0.98)"
-      },
-      "request-additional": {
-        bg: "rgba(247, 223, 212, 0.34)",
-        line: "rgba(154, 78, 52, 0.18)",
-        band: "rgba(247, 223, 212, 0.46)",
-        headerBg: "rgba(255, 249, 247, 0.98)"
       }
     };
 
@@ -4748,6 +4743,17 @@
       }
     });
 
+    const LAYOUT_MIGRATION_PRODUCT_IDS = new Set([
+      "narca",
+      "dalba-hair-serum",
+      "growus-nowash",
+      "jennyhouse-quickdry",
+      "sennok-babyblusher",
+      "daleaf-hairpack-mist",
+      "kerasys-caviar",
+      "silktherapy-silkmist"
+    ]);
+
     const state = loadState();
     let dragState = null;
     let dragCandidate = null;
@@ -4770,9 +4776,16 @@
     function loadState() {
       try {
         const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+        const positions = { ...(parsed.positions || {}) };
+        if ((parsed.layoutVersion || 1) < LAYOUT_VERSION) {
+          for (const id of LAYOUT_MIGRATION_PRODUCT_IDS) {
+            delete positions[id];
+          }
+        }
         return {
+          layoutVersion: LAYOUT_VERSION,
           view: parsed.view || { ...WORLD_DEFAULT },
-          positions: parsed.positions || {},
+          positions,
           memos: parsed.memos || {},
           noteBodies: parsed.noteBodies || {},
           userNotes: parsed.userNotes || [],
@@ -4784,6 +4797,7 @@
         };
       } catch (error) {
         return {
+          layoutVersion: LAYOUT_VERSION,
           view: { ...WORLD_DEFAULT },
           positions: {},
           memos: {},
@@ -4909,7 +4923,7 @@
     }
 
     function getBoardSectionId(product) {
-      return product.boardSectionId || product.cluster;
+      return product.cluster;
     }
 
     function getSectionBounds(section) {
