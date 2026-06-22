@@ -28,6 +28,8 @@
       --violet-ink: #66507f;
       --mint: #d8ece4;
       --mint-ink: #3f6c5c;
+      --teal: #d9ecef;
+      --teal-ink: #3f6970;
       --red-soft: #f7dfd4;
       --red-ink: #9a4e34;
       --green-soft: #deecd9;
@@ -150,7 +152,7 @@
       position: absolute;
       inset: 0 auto auto 0;
       width: 6200px;
-      height: 9800px;
+      height: 11200px;
       transform-origin: 0 0;
     }
 
@@ -340,6 +342,12 @@
     .tag-chip.mint {
       background: var(--mint);
       color: var(--mint-ink);
+    }
+
+    .item-chip.teal,
+    .tag-chip.teal {
+      background: var(--teal);
+      color: var(--teal-ink);
     }
 
     .tier-chip.tier-a {
@@ -611,15 +619,79 @@
       margin-bottom: 12px;
     }
 
+    .segment-definition-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .segment-definition {
+      border-radius: 16px;
+      padding: 12px 14px;
+      border: 1px solid rgba(37, 31, 24, 0.08);
+      background: rgba(255, 255, 255, 0.78);
+    }
+
+    .segment-definition strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 12px;
+      color: var(--ink);
+    }
+
+    .segment-definition p {
+      margin: 0;
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
     .legend-chip {
       display: inline-flex;
       align-items: center;
       gap: 8px;
       padding: 8px 10px;
       border-radius: 999px;
+      appearance: none;
       background: rgba(37, 31, 24, 0.05);
+      border: 1px solid transparent;
+      font: inherit;
       font-size: 12px;
       color: var(--muted);
+      cursor: pointer;
+      transition: opacity 0.18s ease, background 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, color 0.18s ease;
+    }
+
+    .legend-chip:hover {
+      background: rgba(37, 31, 24, 0.08);
+    }
+
+    .legend-chip.is-active {
+      background: rgba(255, 255, 255, 0.98);
+      color: var(--ink);
+      border-color: rgba(37, 31, 24, 0.12);
+      box-shadow: 0 10px 20px rgba(37, 31, 24, 0.08);
+    }
+
+    .legend-chip.is-dimmed {
+      opacity: 0.35;
+    }
+
+    .section-panel {
+      transition: opacity 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .section-panel.dimmed {
+      opacity: 0.18;
+    }
+
+    .section-panel.is-active {
+      border-color: rgba(37, 31, 24, 0.28);
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.68),
+        inset 0 156px 0 var(--section-band, rgba(255, 255, 255, 0.3)),
+        0 0 0 3px rgba(37, 31, 24, 0.08);
     }
 
     .legend-dot {
@@ -639,6 +711,18 @@
 
     .map-point circle {
       transition: r 0.16s ease, stroke-width 0.16s ease, filter 0.16s ease;
+    }
+
+    .map-point {
+      transition: opacity 0.16s ease;
+    }
+
+    .map-point.dimmed {
+      opacity: 0.18;
+    }
+
+    .map-point.dimmed text {
+      opacity: 0.55;
     }
 
     .map-point:hover circle,
@@ -1078,20 +1162,20 @@
   <script>
     const FX_USD_KRW = 1512;
     const STORAGE_KEY = "hair-mist-board-v7";
-    const LAYOUT_VERSION = 4;
+    const LAYOUT_VERSION = 5;
     const WORLD_DEFAULT = { x: 28, y: 24, scale: 0.64 };
 
     const sections = [
       {
         id: "bond-hero",
         title: "본딩·구조복구 히어로형",
-        blurb: "bond, molecular repair, triple bond, disulfide repair처럼 구조 복구 자체가 메인 메시지인 SKU입니다. 쭈드레님의 3-bond 서사와 가장 직접적으로 맞닿는 1차 비교군입니다.",
+        blurb: "bond, molecular repair, triple bond처럼 구조 복구 claim 자체가 구매 이유 1순위인 SKU입니다. 쭈드레님의 3-bond 서사와 가장 직접적으로 맞닿는 1차 비교군입니다.",
         x: 430, y: 120, w: 1460, h: 2445
       },
       {
         id: "bond-extended",
         title: "본딩+리브인/스타일링 확장형",
-        blurb: "본딩이나 단백질 리페어가 중요하지만, leave-in, spray mask, styling creme, heat protect 같은 사용 장면 효익과 함께 팔리는 SKU입니다. direct hero보다 한 단계 넓은 실사용형 본딩 구간입니다.",
+        blurb: "bond/repair 서사는 있지만, 실제 판매 포인트가 leave-in, heat protect, detangle, styling 같은 실사용 효익까지 확장된 SKU입니다. 즉 hero보다 덜 구조복구 중심이고 더 다기능적입니다.",
         x: 1930, y: 120, w: 1460, h: 2445
       },
       {
@@ -1104,7 +1188,13 @@
         id: "daily-functional",
         title: "열보호·엉킴·윤기 데일리 케어형",
         blurb: "열보호, quick-dry, detangling, anti-frizz, gloss finish, no-wash처럼 바로 체감되는 사용 효익이 메인인 구간입니다. 소비자가 '지금 머리 상태를 정돈하려고' 사는 제품들을 모았습니다.",
-        x: 1930, y: 2645, w: 1460, h: 4180
+        x: 1930, y: 2645, w: 1460, h: 2445
+      },
+      {
+        id: "salon-based",
+        title: "살롱 기반 비교구매형",
+        blurb: "헤어드레서, 헤어살롱, salon professional 기원을 신뢰 포인트로 파는 SKU입니다. 기능은 달라도 실제 장바구니 비교가 자주 같이 일어나는 제품들을 모았습니다.",
+        x: 1930, y: 5170, w: 1460, h: 3185
       },
       {
         id: "scent-led",
@@ -1116,7 +1206,7 @@
         id: "luxury-fragrance",
         title: "글로벌 럭셔리 향수 브랜드형",
         blurb: "Dior, BYREDO, 향후 Chanel처럼 향수 하우스/럭셔리 뷰티 브랜드가 헤어 미스트로 확장한 SKU입니다. 가격 논리는 본딩이나 데일리 케어보다 브랜드·향 정체성에 더 가깝습니다.",
-        x: 1930, y: 6925, w: 1460, h: 1700
+        x: 430, y: 8455, w: 1460, h: 1700
       }
     ];
 
@@ -1124,8 +1214,8 @@
       {
         id: "note-how",
         title: "먼저 볼 것",
-        body: "1) 이번 개편의 기준은 `누가 파는가`보다 `왜 사는가`입니다.\\n2) 즉 국가, 가격, 살롱 여부를 먼저 나누지 않고 소비자 구매 이유를 1차 세그로 뒀습니다.\\n3) 그래서 기존 `국내 성분-서사 확장`처럼 설명용 편집 묶음은 메인 세그에서 뺐습니다.\\n4) 대신 `살롱/헤어드레서`, `살롱 프로페셔널`, `프리미엄 살롱 비교군`, `약국/더마 포지션`은 보조 태그로 따로 읽게 만들었습니다.",
-        footer: "세그는 이제 시장 공식 카테고리가 아니라, 실제 구매 이유와 메시지 강도로 읽는 작업 프레임입니다.",
+        body: "1) 이번 개편의 기준은 기본적으로 `왜 사는가`입니다.\\n2) 다만 사용자가 계속 헷갈렸던 비교 장바구니 흐름을 반영해서 `살롱 기반`만은 별도 세그로 분리했습니다.\\n3) 그래서 지금 구조는 `기능 중심 세그 + 실제 비교구매가 강한 살롱 기반 세그`의 혼합형입니다.\\n4) `약국/더마 포지션`, `프리미엄 살롱 비교군` 같은 맥락은 보조 태그로 계속 읽을 수 있게 남겼습니다.",
+        footer: "즉 완전히 교과서식 분류라기보다, 실제 비교구매 맥락이 잘 보이게 재편한 작업 프레임입니다.",
         x: 70, y: 120, w: 310, h: 280
       },
       {
@@ -1145,8 +1235,8 @@
       {
         id: "note-thesis",
         title: "현재 가설",
-        body: "쭈드레님이 3-bond 스토리를 제대로 세우면, 메인 경쟁은 `본딩·구조복구 히어로형`과 `본딩+리브인 확장형`에서 잡는 게 맞습니다.\\n\\n다만 실제 비교구매군은 여기서 끝나지 않고, Olaplex를 보는 소비자가 Moroccanoil · Kérastase · Oribe까지 같이 보는 흐름도 분명히 존재합니다.",
-        footer: "즉 메인 세그는 기능으로 읽고, 실제 비교구매는 `프리미엄 살롱 비교군` 태그로 한 번 더 읽는 구조가 더 자연스럽습니다.",
+        body: "쭈드레님이 3-bond 스토리를 제대로 세우면, 메인 경쟁은 여전히 `본딩·구조복구 히어로형`과 `본딩+리브인 확장형`에서 잡는 게 맞습니다.\\n\\n다만 실제 비교구매군은 여기서 끝나지 않고, Olaplex를 보는 소비자가 Moroccanoil · Kérastase · Oribe 같은 `살롱 기반` SKU까지 함께 보는 흐름도 분명히 존재합니다.",
+        footer: "즉 기능 세그와 별개로, 살롱 기반 비교 장바구니를 따로 보는 게 사용자 이해에는 더 자연스럽습니다.",
         x: 70, y: 1030, w: 310, h: 250
       },
       {
@@ -1159,14 +1249,14 @@
       {
         id: "note-segments",
         title: "세그 정의",
-        body: "본딩·구조복구 히어로형 = bond / molecular repair / triple bond가 메인 카피인 SKU\\n본딩+리브인/스타일링 확장형 = 본딩이나 protein repair가 중요하지만 leave-in, styling, heat protect 효익과 함께 파는 SKU\\n컨디셔닝·세럼형 데일리 리페어 = 헤어 밀크, 세럼, 앰플, 에센스처럼 컨디셔닝 포맷으로 손상 케어를 파는 SKU\\n열보호·엉킴·윤기 데일리 케어형 = 열보호, detangling, anti-frizz, gloss finish가 메인인 SKU\\n향 중심 헤어 퍼퓸형 = 향, 무드, 선물성이 먼저 읽히는 SKU\\n글로벌 럭셔리 향수 브랜드형 = Dior / BYREDO / 향후 Chanel 같은 향수 하우스 확장 SKU",
-        footer: "보조 태그는 `살롱/헤어드레서`, `살롱 프로페셔널`, `프리미엄 살롱 비교군`, `약국/더마 포지션`처럼 비교 맥락을 따로 읽기 위해 붙였습니다.",
+        body: "본딩·구조복구 히어로형 = 구조 복구 claim 자체가 구매 이유 1순위인 SKU\\n본딩+리브인/스타일링 확장형 = bond 서사는 있지만 실제 판매 포인트가 열보호·리브인·스타일링까지 확장된 SKU\\n컨디셔닝·세럼형 데일리 리페어 = 세럼·밀크·에센스 포맷으로 윤기·유연·데일리 손상 케어를 파는 SKU\\n열보호·엉킴·윤기 데일리 케어형 = 바로 체감되는 사용 효익이 메인인 SKU\\n살롱 기반 비교구매형 = 헤어드레서·헤어살롱·salon professional 기원을 신뢰 포인트로 파는 SKU\\n향 중심 헤어 퍼퓸형 = 향, 무드, 선물성이 먼저 읽히는 SKU\\n글로벌 럭셔리 향수 브랜드형 = 향수 하우스/럭셔리 뷰티 브랜드 확장 SKU",
+        footer: "보조 태그는 `약국/더마 포지션`, `프리미엄 살롱 비교군`처럼 추가 비교 맥락을 읽기 위해 붙였습니다.",
         x: 70, y: 1600, w: 310, h: 360
       },
       {
         id: "note-domestic-refresh",
         title: "이번 보강",
-        body: "1) 세그 구조를 전면 재정리한 뒤 총 67개 SKU까지 확장했습니다.\\n2) 이번 라운드 신규 추가는 PHYTO · It's a 10 · UNITE Hair · R+Co · Davines입니다.\\n3) AYUNCHE · Oribe는 기존 카드지만 `살롱 프로페셔널` 태그로 다시 읽히게 정리했습니다.\\n4) `추가 요청 반영 SKU` 같은 임시 영역은 완전히 없애고, 모든 제품을 실제 기능 세그 안으로 다시 배치했습니다.",
+        body: "1) 세그 구조를 다시 손봐서 총 71개 SKU를 7개 세그로 재배치했습니다.\\n2) 이번 라운드 신규 추가는 PHYTO · It's a 10 · UNITE Hair · R+Co · Davines에 더해 Briogeo · Moroccanoil Perfect Defense · Rahua · Drunk Elephant까지 포함합니다.\\n3) Moroccanoil · Kérastase · AYUNCHE · Oribe · OUAI 같은 SKU는 `살롱 기반` 세그로 다시 읽히게 정리했습니다.\\n4) `추가 요청 반영 SKU` 같은 임시 영역은 없애고, 모든 제품을 실제 세그 안으로 다시 배치했습니다.",
         footer: "가격은 공식몰/주요 리테일 현재가를 우선 썼고, 해외 SKU oz 표기는 ml당 단가 비교를 위해 환산했습니다.",
         x: 70, y: 1990, w: 310, h: 320
       }
@@ -3958,6 +4048,166 @@
         sources: [],
         image: "https://us.davines.com/cdn/shop/files/Davines-76119UCL-OI-ALL-IN-ONE-MILK-135ml-8004608298526-1.jpg?v=1764175189",
         defaultPos: { x: 3270, y: 5440 }
+      },
+      {
+        id: "briogeo-rosarco-milk",
+        no: "68",
+        cluster: "daily-functional",
+        clusterLabel: "leave-in frizz milk",
+        tone: "amber",
+        title: "Briogeo Farewell Frizz Rosarco Milk Leave-In Conditioning Spray",
+        productLabel: "lightweight leave-in spray",
+        brand: "Briogeo",
+        brandKo: "브리오지오",
+        form: "리브인 컨디셔닝 스프레이",
+        productName: "Farewell Frizz Rosarco Milk Leave-In Conditioning Spray",
+        volumeMl: 147,
+        priceListDisplay: "$25",
+        priceSaleDisplay: "$25",
+        priceListKrw: Math.round(25 * FX_USD_KRW),
+        priceSaleKrw: Math.round(25 * FX_USD_KRW),
+        unitPriceKrwMl: Math.round((Math.round(25 * FX_USD_KRW) / 147) * 10) / 10,
+        claimDepth: 3.2,
+        concept: "ultra-light leave-in, frizz tame, detangle, soft conditioning",
+        manufacturer: "Briogeo Hair Care",
+        note: "공식 PDP one-time price $25 / full size 5 oz 기준",
+        url: "https://www.briogeohair.com/products/farewell-frizz-rosarco-milk-leave-in-conditioning-spray",
+        keyIngredients: "rosehip oil, argan oil, coconut oil",
+        alcohol: "?",
+        silicone: "?",
+        uspIngredients: "rosehip + argan + coconut oil 기반 lightweight leave-in",
+        ewg: "미확인",
+        performance: "공식 Yotpo 4.49/5 · 리뷰 1,040 노출",
+        tier: "A",
+        memoPlaceholder: "미국 clean-leaning frizz leave-in benchmark",
+        evidence: [
+          "Briogeo 공식 PDP에 현재 one-time price $25와 대표 이미지가 노출됩니다.",
+          "공식 size selector에서 full size 5 oz와 travel 1.75 oz 구성이 함께 확인됩니다.",
+          "공식 설명에 rosehip, argan, coconut oils 기반 ultra lightweight leave-in conditioner와 frizz taming 포인트가 직접 명시됩니다."
+        ],
+        sources: [],
+        image: "https://cdn.shopify.com/s/files/1/0905/3204/products/ff-leave-in-full-size_2.jpg?v=1762439757",
+        defaultPos: { x: 470, y: 5800 }
+      },
+      {
+        id: "moroccanoil-perfect-defense",
+        no: "69",
+        cluster: "salon-based",
+        clusterLabel: "salon heat shield",
+        tone: "teal",
+        title: "Moroccanoil Perfect Defense Heat Protectant",
+        productLabel: "dry aerosol heat protectant",
+        brand: "Moroccanoil",
+        brandKo: "모로칸오일",
+        form: "히트 프로텍트 스프레이",
+        productName: "Perfect Defense Heat Protectant",
+        volumeMl: 177,
+        priceListDisplay: "$32",
+        priceSaleDisplay: "$32",
+        priceListKrw: Math.round(32 * FX_USD_KRW),
+        priceSaleKrw: Math.round(32 * FX_USD_KRW),
+        unitPriceKrwMl: Math.round((Math.round(32 * FX_USD_KRW) / 177) * 10) / 10,
+        claimDepth: 3.9,
+        concept: "weightless dry aerosol, heat protection up to 450F/230C, argan-oil care",
+        manufacturer: "Moroccanoil",
+        note: "공식 PDP full size 6 fl oz / $32 기준",
+        url: "https://www.moroccanoil.com/products/perfect-defense",
+        keyIngredients: "argan oil, vitamins, dry aerosol heat protect system",
+        alcohol: "?",
+        silicone: "?",
+        uspIngredients: "dry aerosol + argan oil + heat shield + salon finishing",
+        ewg: "미확인",
+        performance: "공식 current price/variant와 450F/230C 보호 문구 확인",
+        tier: "A",
+        memoPlaceholder: "Olaplex 비교 장바구니에 자주 붙는 salon heat shield",
+        evidence: [
+          "Moroccanoil 공식 PDP의 full variant에 Full - 6 fl oz / $32와 대표 이미지가 노출됩니다.",
+          "공식 설명에 weightless dry aerosol, argan oil and vitamin-fueled formula, heat styling up to 450°F/230°C 보호가 직접 명시됩니다.",
+          "travel size $15 variant도 함께 보여, full-size와 mini를 병행 판매하는 salon benchmark임을 확인할 수 있습니다."
+        ],
+        sources: [],
+        image: "https://www.moroccanoil.com/cdn/shop/files/48_STYLE-FINISHER_PERFECT-DEFENSE_225mL_v3.jpg?v=1683622808",
+        defaultPos: { x: 820, y: 5800 }
+      },
+      {
+        id: "rahua-hydration-detangler",
+        no: "70",
+        cluster: "daily-functional",
+        clusterLabel: "uv detangler mist",
+        tone: "amber",
+        title: "Rahua Hydration Detangler + UV Barrier",
+        productLabel: "detangle + sun protect",
+        brand: "Rahua",
+        brandKo: "라후아",
+        form: "디탱글러/UV 배리어 미스트",
+        productName: "Hydration Detangler + UV Barrier",
+        volumeMl: 192,
+        priceListDisplay: "$36",
+        priceSaleDisplay: "$36",
+        priceListKrw: Math.round(36 * FX_USD_KRW),
+        priceSaleKrw: Math.round(36 * FX_USD_KRW),
+        unitPriceKrwMl: Math.round((Math.round(36 * FX_USD_KRW) / 192) * 10) / 10,
+        claimDepth: 3.4,
+        concept: "detangle, hydrate, UV barrier, lightweight daily protect mist",
+        manufacturer: "Rahua",
+        note: "공식 PDP full size 6.5 oz / $36 기준",
+        url: "https://rahua.com/products/hydration-detangler-uv-barrier",
+        keyIngredients: "hydration detangler, UV barrier, lightweight conditioning",
+        alcohol: "?",
+        silicone: "?",
+        uspIngredients: "detangling + hydration + sun protection + lightweight leave-in",
+        ewg: "미확인",
+        performance: "공식 variant/price 확인, 리뷰 요약 100개 기반 detangling·softness·UV topics 노출",
+        tier: "A",
+        memoPlaceholder: "clean-leaning daily detangler + UV protect benchmark",
+        evidence: [
+          "Rahua 공식 PDP의 full variant에 6.5 oz / $36가 직접 노출됩니다.",
+          "공식 meta description에 detangle, hydrate, protect와 essential sun protection 포인트가 명시됩니다.",
+          "공식 리뷰 요약에서 detangling, softness, hydration, UV protection 토픽이 반복적으로 집계됩니다."
+        ],
+        sources: [],
+        image: "https://rahua.com/cdn/shop/files/HydrationDetangler_PDP_1_grande.png?v=1772730104",
+        defaultPos: { x: 1170, y: 5800 }
+      },
+      {
+        id: "drunkelephant-wild-marula",
+        no: "71",
+        cluster: "daily-functional",
+        clusterLabel: "clinical detangle mist",
+        tone: "amber",
+        title: "Drunk Elephant Wild Marula Tangle Spray",
+        productLabel: "silicone-free heat protectant",
+        brand: "Drunk Elephant",
+        brandKo: "드렁크엘리펀트",
+        form: "탱글 스프레이 / 리브인 미스트",
+        productName: "Wild Marula Tangle Spray",
+        volumeMl: 120,
+        priceListDisplay: "$27",
+        priceSaleDisplay: "$24.3",
+        priceListKrw: Math.round(27 * FX_USD_KRW),
+        priceSaleKrw: Math.round(24.3 * FX_USD_KRW),
+        unitPriceKrwMl: Math.round((Math.round(24.3 * FX_USD_KRW) / 120) * 10) / 10,
+        claimDepth: 3.6,
+        concept: "silicone-free leave-in, detangle, smooth, heat protect, strengthen",
+        manufacturer: "Drunk Elephant",
+        note: "공식 PDP 120 ml / $27, 현재 sale $24.30 기준",
+        url: "https://www.drunkelephant.com/collections/stylings/wild-marula-tangle-spray-812343031319.html",
+        keyIngredients: "marula-based nourishing leave-in, silicone-free heat protect",
+        alcohol: "?",
+        silicone: "X",
+        uspIngredients: "silicone-free leave-in + detangle + heat protect + smoothing",
+        ewg: "미확인",
+        performance: "공식 PDP 4.5/5 · 리뷰 242 노출",
+        tier: "A",
+        memoPlaceholder: "스킨케어-origin clinical hair mist reference",
+        evidence: [
+          "Drunk Elephant 공식 PDP data에 120 ml / 4 fl oz, standard price $27, current sale price $24.30이 함께 노출됩니다.",
+          "공식 meta description에 silicone-free leave-in mist, detangle, smooth, strengthen, heat protect 포인트가 직접 정리됩니다.",
+          "공식 review block에 4.5/5 평점과 리뷰 242건이 노출돼 초기 검증력도 확인됩니다."
+        ],
+        sources: [],
+        image: "https://www.drunkelephant.com/dw/image/v2/BBSK_PRD/on/demandware.static/-/Sites-itemmaster_drunkelephant/default/dw355ab9c2/products/images/Haircare/812343031319-Wild_Marula_Tangle_Spray/Marula_Tangle_Spray-PDP_Carousel/Marula_Tangle_Spray_Creative-1_v2.jpg?sw=540&sh=540&sm=fit",
+        defaultPos: { x: 1520, y: 5800 }
       }
     ];
 
@@ -4143,7 +4393,8 @@
       "elastine-biobond17", "daleaf-hairpack-mist", "jennyhouse-quickdry",
       "silktherapy-silkmist", "chahong-keratin-mist", "oribe-runthrough", "bumble-hio-primer",
       "ouai-leave-in", "phyto-heat-protection", "itsa10-miracle-leave-in", "unite-7seconds",
-      "randco-sun-catcher", "davines-oi-milk"
+      "randco-sun-catcher", "davines-oi-milk", "briogeo-rosarco-milk",
+      "moroccanoil-perfect-defense", "rahua-hydration-detangler", "drunkelephant-wild-marula"
     ]);
 
     const clusterToneMap = {
@@ -4151,6 +4402,7 @@
       "bond-extended": "mint",
       "repair-serum": "sky",
       "daily-functional": "amber",
+      "salon-based": "teal",
       "scent-led": "rose",
       "luxury-fragrance": "violet"
     };
@@ -4160,8 +4412,19 @@
       "bond-extended": "본딩 확장",
       "repair-serum": "컨디셔닝 리페어",
       "daily-functional": "데일리 기능",
+      "salon-based": "살롱 기반",
       "scent-led": "향 중심",
       "luxury-fragrance": "글로벌 럭셔리"
+    };
+
+    const segmentDefinitionMap = {
+      "bond-hero": "bond·구조복구 claim 자체가 구매 이유 1순위인 SKU",
+      "bond-extended": "bond는 있지만 실제 판매 포인트가 열보호·리브인·스타일링까지 확장된 SKU",
+      "repair-serum": "세럼·밀크·에센스 포맷으로 윤기·유연·데일리 손상 케어를 파는 SKU",
+      "daily-functional": "열보호·엉킴·윤기처럼 바로 체감되는 기능 효익이 메인인 SKU",
+      "salon-based": "헤어드레서·salon professional 기원을 신뢰 포인트로 파는 SKU",
+      "scent-led": "향·무드·선물성이 구매 이유의 중심인 SKU",
+      "luxury-fragrance": "향수 하우스·럭셔리 뷰티 브랜드가 확장한 헤어 미스트 SKU"
     };
 
     const sectionStyleMap = {
@@ -4188,6 +4451,12 @@
         line: "rgba(143, 103, 42, 0.2)",
         band: "rgba(244, 232, 214, 0.5)",
         headerBg: "rgba(255, 251, 245, 0.98)"
+      },
+      "salon-based": {
+        bg: "rgba(217, 236, 239, 0.42)",
+        line: "rgba(63, 105, 112, 0.22)",
+        band: "rgba(217, 236, 239, 0.52)",
+        headerBg: "rgba(247, 252, 252, 0.98)"
       },
       "scent-led": {
         bg: "rgba(243, 221, 225, 0.42)",
@@ -4216,22 +4485,27 @@
         "silktherapy-bond", "elastine-biobond17"
       ],
       "bond-extended": [
-        "miseen", "redken", "aveda", "alterna", "sebastian", "bondiboost", "matrix",
-        "ogx-bond", "nym-toughlove", "sheamoisture-bond", "sauce-beauty", "phyto-heat-protection"
+        "miseen", "alterna", "bondiboost", "ogx-bond", "nym-toughlove",
+        "sheamoisture-bond", "sauce-beauty", "phyto-heat-protection"
       ],
       "repair-serum": [
         "unove", "kundal", "leviemer", "thesaem", "kundal-collagen", "bifidolab",
-        "doterra", "dalba-hair-serum", "itsa10-miracle-leave-in", "davines-oi-milk"
+        "doterra", "dalba-hair-serum", "itsa10-miracle-leave-in"
       ],
       "daily-functional": [
-        "healingbird", "headspa7", "wella", "tricell", "tocobo", "ayunche", "rikera",
-        "growus-nowash", "jennyhouse-quickdry", "daleaf-hairpack-mist", "silktherapy-silkmist",
-        "ratedgreen", "chahong-keratin-mist", "oribe-runthrough", "bumble-hio-primer",
-        "ouai-leave-in", "unite-7seconds", "randco-sun-catcher"
+        "healingbird", "headspa7", "tricell", "ratedgreen", "tocobo", "rikera",
+        "growus-nowash", "daleaf-hairpack-mist", "silktherapy-silkmist",
+        "briogeo-rosarco-milk", "rahua-hydration-detangler", "drunkelephant-wild-marula"
+      ],
+      "salon-based": [
+        "redken", "aveda", "wella", "kerastase", "sebastian", "matrix", "ayunche",
+        "jennyhouse-quickdry", "chahong-keratin-mist", "oribe-runthrough", "bumble-hio-primer",
+        "ouai-leave-in", "unite-7seconds", "randco-sun-catcher", "davines-oi-milk",
+        "moroccanoil-perfect-defense"
       ],
       "scent-led": [
         "roundaround", "bodyholic-potion", "bodyholic-staynudie", "tone28", "anillo",
-        "moroccanoil", "kerastase", "aromatica", "sw19-3pm", "sw19-midnight", "white-sunday",
+        "moroccanoil", "aromatica", "sw19-3pm", "sw19-midnight", "white-sunday",
         "bellista", "pinkghost", "narca", "sennok-babyblusher", "kerasys-caviar"
       ],
       "luxury-fragrance": [
@@ -4259,6 +4533,7 @@
       "unite-7seconds": ["살롱 프로페셔널"],
       "randco-sun-catcher": ["살롱 프로페셔널"],
       "davines-oi-milk": ["살롱 프로페셔널", "프리미엄 살롱 비교군"],
+      "moroccanoil-perfect-defense": ["살롱 프로페셔널", "프리미엄 살롱 비교군"],
       "phyto-heat-protection": ["약국/더마 포지션"]
     };
 
@@ -4267,6 +4542,7 @@
       "bond-extended": { cols: 4, insetX: 42, insetTop: 210, gapX: 350, gapY: 760 },
       "repair-serum": { cols: 4, insetX: 42, insetTop: 210, gapX: 350, gapY: 760 },
       "daily-functional": { cols: 4, insetX: 42, insetTop: 210, gapX: 350, gapY: 780 },
+      "salon-based": { cols: 4, insetX: 42, insetTop: 210, gapX: 350, gapY: 760 },
       "scent-led": { cols: 4, insetX: 42, insetTop: 210, gapX: 350, gapY: 760 },
       "luxury-fragrance": { cols: 2, insetX: 42, insetTop: 210, gapX: 350, gapY: 760 }
     };
@@ -5278,6 +5554,58 @@
           "소비자는 bond hero로 보기보다 frizz control, detangling, softness, shine를 고급스럽게 해결하는 살롱 milk로 읽을 가능성이 큽니다."
         ]
       },
+      "briogeo-rosarco-milk": {
+        ingredientsStatus: "partial",
+        fullIngredientsSource: "Briogeo 공식 PDP",
+        fullIngredientsNote: "공식 페이지에서 rosehip oil, argan oil, coconut oil과 ultra lightweight leave-in, frizz taming 포인트를 확인했습니다. full INCI 전체는 이번 턴에 별도 정리하지 않았습니다.",
+        insightBullets: [
+          "미국 clean-leaning prestige leave-in 시장에서 아주 전형적인 frizz care benchmark입니다.",
+          "bond hero처럼 구조복구를 외치지 않고도 detangle, softness, frizz control을 설득하는 레퍼런스로 가치가 큽니다."
+        ],
+        reviewHighlights: [
+          "공식 Yotpo 요약에서는 soft hair feel, nice scent, frizz control, lightweight spray application이 반복적으로 언급됩니다.",
+          "즉 구조 복구보다도 사용감과 매끈함, frizz 정돈이 구매 이유의 중심인 SKU로 읽는 편이 자연스럽습니다."
+        ]
+      },
+      "moroccanoil-perfect-defense": {
+        ingredientsStatus: "partial",
+        fullIngredientsSource: "Moroccanoil 공식 PDP",
+        fullIngredientsNote: "공식 페이지에서 argan oil and vitamin-fueled formula, weightless dry aerosol, 450°F/230°C 보호 포인트를 확인했습니다. full INCI 전체는 이번 턴에 별도 정리하지 않았습니다.",
+        insightBullets: [
+          "Olaplex나 Kérastase를 보는 소비자가 같이 비교하기 쉬운 salon-origin heat shield라는 점이 핵심입니다.",
+          "구조복구 claim보다도 열기구 루틴 앞단에 끼워 넣는 premium salon finishing 레퍼런스로 보는 편이 맞습니다."
+        ],
+        reviewHighlights: [
+          "공식 메시지는 heat protection, dry aerosol 사용성, argan-oil care에 집중돼 있어 본딩 히어로보다 prep/finish 보조재 역할이 더 선명합니다.",
+          "즉 살롱 기반 세그 안에서 비교구매형 anchor로 읽는 것이 가장 자연스럽습니다."
+        ]
+      },
+      "rahua-hydration-detangler": {
+        ingredientsStatus: "partial",
+        fullIngredientsSource: "Rahua 공식 PDP",
+        fullIngredientsNote: "공식 페이지에서 detangle, hydrate, essential sun protection과 6.5 oz / 2 oz variant 구성을 확인했습니다. full INCI 전체는 이번 턴에 별도 정리하지 않았습니다.",
+        insightBullets: [
+          "UV barrier를 전면에 거는 clean-leaning detangler라는 점이 데일리 기능형 안에서 꽤 차별적입니다.",
+          "bond science보다도 detangling, hydration, lightweight daily protect 루틴에 초점이 맞아 있습니다."
+        ],
+        reviewHighlights: [
+          "공식 리뷰 요약에서는 detangling, softness, shine, hydration, UV protection 키워드가 반복됩니다.",
+          "즉 구조복구보다 매일 쓰는 관리형 미스트로 이해하는 편이 맞습니다."
+        ]
+      },
+      "drunkelephant-wild-marula": {
+        ingredientsStatus: "partial",
+        fullIngredientsSource: "Drunk Elephant 공식 PDP",
+        fullIngredientsNote: "공식 페이지에서 silicone-free leave-in mist, detangle, smooth, strengthen, heat protect 포인트를 확인했습니다. 이번 턴에는 full INCI 전체를 별도로 옮기지 않았습니다.",
+        insightBullets: [
+          "스킨케어 강브랜드가 헤어 카테고리로 확장한 clinical hair mist reference라는 점이 중요합니다.",
+          "약국/더마와 완전히 같지는 않지만, clean clinical 톤으로 detangle + heat protect를 푸는 방식은 충분히 비교 가치가 있습니다."
+        ],
+        reviewHighlights: [
+          "공식 리뷰 블록에 4.5/5와 242 reviews가 보여 초기 반응 검증력은 확보된 편입니다.",
+          "소비자는 bond hero보다도 silicone-free, tangle control, heat protection을 함께 주는 깔끔한 daily mist로 먼저 읽을 가능성이 큽니다."
+        ]
+      },
       pinkghost: {
         ingredientsStatus: "missing",
         fullIngredientsSource: "다나와",
@@ -5336,6 +5664,7 @@
           noteBodies: parsed.noteBodies || {},
           userNotes: parsed.userNotes || [],
           selectedProductId: parsed.selectedProductId || null,
+          activeSegmentId: parsed.activeSegmentId || null,
           tableSort: parsed.tableSort || {
             core: { key: "no", direction: "asc" },
             extended: { key: "no", direction: "asc" }
@@ -5350,6 +5679,7 @@
           noteBodies: {},
           userNotes: [],
           selectedProductId: null,
+          activeSegmentId: null,
           tableSort: {
             core: { key: "no", direction: "asc" },
             extended: { key: "no", direction: "asc" }
@@ -5776,6 +6106,7 @@
         const count = products.filter((product) => product.cluster === section.id).length;
         const node = document.createElement("section");
         node.className = "section-panel";
+        node.dataset.sectionId = section.id;
         node.style.left = bounds.x + "px";
         node.style.top = bounds.y + "px";
         node.style.width = bounds.w + "px";
@@ -5825,6 +6156,7 @@
         node.className = "board-item product-card";
         if (state.selectedProductId === product.id) node.classList.add("highlight");
         node.dataset.itemId = product.id;
+        node.dataset.cluster = product.cluster;
         node.dataset.searchIndex = getCardText(product);
         node.setAttribute("role", "button");
         node.setAttribute("tabindex", "0");
@@ -5900,15 +6232,30 @@
         olive: "#648249",
         mint: "#4c7f70",
         amber: "#b27a2c",
+        teal: "#3f6970",
         rose: "#b66377",
         violet: "#7e63a2"
       };
+
+      const segmentDefinitions = sections.map((section) => `
+        <div class="segment-definition">
+          <strong>${escapeHtml(clusterLabelMap[section.id] || section.title)}</strong>
+          <p>${escapeHtml(segmentDefinitionMap[section.id] || section.blurb)}</p>
+        </div>
+      `).join("");
+
+      const legendItems = sections.map((section) => `
+        <button type="button" class="legend-chip" data-segment-filter="${escapeHtml(section.id)}" aria-pressed="false">
+          <span class="legend-dot" style="background:${colorMap[clusterToneMap[section.id]] || "#666"}"></span>
+          ${escapeHtml(clusterLabelMap[section.id] || section.title)}
+        </button>
+      `).join("");
 
       const dots = eligible.map((product) => {
         const cx = xPos(product.unitPriceKrwMl);
         const cy = yPos(product.claimDepth);
         return `
-          <g class="map-point" data-product-id="${escapeHtml(product.id)}" style="cursor:pointer">
+          <g class="map-point" data-product-id="${escapeHtml(product.id)}" data-cluster="${escapeHtml(product.cluster)}" style="cursor:pointer">
             <circle cx="${cx}" cy="${cy}" r="11" fill="${colorMap[product.tone] || "#666"}" fill-opacity="0.9" stroke="white" stroke-width="3"></circle>
             <text x="${cx}" y="${cy + 4}" text-anchor="middle" font-size="10" font-weight="800" fill="white">${escapeHtml(product.no)}</text>
           </g>
@@ -5949,13 +6296,11 @@
           <div class="map-topline">
             <p>쭈드레님이 실제로 노려야 할 공간을 보기 위해, 가격은 ml당 단가로 통일했고 메시지 강도는 향 중심 ~ direct multi-bond까지 5단계로 정성 점수화했습니다. 숫자 점 위에 마우스를 올리면 미니 카드가, 클릭하면 우측 상세 패널이 열립니다.</p>
           </div>
+          <div class="segment-definition-grid">
+            ${segmentDefinitions}
+          </div>
           <div class="map-legend">
-            <span class="legend-chip"><span class="legend-dot" style="background:#648249"></span>본딩 히어로</span>
-            <span class="legend-chip"><span class="legend-dot" style="background:#4c7f70"></span>본딩 확장</span>
-            <span class="legend-chip"><span class="legend-dot" style="background:#4f7aa8"></span>컨디셔닝 리페어</span>
-            <span class="legend-chip"><span class="legend-dot" style="background:#b27a2c"></span>데일리 기능</span>
-            <span class="legend-chip"><span class="legend-dot" style="background:#b66377"></span>향 중심</span>
-            <span class="legend-chip"><span class="legend-dot" style="background:#7e63a2"></span>글로벌 럭셔리</span>
+            ${legendItems}
           </div>
           <div class="map-svg-wrap">
             <svg viewBox="0 0 ${width} ${height}" width="100%" height="100%" aria-label="헤어미스트 포지셔닝맵">
@@ -6155,7 +6500,7 @@
         1650,
         Array.from(deepDiveIds),
         "딥다이브 매트릭스",
-        "성분/알코올/실리콘/EWG/성과까지 최대한 채운 비교표"
+        "핵심 비교군만 골라 성분·플래그·성과까지 최대한 깊게 채운 정밀 비교표"
       );
       renderTableCard(
         "extended",
@@ -6163,7 +6508,7 @@
         3440,
         products.filter((product) => !deepDiveIds.has(product.id)).map((product) => product.id),
         "확장 가격군 매트릭스",
-        "상품 수를 늘리기 위한 확장 가격군. 기능 깊이는 상대적으로 얕게 입력"
+        "SKU 폭을 넓게 보기 위한 보조 표로, 가격·포지션·대표 USP 중심으로 가볍게 스캔한 매트릭스"
       );
       renderTargetCard();
       renderUserNotes();
@@ -6212,16 +6557,35 @@
       zoomLabel.textContent = `${Math.round(state.view.scale * 100)}%`;
     }
 
-    function applySearchFilter() {
+    function applyBoardFilters() {
       const keyword = searchInput.value.trim().toLowerCase();
       document.querySelectorAll(".product-card").forEach((card) => {
-        if (!keyword) {
-          card.classList.remove("dimmed");
-          return;
-        }
         const haystack = card.dataset.searchIndex || "";
-        card.classList.toggle("dimmed", !haystack.includes(keyword));
+        const matchesSearch = !keyword || haystack.includes(keyword);
+        const matchesSegment = !state.activeSegmentId || card.dataset.cluster === state.activeSegmentId;
+        card.classList.toggle("dimmed", !(matchesSearch && matchesSegment));
       });
+      document.querySelectorAll(".map-point").forEach((point) => {
+        const matchesSegment = !state.activeSegmentId || point.dataset.cluster === state.activeSegmentId;
+        point.classList.toggle("dimmed", !matchesSegment);
+      });
+      document.querySelectorAll(".section-panel").forEach((panel) => {
+        const isActive = !!state.activeSegmentId && panel.dataset.sectionId === state.activeSegmentId;
+        const isDimmed = !!state.activeSegmentId && !isActive;
+        panel.classList.toggle("is-active", isActive);
+        panel.classList.toggle("dimmed", isDimmed);
+      });
+      document.querySelectorAll("[data-segment-filter]").forEach((button) => {
+        const isActive = button.dataset.segmentFilter === state.activeSegmentId;
+        const isDimmed = !!state.activeSegmentId && !isActive;
+        button.classList.toggle("is-active", isActive);
+        button.classList.toggle("is-dimmed", isDimmed);
+        button.setAttribute("aria-pressed", isActive ? "true" : "false");
+      });
+    }
+
+    function applySearchFilter() {
+      applyBoardFilters();
     }
 
     function screenToWorld(clientX, clientY) {
@@ -6377,6 +6741,14 @@
 
     world.addEventListener("click", (event) => {
       if (suppressClick) return;
+      const segmentFilterButton = event.target.closest("[data-segment-filter]");
+      if (segmentFilterButton) {
+        const nextId = segmentFilterButton.dataset.segmentFilter;
+        state.activeSegmentId = state.activeSegmentId === nextId ? null : nextId;
+        saveState();
+        applyBoardFilters();
+        return;
+      }
       const dot = event.target.closest(".map-point");
       if (dot) {
         showMapPreview(dot.dataset.productId, event.clientX, event.clientY);
