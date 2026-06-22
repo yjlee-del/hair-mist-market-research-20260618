@@ -1222,7 +1222,7 @@
     const FX_EUR_KRW = 1757;
     const FX_GBP_KRW = 2018;
     const STORAGE_KEY = "hair-mist-board-v10";
-    const LAYOUT_VERSION = 10;
+    const LAYOUT_VERSION = 11;
     const WORLD_DEFAULT = { x: 28, y: 24, scale: 0.64 };
 
     const sections = [
@@ -6169,6 +6169,14 @@
       return products.filter((product) => product.mapEligible !== false && isMistNamedProduct(product));
     }
 
+    function getMistDistributionEligibleProducts() {
+      return products.filter((product) => {
+        if (product.mapEligible === false) return false;
+        if (isMistNamedProduct(product)) return true;
+        return product.cluster === "bond-hero";
+      });
+    }
+
     function isMistNamedProduct(product) {
       const primaryHaystack = [
         product.form,
@@ -6252,13 +6260,8 @@
     }
 
     const LAYOUT_RESET_IDS = new Set([
-      ...products.map((product) => product.id),
-      ...noteCards.map((note) => note.id),
-      "positioning-map",
       "mist-volume-map",
-      "table-core",
-      "table-extended",
-      "target-card"
+      "mist-total-price-map"
     ]);
 
     const state = loadState();
@@ -6978,43 +6981,84 @@
       world.appendChild(card);
     }
 
-    function renderMistVolumeDistributionCard() {
+    function getEffectivePriceKrw(product) {
+      const sale = getSalePriceKrw(product);
+      if (Number.isFinite(sale)) return sale;
+      return getListPriceKrw(product);
+    }
+
+    function buildDistributionMapDot(product, cx, cy, toneColor) {
+      const isMist = isMistNamedProduct(product);
+      return `
+        <g class="map-point" data-product-id="${escapeHtml(product.id)}" data-cluster="${escapeHtml(product.cluster)}" style="cursor:pointer">
+          <circle
+            cx="${cx}"
+            cy="${cy}"
+            r="11"
+            fill="${isMist ? toneColor : "white"}"
+            fill-opacity="${isMist ? "0.92" : "1"}"
+            stroke="${isMist ? "white" : toneColor}"
+            stroke-width="${isMist ? "3" : "2.5"}"
+            stroke-dasharray="${isMist ? "" : "3.4 3.4"}"
+          ></circle>
+          <text x="${cx}" y="${cy + 4}" text-anchor="middle" font-size="10" font-weight="800" fill="${isMist ? "white" : toneColor}">${escapeHtml(product.no)}</text>
+        </g>
+      `;
+    }
+
+    function renderDistributionMapCard({
+      itemId,
+      defaultPos,
+      titleChip,
+      yChip,
+      metaSignal,
+      intro,
+      footnotes,
+      ariaLabel,
+      yAxisLabel,
+      yValueAccessor,
+      yTickLabelFormatter,
+      minYFloor,
+      resolveYStep
+    }) {
       const card = document.createElement("article");
       card.className = "board-item panel-card map-card";
-      card.dataset.itemId = "mist-volume-map";
-      const pos = getItemPosition({ id: "mist-volume-map", defaultPos: { x: 3490, y: 1080 } });
+      card.dataset.itemId = itemId;
+      card.style.width = "1560px";
+      card.style.height = "700px";
+      const pos = getItemPosition({ id: itemId, defaultPos });
       card.style.left = pos.x + "px";
       card.style.top = pos.y + "px";
-      const eligible = getMistEligibleProducts();
+
+      const eligible = getMistDistributionEligibleProducts().filter((product) => (
+        Number.isFinite(product.volumeMl) &&
+        product.volumeMl > 0 &&
+        Number.isFinite(yValueAccessor(product))
+      ));
       const colorMap = getMapColorMap();
-      const width = 2300;
-      const height = 540;
-      const pad = { left: 110, right: 50, top: 48, bottom: 82 };
+      const width = 1460;
+      const height = 430;
+      const pad = { left: 110, right: 50, top: 46, bottom: 82 };
       const plotWidth = width - pad.left - pad.right;
       const plotHeight = height - pad.top - pad.bottom;
       const maxVolume = Math.max(200, ...eligible.map((product) => product.volumeMl || 0));
       const xStep = maxVolume <= 160 ? 25 : maxVolume <= 260 ? 50 : maxVolume <= 520 ? 100 : 200;
       const xMax = Math.ceil(maxVolume / xStep) * xStep;
-      const hundredPriceValues = eligible.map((product) => Math.round(product.unitPriceKrwMl * 100));
-      const maxHundredPrice = Math.max(5000, ...hundredPriceValues);
-      const yStep = maxHundredPrice <= 10000 ? 2000 : maxHundredPrice <= 20000 ? 5000 : maxHundredPrice <= 50000 ? 10000 : 20000;
-      const yMax = Math.ceil(maxHundredPrice / yStep) * yStep;
-      const xPos = (value) => pad.left + ((value - 0) / Math.max(1, xMax)) * plotWidth;
-      const yPos = (value) => pad.top + (1 - (value - 0) / Math.max(1, yMax)) * plotHeight;
+      const yValues = eligible.map((product) => yValueAccessor(product));
+      const maxYValue = Math.max(minYFloor, ...yValues);
+      const yStep = resolveYStep(maxYValue);
+      const yMax = Math.ceil(maxYValue / yStep) * yStep;
+      const xPos = (value) => pad.left + (value / Math.max(1, xMax)) * plotWidth;
+      const yPos = (value) => pad.top + (1 - (value / Math.max(1, yMax))) * plotHeight;
       const xTicks = Array.from({ length: Math.floor(xMax / xStep) + 1 }, (_, idx) => idx * xStep);
       const yTicks = Array.from({ length: Math.floor(yMax / yStep) + 1 }, (_, idx) => idx * yStep);
       const legendItems = buildSegmentLegendButtons(colorMap);
 
       const dots = eligible.map((product) => {
         const cx = xPos(product.volumeMl);
-        const cy = yPos(product.unitPriceKrwMl * 100);
+        const cy = yPos(yValueAccessor(product));
         const toneColor = colorMap[product.tone] || "#666";
-        return `
-          <g class="map-point" data-product-id="${escapeHtml(product.id)}" data-cluster="${escapeHtml(product.cluster)}" style="cursor:pointer">
-            <circle cx="${cx}" cy="${cy}" r="11" fill="${toneColor}" fill-opacity="0.92" stroke="white" stroke-width="3"></circle>
-            <text x="${cx}" y="${cy + 4}" text-anchor="middle" font-size="10" font-weight="800" fill="white">${escapeHtml(product.no)}</text>
-          </g>
-        `;
+        return buildDistributionMapDot(product, cx, cy, toneColor);
       }).join("");
 
       const xGrid = xTicks.map((tick) => `
@@ -7027,45 +7071,97 @@
       const yGrid = yTicks.map((tick) => `
         <g>
           <line x1="${pad.left}" y1="${yPos(tick)}" x2="${pad.left + plotWidth}" y2="${yPos(tick)}" stroke="rgba(37,31,24,0.08)" stroke-dasharray="5 7"></line>
-          <text x="${pad.left - 16}" y="${yPos(tick) + 4}" text-anchor="end" font-size="11" fill="#6c625a">${tick === 0 ? "0" : formatInt(tick)}</text>
+          <text x="${pad.left - 16}" y="${yPos(tick) + 4}" text-anchor="end" font-size="11" fill="#6c625a">${escapeHtml(yTickLabelFormatter(tick))}</text>
         </g>
       `).join("");
 
       card.innerHTML = `
         <div class="drag-handle" data-drag-handle="true">
           <div class="item-heading">
-            <span class="item-chip mint">미스트 용량·가격 분포</span>
+            <span class="item-chip mint">${escapeHtml(titleChip)}</span>
             <span class="item-chip sky">x = 전체 용량</span>
-            <span class="item-chip amber">y = 100ml 환산 단가</span>
+            <span class="item-chip amber">${escapeHtml(yChip)}</span>
+            <span class="item-chip olive">점선 = 본딩 히어로 비미스트 참고점</span>
           </div>
-          <span class="meta-signal">미스트/스프레이만 포함 · hover/click 연동</span>
+          <span class="meta-signal">${escapeHtml(metaSignal)}</span>
         </div>
         <div class="panel-body">
           <div class="map-topline">
-            <p>헤어에 뿌리는 mist/spray 제품만 남기고, 가로축은 전체 용량(ml), 세로축은 100ml 환산 단가(KRW)로 다시 펼쳐 본 분포도입니다. 세그 버튼을 누르면 해당 세그만 하이라이트되고, 점에 마우스를 올리거나 클릭하면 기존과 같은 미니 카드/상세 패널이 열립니다.</p>
+            <p>${escapeHtml(intro)}</p>
           </div>
           <div class="map-legend">
             ${legendItems}
           </div>
           <div class="map-svg-wrap">
-            <svg viewBox="0 0 ${width} ${height}" width="100%" height="100%" aria-label="헤어미스트 용량과 100ml 단가 분포도">
+            <svg viewBox="0 0 ${width} ${height}" width="100%" height="100%" aria-label="${escapeHtml(ariaLabel)}">
               <rect x="0" y="0" width="${width}" height="${height}" fill="transparent"></rect>
               ${xGrid}
               ${yGrid}
               <line x1="${pad.left}" y1="${pad.top + plotHeight}" x2="${pad.left + plotWidth}" y2="${pad.top + plotHeight}" stroke="#251f18" stroke-width="1.5"></line>
               <line x1="${pad.left}" y1="${pad.top}" x2="${pad.left}" y2="${pad.top + plotHeight}" stroke="#251f18" stroke-width="1.5"></line>
               <text x="${pad.left + plotWidth / 2}" y="${height - 22}" text-anchor="middle" font-size="13" font-weight="800" fill="#251f18">전체 제품 용량 (ml)</text>
-              <text x="28" y="${pad.top + plotHeight / 2}" text-anchor="middle" transform="rotate(-90 28 ${pad.top + plotHeight / 2})" font-size="13" font-weight="800" fill="#251f18">100ml 환산 단가 (KRW)</text>
+              <text x="28" y="${pad.top + plotHeight / 2}" text-anchor="middle" transform="rotate(-90 28 ${pad.top + plotHeight / 2})" font-size="13" font-weight="800" fill="#251f18">${escapeHtml(yAxisLabel)}</text>
               ${dots}
             </svg>
           </div>
           <div class="map-footnotes">
-            <div class="mini">점선 예외였던 두피/세럼 인접 포맷은 이 카드에서 제외했고, 실제 헤어용 미스트·스프레이만 남겼습니다.</div>
-            <div class="mini">즉 이 분포도는 “소비자가 체감하는 분사형 헤어케어” 안에서 용량과 가격 체계가 어떻게 갈리는지 보는 보조 맵입니다.</div>
+            ${footnotes.map((note) => `<div class="mini">${escapeHtml(note)}</div>`).join("")}
           </div>
         </div>
       `;
       world.appendChild(card);
+    }
+
+    function renderMistVolumeDistributionCard() {
+      renderDistributionMapCard({
+        itemId: "mist-volume-map",
+        defaultPos: { x: 5920, y: 140 },
+        titleChip: "미스트 용량/가격 분포 맵",
+        yChip: "y = 100ml 환산 단가",
+        metaSignal: "세그 하이라이트 · hover/click 연동",
+        intro: "헤어에 뿌리는 mist/spray 제품을 중심으로 다시 펼쳐 본 맵입니다. 다만 본딩 히어로 세그는 Olaplex·K18 같은 비-미스트 reference SKU도 점선으로 함께 넣어, 실제 분사형 헤어미스트 시장과 가격축에서 얼마나 떨어져 있는지 같이 볼 수 있게 했습니다.",
+        footnotes: [
+          "실선 점은 실제 헤어미스트/스프레이이고, 점선 점은 본딩 히어로 세그의 비-미스트 reference SKU입니다.",
+          "즉 이 맵은 소비자가 체감하는 분사형 헤어케어 안에서 용량과 100ml 단가가 어떻게 갈리고, 구조복구 히어로형이 그 바깥 어디에 놓이는지 같이 읽는 보조 맵입니다."
+        ],
+        ariaLabel: "헤어미스트 용량과 100ml 단가 분포도",
+        yAxisLabel: "100ml 환산 단가 (KRW)",
+        yValueAccessor: (product) => Math.round(product.unitPriceKrwMl * 100),
+        yTickLabelFormatter: (tick) => tick === 0 ? "0" : formatInt(tick),
+        minYFloor: 5000,
+        resolveYStep: (maxYValue) => {
+          if (maxYValue <= 10000) return 2000;
+          if (maxYValue <= 20000) return 5000;
+          if (maxYValue <= 50000) return 10000;
+          return 20000;
+        }
+      });
+    }
+
+    function renderMistTotalPriceDistributionCard() {
+      renderDistributionMapCard({
+        itemId: "mist-total-price-map",
+        defaultPos: { x: 5920, y: 860 },
+        titleChip: "미스트 가격 & 전체 용량 분포 맵",
+        yChip: "y = 전체 가격",
+        metaSignal: "세그 하이라이트 · hover/click 연동",
+        intro: "같은 미스트 중심군을 이번에는 100ml 환산이 아니라 실제 판매가(KRW) 기준으로 다시 본 맵입니다. 전체 용량이 같아도 absolute price가 얼마나 다르게 읽히는지, 그리고 본딩 히어로 비-미스트 reference가 소비자 체감 가격대에서 어디에 놓이는지 바로 비교할 수 있습니다.",
+        footnotes: [
+          "세로축은 할인 판매가를 우선 사용하고, 할인가가 없을 때만 판매가를 fallback으로 사용했습니다.",
+          "여기도 실선은 실제 헤어미스트/스프레이, 점선은 본딩 히어로 세그의 비-미스트 reference SKU입니다."
+        ],
+        ariaLabel: "헤어미스트 전체 가격과 용량 분포도",
+        yAxisLabel: "전체 가격 (KRW)",
+        yValueAccessor: (product) => getEffectivePriceKrw(product),
+        yTickLabelFormatter: (tick) => tick === 0 ? "0" : formatInt(tick),
+        minYFloor: 20000,
+        resolveYStep: (maxYValue) => {
+          if (maxYValue <= 30000) return 5000;
+          if (maxYValue <= 80000) return 10000;
+          if (maxYValue <= 150000) return 20000;
+          return 50000;
+        }
+      });
     }
 
     function renderTableCard(kind, x, y, ids, title, description) {
@@ -7239,6 +7335,7 @@
       renderProductCards();
       renderMapCard();
       renderMistVolumeDistributionCard();
+      renderMistTotalPriceDistributionCard();
       renderTableCard(
         "core",
         3490,
