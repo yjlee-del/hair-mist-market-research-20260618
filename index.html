@@ -420,6 +420,20 @@
       letter-spacing: -0.03em;
     }
 
+    .usp-driver-row {
+      margin: 8px 16px 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .usp-driver-note {
+      margin: 8px 16px 0;
+      font-size: 12px;
+      line-height: 1.55;
+      color: rgba(65, 53, 42, 0.78);
+    }
+
     .product-media {
       margin: 0 16px;
       height: 128px;
@@ -953,6 +967,13 @@
       margin: 8px 0 4px;
     }
 
+    .map-preview .preview-driver {
+      margin-top: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
     .map-preview .preview-meta,
     .map-preview .preview-copy {
       font-size: 12px;
@@ -1051,6 +1072,13 @@
       margin: 0 0 10px;
       font-size: 14px;
       letter-spacing: -0.02em;
+    }
+
+    .drawer-driver-note {
+      margin-top: 10px;
+      font-size: 13px;
+      line-height: 1.65;
+      color: rgba(65, 53, 42, 0.8);
     }
 
     .drawer-grid {
@@ -5967,24 +5995,168 @@
       "korres-red-vine-hair-sun": { dx: -20, dy: -54, align: "end" }
     };
 
+    const USP_DRIVER_META = {
+      "bond-core": {
+        label: "본딩 위주",
+        shortLabel: "본딩",
+        tone: "olive",
+        summary: "본딩/구조복구 서사 자체가 구매 이유의 중심인 타입"
+      },
+      "bond-plus": {
+        label: "다른 기능 + 본딩 추가",
+        shortLabel: "+본딩",
+        tone: "mint",
+        summary: "열보호·리브인·스타일링 같은 기능에 본딩 서사를 얹은 타입"
+      },
+      "finish-repair": {
+        label: "결·윤기 중심",
+        shortLabel: "결·윤기",
+        tone: "sky",
+        summary: "부드러움·윤기·컨디셔닝 결과감이 구매 이유의 중심인 타입"
+      },
+      "daily-function": {
+        label: "열보호·엉킴·스타일링",
+        shortLabel: "기능",
+        tone: "amber",
+        summary: "열보호·detangle·스타일링 prep처럼 즉시 체감 기능이 중심인 타입"
+      }
+    };
+
+    const uspDriverByProduct = {
+      quickbond: {
+        type: "bond-core",
+        note: "공식몰이 `#본딩케어`를 전면에 두고 시술 손상 케어용으로 설명해, 구매 이유의 중심이 본딩 자체에 가깝습니다."
+      },
+      redken: {
+        type: "bond-plus",
+        note: "Acidic Bonding Concentrate 서사는 분명하지만, 실제 PDP는 leave-in repair treatment와 daily damage care를 함께 파는 하이브리드형입니다."
+      },
+      aveda: {
+        type: "bond-plus",
+        note: "botanical repair 카피에 leave-in 보호/정돈 효익이 같이 붙어 있어 pure bond hero보다는 기능+본딩에 가깝습니다."
+      },
+      wella: {
+        type: "bond-plus",
+        note: "inside-out repair 카피가 강하지만 실제 사용 맥락은 rescue mist + heat/finish 보조까지 포함돼 구조복구+기능 하이브리드로 읽힙니다."
+      },
+      kerastase: {
+        type: "finish-repair",
+        note: "Gloss, anti-frizz, parfum finish 쪽이 먼저 읽혀서 본딩보다는 결·윤기 관리형 프리미엄 미스트에 가깝습니다."
+      },
+      sebastian: {
+        type: "bond-plus",
+        note: "bonding spray이긴 하지만 Apple Acid와 styling polymers를 함께 앞세워, 본딩 단독보다 스타일링 보조가 섞인 타입입니다."
+      },
+      matrix: {
+        type: "bond-plus",
+        note: "Build-A-Bond 스토리는 있지만 실제 체감 포인트는 smoothing leave-in 쪽이어서 기능+본딩 확장형으로 보는 편이 자연스럽습니다."
+      },
+      ayunche: {
+        type: "finish-repair",
+        note: "리뷰와 카피 모두 엉킴·정전기·건조 정돈 같은 finish benefit 쪽으로 읽혀, 본딩보다 결·윤기 관리형에 가깝습니다."
+      },
+      "chahong-keratin-mist": {
+        type: "finish-repair",
+        note: "케라틴 미스트지만 실제 구매 이유는 손상모 컨디셔닝과 결 정돈 쪽이어서 결·윤기 중심 리페어에 가깝습니다."
+      },
+      "oribe-runthrough": {
+        type: "daily-function",
+        note: "detangling primer, heat protect, styling prep가 전면이라 즉시 체감 기능형 미스트로 읽히는 제품입니다."
+      },
+      "bumble-hio-primer": {
+        type: "daily-function",
+        note: "anti-frizz, detangle, heat protect 카피가 메인이라 결 관리보다 스타일링 prep/기능형으로 보는 편이 맞습니다."
+      },
+      "ouai-leave-in": {
+        type: "daily-function",
+        note: "detangle, smooth, heat protect, split-end seal이 메인이라 일상적인 기능 해결형 leave-in으로 읽힙니다."
+      },
+      "unite-7seconds": {
+        type: "daily-function",
+        note: "7SECONDS는 detangle과 heat/UV protect가 구매 이유 1순위라, 살롱 오리진이어도 기능형 비중이 더 큽니다."
+      },
+      "randco-sun-catcher": {
+        type: "daily-function",
+        note: "soften, seal, detangle, styling base를 먼저 파는 SKU라 결 관리보다 루틴 기능형에 가깝습니다."
+      },
+      "davines-oi-milk": {
+        type: "finish-repair",
+        note: "softness, shine, frizz control 같은 결과감이 주역인 프리미엄 milk라 결·윤기 중심 리페어로 읽는 편이 자연스럽습니다."
+      },
+      "moroccanoil-perfect-defense": {
+        type: "daily-function",
+        note: "450°F heat protect와 dry aerosol 사용성이 앞서는 대표 기능형 heat protect라 열보호 중심으로 보는 편이 맞습니다."
+      },
+      "drybar-hot-toddy": {
+        type: "daily-function",
+        note: "blowout prep과 heat shield가 메인이라 살롱 스타일링 기능형 미스트의 대표 케이스입니다."
+      },
+      "phyto-heat-protection": {
+        type: "daily-function",
+        note: "230°C heat protect와 anti-breakage가 전면이라, 더마/약국 톤의 기능형 미스트로 읽는 것이 가장 자연스럽습니다."
+      },
+      "klorane-chamomile-spray": {
+        type: "finish-repair",
+        note: "brighten, shine, detangle이 중심이라 본딩보다 결·윤기와 헤어 톤 finish 쪽이 더 앞에 오는 제품입니다."
+      },
+      "rene-furterer-naturia": {
+        type: "daily-function",
+        note: "organic express detangling과 whole-family ease가 핵심이라 즉시 체감 기능형으로 보는 편이 맞습니다."
+      },
+      "rene-furterer-thermal": {
+        type: "daily-function",
+        note: "220°C heat protection과 anti-frizz가 핵심이어서, 헤어에 뿌리는 기능형 미스트/스프레이로 읽히는 제품입니다."
+      },
+      "nuxe-hair-sun-oil": {
+        type: "daily-function",
+        note: "UV, salt, chlorine protection이 주역인 seasonal protect 제품이라 결 관리보다 기능 protect 쪽이 더 강합니다."
+      },
+      "korres-red-vine-hair-sun": {
+        type: "daily-function",
+        note: "UV protect와 colour maintenance가 핵심이라 더마/약국 오리진의 protect형 기능 미스트로 보는 편이 맞습니다."
+      }
+    };
+
     function truncateMapLabel(value, maxLength = 26) {
       const text = String(value || "").trim();
       if (text.length <= maxLength) return text;
       return text.slice(0, maxLength - 1) + "…";
     }
 
+    function getUspDriverInfo(product) {
+      const entry = uspDriverByProduct[product.id];
+      if (!entry) return null;
+      const meta = USP_DRIVER_META[entry.type];
+      if (!meta) return null;
+      return {
+        type: entry.type,
+        label: meta.label,
+        shortLabel: meta.shortLabel,
+        tone: meta.tone,
+        summary: meta.summary,
+        note: entry.note
+      };
+    }
+
+    function renderUspDriverChip(driverInfo) {
+      if (!driverInfo) return "";
+      return `<span class="item-chip ${escapeHtml(driverInfo.tone)}">USP 주역 · ${escapeHtml(driverInfo.label)}</span>`;
+    }
+
     function isMistNamedProduct(product) {
-      const haystack = [
+      const primaryHaystack = [
         product.form,
         product.productName,
         product.title,
-        product.productLabel,
+        product.productLabel
+      ].join(" ").toLowerCase();
+      const contextHaystack = [
         product.concept,
         product.uspIngredients
       ].join(" ").toLowerCase();
-      if (/두피|scalp|토닉|tonic/.test(haystack)) return false;
-      if (/인접|adjacent/.test(haystack)) return false;
-      return /미스트|mist|스프레이|spray/.test(haystack);
+      if (/두피|scalp|토닉|tonic/.test(primaryHaystack) || /두피|scalp|토닉|tonic/.test(contextHaystack)) return false;
+      if (/인접|adjacent/.test(primaryHaystack)) return false;
+      return /미스트|mist|스프레이|spray/.test(primaryHaystack);
     }
 
     function shouldShowPinnedMapLabel(product) {
@@ -5993,14 +6165,16 @@
 
     function buildMapPinnedLabel(product, cx, cy, toneColor) {
       const config = mapLabelConfig[product.id] || { dx: 16, dy: -42, align: "start" };
+      const driverInfo = getUspDriverInfo(product);
       const brandLine = truncateMapLabel(product.brandKo || product.brand, 18);
       const nameLine = truncateMapLabel(product.productName || product.title, 30);
-      const lines = [brandLine, nameLine];
+      const driverLine = driverInfo ? truncateMapLabel(driverInfo.shortLabel, 16) : "";
+      const lines = driverInfo ? [brandLine, nameLine, driverLine] : [brandLine, nameLine];
       const estimatedWidth = Math.min(
         250,
         Math.max(...lines.map((line) => line.length)) * 7.1 + 18
       );
-      const boxHeight = 38;
+      const boxHeight = driverInfo ? 52 : 38;
       const boxX = config.align === "end" ? cx + config.dx - estimatedWidth : cx + config.dx;
       const boxY = cy + config.dy - 10;
       const textX = config.align === "end" ? boxX + estimatedWidth - 9 : boxX + 9;
@@ -6042,6 +6216,11 @@
           <text x="${textX}" y="${boxY + 29}" text-anchor="${anchor}" font-size="10" font-weight="600" fill="#4b4036">
             ${escapeHtml(nameLine)}
           </text>
+          ${driverInfo ? `
+            <text x="${textX}" y="${boxY + 43}" text-anchor="${anchor}" font-size="9" font-weight="800" fill="${toneColor}">
+              ${escapeHtml(driverLine)}
+            </text>
+          ` : ""}
         </g>
       `;
     }
@@ -6265,6 +6444,7 @@
     }
 
     function getCardText(product) {
+      const driverInfo = getUspDriverInfo(product);
       return [
         product.no,
         product.title,
@@ -6286,7 +6466,9 @@
         (detailCatalog[product.id]?.reviewHighlights || []).join(" "),
         detailCatalog[product.id]?.bondMechanismType || "",
         detailCatalog[product.id]?.bondMechanismSummary || "",
-        (detailCatalog[product.id]?.bondMechanismDetails || []).join(" ")
+        (detailCatalog[product.id]?.bondMechanismDetails || []).join(" "),
+        driverInfo?.label || "",
+        driverInfo?.note || ""
       ].join(" ").toLowerCase();
     }
 
@@ -6386,6 +6568,7 @@
       const displaySources = getDisplaySources(product);
       const reviewSummary = getReviewSummary(product);
       const bondInfo = getBondMechanismInfo(product);
+      const driverInfo = getUspDriverInfo(product);
       const fullIngredientsText = catalog.fullIngredients || "";
       const fullIngredientsSource = catalog.fullIngredientsSource || "";
       const fullIngredientsNote = catalog.fullIngredientsNote || "";
@@ -6418,9 +6601,24 @@
             <span class="tier-chip tier-${product.tier.toLowerCase()}">${escapeHtml(product.tier)} 근거</span>
           </div>
           ${renderProductTagChips(product.metaTags, "compact")}
+          ${driverInfo ? `<div class="usp-driver-row" style="margin:10px 0 0;">${renderUspDriverChip(driverInfo)}</div>` : ""}
           <div class="drawer-grid">${priceRows}</div>
           ${detailPageRow}
         </section>
+        ${driverInfo ? `
+          <section class="drawer-card">
+            <h3>USP 주역 판정</h3>
+            <div class="item-heading">
+              ${renderUspDriverChip(driverInfo)}
+            </div>
+            <p class="drawer-driver-note">${escapeHtml(driverInfo.note)}</p>
+            <ul class="drawer-list">
+              <li><strong>PDP 메인 카피</strong> ${escapeHtml(product.concept)}</li>
+              <li><strong>성분/포뮬러</strong> ${escapeHtml(product.uspIngredients)}</li>
+              <li><strong>리뷰/반응</strong> ${escapeHtml(reviewSummary.items[0] || product.performance || "현재 보드의 리뷰 메모를 참고해 주세요.")}</li>
+            </ul>
+          </section>
+        ` : ""}
         <section class="drawer-card">
           <h3>세그 정의와 해석</h3>
           <p class="drawer-text">${escapeHtml(sections.find((section) => section.id === product.cluster)?.blurb || "")}</p>
@@ -6496,6 +6694,7 @@
     function showMapPreview(productId, clientX, clientY) {
       const product = getProductById(productId);
       if (!product) return;
+      const driverInfo = getUspDriverInfo(product);
       mapPreview.classList.add("visible");
       mapPreview.setAttribute("aria-hidden", "false");
       mapPreview.innerHTML = `
@@ -6507,6 +6706,7 @@
           </div>
           <div class="preview-title">${escapeHtml(product.title)}</div>
           <div class="preview-meta">${escapeHtml(formatKrw(getSalePriceKrw(product)))} · ${escapeHtml(product.volumeMl)}ml · ${escapeHtml(formatUnit(product.unitPriceKrwMl))}</div>
+          ${driverInfo ? `<div class="preview-driver">${renderUspDriverChip(driverInfo)}</div>` : ""}
           <div class="preview-copy">${escapeHtml(product.concept)}</div>
         </div>
       `;
@@ -6580,6 +6780,7 @@
       for (const product of products) {
         const pos = getItemPosition(product);
         const displaySources = getDisplaySources(product);
+        const driverInfo = getUspDriverInfo(product);
         const node = document.createElement("article");
         node.className = "board-item product-card";
         if (state.selectedProductId === product.id) node.classList.add("highlight");
@@ -6602,6 +6803,7 @@
           <h3>${escapeHtml(product.title)}</h3>
           <div class="product-meta">${escapeHtml(product.volumeMl)}ml | 할인 ${escapeHtml(product.priceSaleDisplay)} | ml당 ${escapeHtml(formatUnit(product.unitPriceKrwMl))}</div>
           <div class="product-score">과학 소구 강도 ${escapeHtml(product.claimDepth.toFixed(1))}/5 · ${escapeHtml(clusterLabelMap[product.cluster])}</div>
+          ${driverInfo ? `<div class="usp-driver-row">${renderUspDriverChip(driverInfo)}</div><div class="usp-driver-note">${escapeHtml(driverInfo.note)}</div>` : ""}
           ${renderProductTagChips(product.metaTags)}
           <div class="cta-row">
             <a class="source-chip primary" href="${escapeHtml(product.url)}" target="_blank" rel="noreferrer">상세페이지</a>
@@ -6685,6 +6887,7 @@
         const cy = yPos(product.claimDepth);
         const toneColor = colorMap[product.tone] || "#666";
         const isMist = isMistNamedProduct(product);
+        const driverInfo = getUspDriverInfo(product);
         const labelMarkup = shouldShowPinnedMapLabel(product)
           ? buildMapPinnedLabel(product, cx, cy, toneColor)
           : "";
@@ -6701,6 +6904,7 @@
               stroke-dasharray="${isMist ? "" : "3.4 3.4"}"
             ></circle>
             <text x="${cx}" y="${cy + 4}" text-anchor="middle" font-size="10" font-weight="800" fill="${isMist ? "white" : toneColor}">${escapeHtml(product.no)}</text>
+            ${driverInfo ? `<text x="${cx}" y="${cy + 26}" text-anchor="middle" font-size="9" font-weight="800" fill="${toneColor}">${escapeHtml(driverInfo.shortLabel)}</text>` : ""}
             ${labelMarkup}
           </g>
         `;
@@ -6732,7 +6936,7 @@
         </div>
         <div class="panel-body">
           <div class="map-topline">
-            <p>가격은 ml당 단가로 통일했고 메시지 강도는 향 중심 ~ direct multi-bond까지 5단계로 정성 점수화했습니다. 숫자 점 위에 마우스를 올리면 미니 카드가, 클릭하면 우측 상세 패널이 열립니다. VAMOOD · OLAPLEX · K18 · Moroccanoil · ChaHong과 더마/약국 세그는 맵에서 기본 라벨이 항상 보이도록 두었습니다.</p>
+            <p>가격은 ml당 단가로 통일했고 메시지 강도는 향 중심 ~ direct multi-bond까지 5단계로 정성 점수화했습니다. 숫자 점 위에 마우스를 올리면 미니 카드가, 클릭하면 우측 상세 패널이 열립니다. VAMOOD · OLAPLEX · K18 · Moroccanoil · ChaHong과 더마/약국 세그는 맵에서 기본 라벨이 항상 보이도록 두었고, 점 아래 보조 텍스트는 USP 주역(본딩 / +본딩 / 결·윤기 / 기능)을 뜻합니다.</p>
           </div>
           <div class="segment-definition-grid">
             ${segmentDefinitions}
