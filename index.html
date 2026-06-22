@@ -1193,8 +1193,8 @@
     const FX_USD_KRW = 1512;
     const FX_EUR_KRW = 1757;
     const FX_GBP_KRW = 2018;
-    const STORAGE_KEY = "hair-mist-board-v8";
-    const LAYOUT_VERSION = 8;
+    const STORAGE_KEY = "hair-mist-board-v9";
+    const LAYOUT_VERSION = 9;
     const WORLD_DEFAULT = { x: 28, y: 24, scale: 0.64 };
 
     const sections = [
@@ -1212,14 +1212,14 @@
       },
       {
         id: "repair-serum",
-        title: "컨디셔닝·세럼형 데일리 리페어",
-        blurb: "본딩 hero만큼 구조 복구를 강하게 외치지는 않지만, 세럼·앰플·에센스·헤어 밀크 같은 컨디셔닝 포맷으로 건조함, 푸석함, 윤기, 데일리 손상 케어를 밀도 있게 파는 SKU입니다. 과한 본딩 서사 없이도 '잘 관리된 머릿결'을 만드는 구간입니다.",
+        title: "결·윤기 중심 리페어",
+        blurb: "본딩 hero만큼 구조 복구를 강하게 외치지는 않지만, 세럼·앰플·에센스·헤어 밀크 같은 컨디셔닝 포맷으로 건조함, 푸석함, 윤기, 데일리 손상 케어를 밀도 있게 파는 SKU입니다. 즉 '머릿결을 더 좋아 보이게 관리하는 것'이 메인인 구간입니다.",
         x: 430, y: 2645, w: 1460, h: 2445
       },
       {
         id: "daily-functional",
-        title: "열보호·엉킴·윤기 데일리 케어형",
-        blurb: "열보호, quick-dry, detangling, anti-frizz, gloss finish, no-wash처럼 바로 체감되는 사용 효익이 메인인 구간입니다. 소비자가 '지금 머리 상태를 정돈하려고' 사는 제품들을 모았습니다.",
+        title: "열보호·엉킴·스타일링 기능",
+        blurb: "열보호, quick-dry, detangling, anti-frizz, gloss finish, no-wash, styling prep처럼 바로 체감되는 사용 효익이 메인인 구간입니다. 소비자가 '지금 머리 상태를 정돈하려고' 사는 제품들을 모았습니다.",
         x: 1930, y: 2645, w: 1460, h: 2445
       },
       {
@@ -1287,14 +1287,14 @@
       {
         id: "note-segments",
         title: "세그 정의",
-        body: "본딩·구조복구 히어로형 = 본딩 자체가 메인인 제품\\n본딩+리브인/스타일링 확장형 = 본딩 기술을 얹은 기능형 리브인\\n컨디셔닝·세럼형 데일리 리페어 = 본딩보다 머릿결·윤기 관리가 메인인 세럼/밀크형\\n열보호·엉킴·윤기 데일리 케어형 = 지금 당장 정돈해주는 체감 효익형\\n살롱 오리진 = 살롱에서 출발한 브랜드라서 신뢰하는 제품\\n더마/약국 신뢰형 = 약국·더마 채널 신뢰가 먼저 읽히는 제품\\n향 중심 헤어 퍼퓸형 = 케어보다 향과 무드가 먼저 읽히는 제품\\n글로벌 럭셔리 향수 브랜드형 = 명품·향수 브랜드 확장으로 보는 제품",
+        body: "본딩·구조복구 히어로형 = 본딩 자체가 메인인 제품\\n본딩+리브인/스타일링 확장형 = 본딩 기술을 얹은 기능형 리브인\\n결·윤기 중심 리페어 = 본딩보다 머릿결·윤기 관리가 메인인 세럼/밀크형\\n열보호·엉킴·스타일링 기능 = 지금 당장 정돈해주는 체감 효익형\\n살롱 오리진 = 살롱에서 출발한 브랜드라서 신뢰하는 제품\\n더마/약국 신뢰형 = 약국·더마 채널 신뢰가 먼저 읽히는 제품\\n향 중심 헤어 퍼퓸형 = 케어보다 향과 무드가 먼저 읽히는 제품\\n글로벌 럭셔리 향수 브랜드형 = 명품·향수 브랜드 확장으로 보는 제품",
         footer: "즉 같은 브랜드여도 fragrance extension처럼 오리진보다 향이 먼저 읽히는 SKU는 다른 세그에 남을 수 있습니다.",
         x: 70, y: 1600, w: 310, h: 360
       },
       {
         id: "note-domestic-refresh",
         title: "이번 보강",
-        body: "1) 세그 구조를 다시 손봐서 총 76개 SKU를 8개 세그로 재배치했습니다.\\n2) `살롱 오리진`과 `더마/약국 신뢰형`을 분리해, 비슷해 보이지만 다른 신뢰 논리가 섞이지 않게 정리했습니다.\\n3) AMOS Quick Bond는 살롱 오리진으로 옮겼고, Jennyhouse 퀵 드라이는 실제 구매 이유가 기능형에 가까워 데일리 기능 세그에 남겼습니다.\\n4) 현재 판매중 여부가 불명확한 Elastine 바이오본드 17 본딩 앰플은 보드에서 제외했습니다.\\n5) Klorane · René Furterer · NUXE · KORRES 쪽 약국/유럽 더마 유통 미스트도 이번 턴에 더마 세그로 보강했습니다.",
+        body: "1) 세그 구조를 다시 손봐서 총 76개 SKU를 8개 세그로 재배치했습니다.\\n2) `살롱 오리진`과 `더마/약국 신뢰형`을 분리해, 비슷해 보이지만 다른 신뢰 논리가 섞이지 않게 정리했습니다.\\n3) AMOS Quick Bond는 살롱 오리진으로 옮겼고, Jennyhouse 퀵 드라이는 실제 구매 이유가 기능형에 가까워 `열보호·엉킴·스타일링 기능` 세그에 남겼습니다.\\n4) 현재 판매중 여부가 불명확한 Elastine 바이오본드 17 본딩 앰플은 보드에서 제외했습니다.\\n5) Klorane · René Furterer · NUXE · KORRES 쪽 약국/유럽 더마 유통 미스트도 이번 턴에 더마 세그로 보강했습니다.",
         footer: "가격은 공식몰/주요 리테일 현재가를 우선 썼고, 해외 SKU oz 표기는 ml당 단가 비교를 위해 환산했습니다.",
         x: 70, y: 1990, w: 310, h: 320
       }
@@ -3498,7 +3498,7 @@
         evidence: [
           "공식몰에 소비자가 19,000원 / 판매가 15,900원 확인",
           "공식 메타 설명에 69% 건조 시간 단축과 열 손상 보호가 명시됩니다.",
-          "올리브영에서도 동일 200ml SKU가 별도 판매돼, 실제 소비자에게는 살롱 전용품보다 데일리 기능형으로 읽힐 가능성이 큽니다."
+          "올리브영에서도 동일 200ml SKU가 별도 판매돼, 실제 소비자에게는 살롱 전용품보다 열보호·엉킴·스타일링 기능 세그로 읽힐 가능성이 큽니다."
         ],
         sources: [
           { label: "Jennyhouse", url: "https://jennyhouse.com/product/%EC%A0%9C%EB%8B%88%ED%95%98%EC%9A%B0%EC%8A%A4-%ED%9E%88%ED%8C%85%EC%BC%80%EC%96%B4-%ED%80%B5-%EB%93%9C%EB%9D%BC%EC%9D%B4-%ED%97%A4%EC%96%B4-%EB%AF%B8%EC%8A%A4%ED%8A%B8-200ml/16/" },
@@ -4659,8 +4659,8 @@
     const clusterLabelMap = {
       "bond-hero": "본딩 히어로",
       "bond-extended": "본딩 확장",
-      "repair-serum": "컨디셔닝 리페어",
-      "daily-functional": "데일리 기능",
+      "repair-serum": "결·윤기 중심 리페어",
+      "daily-functional": "열보호·엉킴·스타일링 기능",
       "salon-based": "살롱 오리진",
       "derma-pharmacy": "더마/약국 신뢰형",
       "scent-led": "향 중심",
@@ -4671,7 +4671,7 @@
       "bond-hero": "본딩 자체가 메인인 제품 (본딩 기술이 주인공)",
       "bond-extended": "본딩 기술을 얹은 기능형 리브인 (본딩은 조연, 다른 기능이 주인공)",
       "repair-serum": "본딩보다 머릿결·윤기 관리가 메인인 세럼/밀크형",
-      "daily-functional": "열보호·엉킴·윤기처럼 지금 당장 체감되는 효익이 메인인 제품",
+      "daily-functional": "열보호·엉킴·스타일링처럼 지금 당장 체감되는 효익이 메인인 제품",
       "salon-based": "살롱에서 출발한 브랜드라서 더 믿고 보는 제품",
       "derma-pharmacy": "약국·더마 채널 신뢰와 기능 검증 톤이 먼저 읽히는 제품",
       "scent-led": "케어보다 향과 무드가 먼저 읽히는 헤어 퍼퓸형",
@@ -5838,7 +5838,7 @@
         fullIngredientsSource: "It's a 10 Haircare 공식 PDP",
         fullIngredientsNote: "공식 페이지에서 sunflower seed extract, green tea leaf extract, silk amino acids, aloe vera, panthenol과 열보호/UV/detangle 효익을 확인했습니다.",
         insightBullets: [
-          "미국 mass-premium leave-in의 교과서 같은 SKU라, 본딩보다는 다기능 컨디셔닝 리페어 기준점으로 좋습니다.",
+          "미국 mass-premium leave-in의 교과서 같은 SKU라, 본딩보다는 다기능 결·윤기 중심 리페어 기준점으로 좋습니다.",
           "4oz $21 가격대는 국내 데일리 리페어군과 비교할 때도 꽤 현실적인 환산값을 만듭니다."
         ],
         reviewHighlights: [
@@ -5850,11 +5850,11 @@
         fullIngredientsSource: "UNITE Hair 공식 PDP",
         fullIngredientsNote: "공식 페이지에서 protein-based formula, heat protection up to 450°F, UV protection, color lock, extension-safe 포인트를 확인했습니다.",
         insightBullets: [
-          "미국 살롱 프로페셔널 detangler의 대표격이라, 데일리 기능형 세그 안에서 매우 좋은 benchmark입니다.",
+          "미국 살롱 프로페셔널 detangler의 대표격이라, 열보호·엉킴·스타일링 기능 세그 안에서 매우 좋은 benchmark입니다.",
           "즉각적인 빗질 편의와 열보호를 함께 파는 방식이 한국 quick-dry/anti-frizz SKU와 비교하기 좋습니다."
         ],
         reviewHighlights: [
-          "구매 이유가 구조 복구보다는 detangling과 daily manageability에 더 가까워, 살롱 origin이어도 메인 세그는 데일리 기능형으로 두는 편이 자연스럽습니다."
+          "구매 이유가 구조 복구보다는 detangling과 daily manageability에 더 가까워, 살롱 origin이어도 메인 세그는 열보호·엉킴·스타일링 기능으로 두는 편이 자연스럽습니다."
         ]
       },
       "randco-sun-catcher": {
@@ -5863,7 +5863,7 @@
         fullIngredientsNote: "공식 페이지에서 soften, seal, detangle, frizz control, damp/dry layering 사용 장면을 확인했습니다.",
         insightBullets: [
           "editorial/salon brand가 leave-in conditioner를 얼마나 가볍고 라이프스타일형으로 푸는지 보여주는 미국 레퍼런스입니다.",
-          "bond story보다 anti-frizz와 detangle, layering usability를 먼저 파는 SKU라 데일리 기능형에 가깝습니다."
+          "bond story보다 anti-frizz와 detangle, layering usability를 먼저 파는 SKU라 열보호·엉킴·스타일링 기능 세그에 가깝습니다."
         ],
         reviewHighlights: [
           "스타일링 전 단계 프라이머에 가까워, 과학 서사보다는 루틴 호환성과 부드러운 사용감이 비교 포인트가 됩니다."
@@ -5912,7 +5912,7 @@
         fullIngredientsSource: "Rahua 공식 PDP",
         fullIngredientsNote: "공식 페이지에서 detangle, hydrate, essential sun protection과 6.5 oz / 2 oz variant 구성을 확인했습니다. full INCI 전체는 이번 턴에 별도 정리하지 않았습니다.",
         insightBullets: [
-          "UV barrier를 전면에 거는 clean-leaning detangler라는 점이 데일리 기능형 안에서 꽤 차별적입니다.",
+          "UV barrier를 전면에 거는 clean-leaning detangler라는 점이 열보호·엉킴·스타일링 기능 세그 안에서 꽤 차별적입니다.",
           "bond science보다도 detangling, hydration, lightweight daily protect 루틴에 초점이 맞아 있습니다."
         ],
         reviewHighlights: [
@@ -5978,8 +5978,12 @@
         product.form,
         product.productName,
         product.title,
-        product.productLabel
+        product.productLabel,
+        product.concept,
+        product.uspIngredients
       ].join(" ").toLowerCase();
+      if (/두피|scalp|토닉|tonic/.test(haystack)) return false;
+      if (/인접|adjacent/.test(haystack)) return false;
       return /미스트|mist|스프레이|spray/.test(haystack);
     }
 
@@ -6722,7 +6726,7 @@
             <span class="item-chip mint">포지셔닝맵</span>
             <span class="item-chip amber">x = ml당 단가</span>
             <span class="item-chip rose">y = 본딩/리페어 과학 소구 강도</span>
-            <span class="item-chip olive">점선 원 = 미스트/스프레이 외 제형</span>
+            <span class="item-chip olive">점선 원 = 두피/세럼/밤 등 비-헤어미스트 제형</span>
           </div>
           <span class="meta-signal">hover = 미니 카드 / click = 상세 패널</span>
         </div>
