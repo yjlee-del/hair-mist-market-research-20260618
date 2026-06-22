@@ -149,8 +149,8 @@
     .world {
       position: absolute;
       inset: 0 auto auto 0;
-      width: 5600px;
-      height: 6500px;
+      width: 6200px;
+      height: 9800px;
       transform-origin: 0 0;
     }
 
@@ -173,7 +173,7 @@
       background: var(--section-bg, rgba(255, 252, 247, 0.56));
       box-shadow:
         inset 0 0 0 1px rgba(255, 255, 255, 0.52),
-        inset 0 86px 0 var(--section-band, rgba(255, 255, 255, 0.3));
+        inset 0 156px 0 var(--section-band, rgba(255, 255, 255, 0.3));
       pointer-events: none;
       z-index: 0;
     }
@@ -181,7 +181,7 @@
     .section-panel header {
       position: absolute;
       left: 22px;
-      top: -18px;
+      top: 18px;
       padding: 8px 14px;
       border-radius: 14px;
       border: 1px solid var(--section-line, rgba(37, 31, 24, 0.12));
@@ -190,12 +190,29 @@
       font-weight: 800;
       letter-spacing: -0.03em;
       box-shadow: var(--shadow);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-panel header strong {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      height: 24px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: rgba(37, 31, 24, 0.08);
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--muted);
     }
 
     .section-panel p {
       position: absolute;
       left: 24px;
-      top: 28px;
+      top: 72px;
       width: calc(100% - 48px);
       color: var(--muted);
       font-size: 13px;
@@ -434,6 +451,17 @@
 
     .product-score {
       margin-top: 6px;
+    }
+
+    .product-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 8px 16px 0;
+    }
+
+    .product-tags.compact {
+      margin: 0 0 12px;
     }
 
     .micro-list {
@@ -1009,14 +1037,14 @@
   <div class="toolbar">
     <div class="toolbar-title">
       <strong>헤어미스트 SKU 리서치 보드</strong>
-      <span>카드 본문 드래그 이동, 휠 확대/축소, 메모 편집, 포지셔닝맵, 딥다이브 표를 한 화면에서 보도록 재구성한 로컬 보드</span>
+      <span>카드 상단 또는 본문 빈 공간 드래그 이동, 휠 확대/축소, 메모 편집, 포지셔닝맵, 딥다이브 표를 한 화면에서 보도록 재구성한 로컬 보드</span>
     </div>
     <div class="search-wrap">
       <input id="searchInput" type="search" placeholder="상품명, 브랜드, USP, 본딩, 실리콘, 바쿠치올, 세라마이드, 알코올, 올영, 카카오선물 등으로 검색" />
     </div>
     <div class="toolbar-group">
-      <span id="deepDivePill" class="pill">딥다이브 29개</span>
-      <span id="extendedPill" class="pill">확장 가격군 9개</span>
+      <span id="deepDivePill" class="pill">딥다이브</span>
+      <span id="extendedPill" class="pill">확장 가격군</span>
       <span class="pill">FX 가정 1 USD = 1,512 KRW</span>
     </div>
     <div class="toolbar-group">
@@ -1050,57 +1078,45 @@
   <script>
     const FX_USD_KRW = 1512;
     const STORAGE_KEY = "hair-mist-board-v7";
-    const LAYOUT_VERSION = 2;
+    const LAYOUT_VERSION = 4;
     const WORLD_DEFAULT = { x: 28, y: 24, scale: 0.64 };
 
     const sections = [
       {
-        id: "domestic-repair",
-        title: "국내 성분-서사 확장",
-        blurb: "이 구간은 시장의 공식 카테고리라기보다, 성분 서사를 어디까지 끌어오고 있는지 보기 위한 편집용 묶음입니다. 세라마이드·히알루론산·펩타이드·콜라겐·비피다처럼 스킨케어에서 익숙한 키워드를 헤어미스트에 얹는 제품을 모아, 쭈드레님이 본딩 외에 '성분 서사'를 확장할 때 참고하도록 두었습니다.",
-        x: 430, y: 120, w: 980, h: 1100
+        id: "bond-hero",
+        title: "본딩·구조복구 히어로형",
+        blurb: "bond, molecular repair, triple bond, disulfide repair처럼 구조 복구 자체가 메인 메시지인 SKU입니다. 쭈드레님의 3-bond 서사와 가장 직접적으로 맞닿는 1차 비교군입니다.",
+        x: 430, y: 120, w: 1460, h: 2445
       },
       {
-        id: "domestic-bond",
-        title: "국내 본딩/살롱 리페어",
-        blurb: "국내에서 bond·protein·salon repair 문법을 비교적 직접적으로 쓰는 구간입니다. 쭈드레님처럼 과학 소구를 팔려는 제품과 가장 직접적으로 메시지가 겹치고, 실판매가/정가 벤치마크를 잡기에도 우선순위가 높습니다.",
-        x: 1480, y: 120, w: 980, h: 1100
+        id: "bond-extended",
+        title: "본딩+리브인/스타일링 확장형",
+        blurb: "본딩이나 단백질 리페어가 중요하지만, leave-in, spray mask, styling creme, heat protect 같은 사용 장면 효익과 함께 팔리는 SKU입니다. direct hero보다 한 단계 넓은 실사용형 본딩 구간입니다.",
+        x: 1930, y: 120, w: 1460, h: 2445
       },
       {
-        id: "global-direct",
-        title: "글로벌 본딩 Direct",
-        blurb: "이 세그는 'bond repair 자체'가 주인공인 제품들입니다. 브랜드가 전면에서 bond, molecular repair, three-bond, disulfide repair 같은 구조적 복구 서사를 직접 파는 구간이라, 쭈드레님의 3-bond 서사와 가장 개념적으로 가깝습니다.",
-        x: 430, y: 1220, w: 980, h: 990
+        id: "repair-serum",
+        title: "컨디셔닝·세럼형 데일리 리페어",
+        blurb: "본딩 hero만큼 구조 복구를 강하게 외치지는 않지만, 세럼·앰플·에센스·헤어 밀크 같은 컨디셔닝 포맷으로 건조함, 푸석함, 윤기, 데일리 손상 케어를 밀도 있게 파는 SKU입니다. 과한 본딩 서사 없이도 '잘 관리된 머릿결'을 만드는 구간입니다.",
+        x: 430, y: 2645, w: 1460, h: 2445
       },
       {
-        id: "global-adjacent",
-        title: "글로벌 본딩 Adjacent",
-        blurb: "이 세그는 bond가 핵심이긴 하지만, 완전히 'direct bond hero SKU'라기보다 styling creme, rescue treatment, anti-breakage leave-in처럼 다른 효익과 함께 묶여 있는 구간입니다. 즉 direct보다 본딩 서사가 한 단계 덜 전면에 나오거나 포맷이 다릅니다.",
-        x: 1480, y: 1220, w: 980, h: 990
+        id: "daily-functional",
+        title: "열보호·엉킴·윤기 데일리 케어형",
+        blurb: "열보호, quick-dry, detangling, anti-frizz, gloss finish, no-wash처럼 바로 체감되는 사용 효익이 메인인 구간입니다. 소비자가 '지금 머리 상태를 정돈하려고' 사는 제품들을 모았습니다.",
+        x: 1930, y: 2645, w: 1460, h: 4180
       },
       {
         id: "scent-led",
-        title: "국내 퍼퓸/클린/감성 SKU",
-        blurb: "향·무드·선물성 중심 SKU와 실리콘 프리/클린 포뮬러 레퍼런스를 함께 모은 구간입니다. 여기서는 본딩보다 향 경험, 감성 패키지, 클린 포뮬러 문법이 가격을 만드는 경우가 많아 쭈드레님과는 다른 가격 논리도 함께 볼 수 있습니다.",
-        x: 430, y: 2320, w: 1300, h: 1180
+        title: "향 중심 헤어 퍼퓸형",
+        blurb: "향, 무드, 선물성, 리프레시 경험이 구매 이유의 중심인 SKU입니다. 케어 성분이 들어가도 소비자에게 먼저 읽히는 건 퍼퓸 경험인 제품들을 이쪽에 두었습니다.",
+        x: 430, y: 5170, w: 1460, h: 3185
       },
       {
-        id: "premium-ceiling",
-        title: "프리미엄/살롱 Ceiling",
-        blurb: "살롱·수입·럭셔리 프래그런스가 만드는 가격 상단입니다. 같은 고가라도 향 중심 프리미엄인지, 살롱 리페어인지, 과학형 본딩인지 이유가 다르기 때문에 '왜 비싼지'를 분리해서 읽는 용도로 두었습니다.",
-        x: 1785, y: 2320, w: 1135, h: 1180
-      },
-      {
-        id: "global-mass-bond",
-        title: "글로벌 매스 본딩/리페어 확장",
-        blurb: "Ulta mass/prestige 채널처럼 본딩이 이미 대중화된 시장의 확장 레퍼런스입니다. direct처럼 상징성이 큰 히어로 SKU는 아니지만, 중가 시장에서도 bond spray·build-a-bond·leave-in protector가 얼마나 촘촘하게 깔려 있는지 보여줍니다.",
-        x: 430, y: 3600, w: 2490, h: 980
-      },
-      {
-        id: "domestic-functional",
-        title: "국내 기능성 리페어/열보호",
-        blurb: "이 구간은 bond direct보다는 열보호·퀵드라이·노워시·엉킴 개선처럼 사용 장면 효익이 먼저 읽히는 국내 기능성 리페어 SKU입니다. 즉각적인 사용감과 드라이 루틴 효익으로 팔리는 제품을 따로 분리해, 성분 서사형이나 본딩형과 헷갈리지 않게 보려는 구간입니다.",
-        x: 430, y: 4600, w: 980, h: 980
+        id: "luxury-fragrance",
+        title: "글로벌 럭셔리 향수 브랜드형",
+        blurb: "Dior, BYREDO, 향후 Chanel처럼 향수 하우스/럭셔리 뷰티 브랜드가 헤어 미스트로 확장한 SKU입니다. 가격 논리는 본딩이나 데일리 케어보다 브랜드·향 정체성에 더 가깝습니다.",
+        x: 1930, y: 6925, w: 1460, h: 1700
       }
     ];
 
@@ -1108,8 +1124,8 @@
       {
         id: "note-how",
         title: "먼저 볼 것",
-        body: "1) 이번 보강에서 제일 먼저 확인한 건 `국내 성분-서사 확장` 구간입니다.\\n2) 이건 시장 공식 세그라기보다, 성분 서사를 따로 읽기 위한 편집 묶음에 가깝습니다.\\n3) 바쿠치올 헤어미스트는 이번 턴 기준 국내 주요 공식몰/리테일에서 직접 사례를 아직 못 찾았습니다.\\n4) 대신 세라마이드·히알루론산·펩타이드·콜라겐·비피다를 앞세운 국내 헤어미스트는 꽤 많이 확인됐습니다.",
-        footer: "즉, 지금은 '바쿠치올 유무'보다 '스킨케어 성분 차용 흐름'이 더 중요한 시장 신호로 보입니다.",
+        body: "1) 이번 개편의 기준은 `누가 파는가`보다 `왜 사는가`입니다.\\n2) 즉 국가, 가격, 살롱 여부를 먼저 나누지 않고 소비자 구매 이유를 1차 세그로 뒀습니다.\\n3) 그래서 기존 `국내 성분-서사 확장`처럼 설명용 편집 묶음은 메인 세그에서 뺐습니다.\\n4) 대신 `살롱/헤어드레서`, `살롱 프로페셔널`, `프리미엄 살롱 비교군`, `약국/더마 포지션`은 보조 태그로 따로 읽게 만들었습니다.",
+        footer: "세그는 이제 시장 공식 카테고리가 아니라, 실제 구매 이유와 메시지 강도로 읽는 작업 프레임입니다.",
         x: 70, y: 120, w: 310, h: 280
       },
       {
@@ -1129,8 +1145,8 @@
       {
         id: "note-thesis",
         title: "현재 가설",
-        body: "쭈드레님이 3-bond 스토리를 제대로 세우면 국내 대중 손상케어보다 한 단계 위, 하지만 해외 direct bond만큼은 아닌 중상단 포지션을 잡을 수 있습니다.\\n\\n즉, 포지션상 가장 중요한 경쟁군은 Hairplus · Headspa7 · Vamood · Olaplex No.9입니다.",
-        footer: "정가 전략은 90~100ml premium science형과 150~200ml 대용량형으로 분리해서 봐야 합니다.",
+        body: "쭈드레님이 3-bond 스토리를 제대로 세우면, 메인 경쟁은 `본딩·구조복구 히어로형`과 `본딩+리브인 확장형`에서 잡는 게 맞습니다.\\n\\n다만 실제 비교구매군은 여기서 끝나지 않고, Olaplex를 보는 소비자가 Moroccanoil · Kérastase · Oribe까지 같이 보는 흐름도 분명히 존재합니다.",
+        footer: "즉 메인 세그는 기능으로 읽고, 실제 비교구매는 `프리미엄 살롱 비교군` 태그로 한 번 더 읽는 구조가 더 자연스럽습니다.",
         x: 70, y: 1030, w: 310, h: 250
       },
       {
@@ -1143,15 +1159,15 @@
       {
         id: "note-segments",
         title: "세그 정의",
-        body: "국내 성분-서사 확장 = 세라마이드·히알루론산·펩타이드·콜라겐·비피다처럼 스킨케어 익숙 성분을 헤어미스트에 차용한 편집 묶음\\n국내 본딩/살롱 리페어 = 본드·단백질·살롱 케어를 앞세운 국내 직접 경쟁군\\n국내 기능성 리페어/열보호 = 열보호·퀵드라이·노워시처럼 사용 장면 효익이 먼저 읽히는 구간\\n국내 퍼퓸/클린 = 향·무드·실리콘 프리·감성 문법으로 가격을 만드는 구간\\n글로벌 direct = bond repair 자체가 주인공인 히어로 SKU\\n글로벌 adjacent = bond가 중요하지만 다른 효익과 함께 파는 구간",
-        footer: "즉 세그는 시장 공식 분류라기보다, 어떤 메시지로 팔리는지 읽기 위한 작업용 프레임입니다.",
+        body: "본딩·구조복구 히어로형 = bond / molecular repair / triple bond가 메인 카피인 SKU\\n본딩+리브인/스타일링 확장형 = 본딩이나 protein repair가 중요하지만 leave-in, styling, heat protect 효익과 함께 파는 SKU\\n컨디셔닝·세럼형 데일리 리페어 = 헤어 밀크, 세럼, 앰플, 에센스처럼 컨디셔닝 포맷으로 손상 케어를 파는 SKU\\n열보호·엉킴·윤기 데일리 케어형 = 열보호, detangling, anti-frizz, gloss finish가 메인인 SKU\\n향 중심 헤어 퍼퓸형 = 향, 무드, 선물성이 먼저 읽히는 SKU\\n글로벌 럭셔리 향수 브랜드형 = Dior / BYREDO / 향후 Chanel 같은 향수 하우스 확장 SKU",
+        footer: "보조 태그는 `살롱/헤어드레서`, `살롱 프로페셔널`, `프리미엄 살롱 비교군`, `약국/더마 포지션`처럼 비교 맥락을 따로 읽기 위해 붙였습니다.",
         x: 70, y: 1600, w: 310, h: 360
       },
       {
         id: "note-domestic-refresh",
         title: "이번 보강",
-        body: "1) 이전 보강 12개에 이번 요청 8개를 더해 총 58개까지 확장했습니다.\\n2) 이번에는 나르카·달바·그로우어스·제니하우스·센녹·달리프·케라시스·실크테라피 실크 미스트를 보강했습니다.\\n3) 어노브·미쟝센·헤드스파7·케라스타즈는 이미 포함되어 있었고, SOOO는 공식 헤어미스트 PDP 미확보로 보류했습니다.\\n4) 이번 수정에서 추가 제품을 별도 요청 구역이 아니라 실제 세그로 다시 배치했습니다.",
-        footer: "가격은 공식몰/주요 리테일 현재가를 우선 쓰고, 미표기 값은 추정으로 메우지 않았습니다.",
+        body: "1) 세그 구조를 전면 재정리한 뒤 총 67개 SKU까지 확장했습니다.\\n2) 이번 라운드 신규 추가는 PHYTO · It's a 10 · UNITE Hair · R+Co · Davines입니다.\\n3) AYUNCHE · Oribe는 기존 카드지만 `살롱 프로페셔널` 태그로 다시 읽히게 정리했습니다.\\n4) `추가 요청 반영 SKU` 같은 임시 영역은 완전히 없애고, 모든 제품을 실제 기능 세그 안으로 다시 배치했습니다.",
+        footer: "가격은 공식몰/주요 리테일 현재가를 우선 썼고, 해외 SKU oz 표기는 ml당 단가 비교를 위해 환산했습니다.",
         x: 70, y: 1990, w: 310, h: 320
       }
     ];
@@ -1195,7 +1211,7 @@
         sources: [
           { label: "Olive Young", url: "https://www.oliveyoung.co.kr/store/goods/getGoodsDetail.do?goodsNo=A000000188767" }
         ],
-        image: "assets/hair-mist-board/unove.png",
+        image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAABhCAYAAAAKjN+QAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAOdEVYdFNvZnR3YXJlAEZpZ21hnrGWYwAAGZFJREFUeAHt3VuMXddZB/D/2nuf+xnPjMdztcdjJ7GdhNzsXNrmUicNl6ZUSPQBeEKBB+gLEgLxwBsSSCAhoSLRJx7aIiHR9gGoQKWkTWnTpLQlTpOQq5v4Pr6Mx3M9l31Za/GttfeM3ZKWojZ7T6P/zzo+lzlz/Hb09/d9+1sK4u0Tz9yto3As00qBiN6T9szsO97u7voTUGWGg41PXLlw7p9BRO9JDWtOran22tGjR1fVCy98dWzUjo7edOzYGRDRe5a19km5+xSoSk8qpT4DInrPeu2Fbx4IasFo0ATGGK6IiIiIfnK3Hf3A6cDosQCIDoCIiIiIfkoiBCAi+llht+4sjPxxT909EdFOE4GI6GeAD1NZisH6CrJBD0G9jkZ3F+qNDhCCiGhHYcAioh3LWAOlFNJ+D/H6BvpLlzG8cAaxPB8O+hjEKWyrhckDN2PuzntQ73QQKhbmiah6DFhEVCnrSlOq6P3h+qYYawz6V5ewcfokUqlYRUEEHfehrYaq1RDpBpry9nhzDaeeexqvfO0pHP7AB3H4kccklIXg0hkiqhIDFhFVykiQ6p1/G/HKNaigDq0zQBtk0hRUaYbQyiOpVsX9dWkRGqRGy48NrJagJems1agjGB1HrbeB17/yRayeP4t7fvXXUW+2EASsZhFRNfjtQ0QVMr7SlG2sIbl6GcnqEvSVC7DxJjrtNtBfxvrZ72FwbQnpMEaWJFLFSuTncpMQ5gKWzTQCCV3ddhdTs3uxdPJVfOWv/xLD/sD/C9ZaEBGVjQGLiCqmoJI+VH8F6K2jPjaOkem92HzrVfQuX4KRSpUxFqkEqTTLpMKlXW3LX0morc2vJZRKlZvVqoeBhKx9QLqJp//mL3x1TLFXSEQVYMAiogoFUmEyaOwaB5IeWlMzaMzM4+qrJzDcXJfoFPhw5apUkPdZP/QeSJ7KQ1M+uuUeW/9zJbdAQteemb2w/TU8//m/k9/RICIqG2ewiKhSQRiicfBWjNelJRjVsPryC4hde0/CUpZpX4XaGoT3/yP0fxl/y5t/1v/MBzE3vyUVqzBqSCVrPy6++B1sPvYEupNTrGQRUalYwSKiSrnYozc3/AD78OI5DNavyguphKvMD7JbX7mS4BTJ/wdbHbhA5YbcXXvQVayM0f6mJGRpCWRRrYV6rQ3pFmJCKmKv/PsX/LoHcBSLiErEChYRVcpIKBqsLsuXkcHgygVkEqrcKgZXkXKhqTO7gLGbj6A9O4v02hpOfv5TCFstvxerMTOH3fPzWL90Htmgj0CqVFGrjSvPfwPZ0GDmgWNYW3JzXCnCmvv/JKtYRFQOBiwiqo518+hrCFODdLiOuLfpt7W7VQ01qVZNPvBBjC3c7Nt7bpxdb/RQa3eQaIP+8hLGDhzCvsefQLbZw9VXTuDqay9JVSvD6L790PUaIhVi9p77EUR1X8BivCKisjBgEVFlXPsvW1tBWI/QW7yKNM2k2iRfTI025h77CDqT01KVKiYZpMuX9DcQdUelgxgD9QaMaxtKBUxnCdbPnkKopeol4aw1OSOflfpZrrlbbkXgrlRkvCKiEjFgEVEl3NxUJhUrt0xUhyHia0tSvcog5Sbse/QJdKdmv+/9ca+Pq898GZ2ZeYQrSxiMjmDx21/F2tnXEaKG9swMVC2S8JUgHgz81vfuvoMY3TvPAXciKh0DFhFVw7UHV64hkEpUfOU80kEfRtp70/c/hNb03P96e2A1OnsXoNz81cY1qEhqUq020NyNZrsFI0HNV7uCAJE833PHUex76FF/bA4RUdkYsIioEtnGBmw8hK2F6C+eQpZqjBw4gvEjt/th9R9kJTyFUqHaOmfQBjVAu2Wjcid/+YOhJVwFYQ3Td9+LqbuO+fMLiYiqwDUNRFQqN3fltrPHa1cRtkYwuHweSW8AdLvYfewBCU/vHIrc5vbAzVzJvVvBEMrj0QWpaCHD+uo1pMMhlDGYufdBzNx9P0JWroioQgxYRFQqd8xNsraMIDWw2QCbi+eQBgqz7/8Q2p1RvNPCKneeoDuvMGp3EY2Myv04DkqQGp+/Ce2JUST9VWxeXsTokdsw/XN3+nF2zl0RUZUYsIioNC4omSRBIhWnoNvB5rlTiIcJdt96Nzqzcz4UvXMwkoAlFSq3y133e7A6QSqfs7a8DKVDhI2aVLUU5o4+4I/SYbgioqoxYBFRaVx7cHDpAgJpAw4vncfmxbPoHrgFk3fdh/BHrFHwNS13cHOYH/KcxUOsnj2FprLSXlz3w/J7H3wYtXYbREQ7ASdAiagE1p8emCwtAXEMnUpAOvUKanvmMPPAw/mOqh9SdXLhyvqfmfwFrf2Oq/XLl9DbWMFwEKMehX7uKuCuKyLaIRiwiOhd5469GV5eRLy6Apv2sXHqTTTnDmLy6IP+qr8fxh/ybDSG6yvor/fQjFzMcoX3EFZagkbagabeRTg+ju7EJFuDRLRjsEVIRO8qK6293vIlxNLGs3EP66dOor73Fkzd+zCi6EeFK+tv6xfO4eIz/4F08TyMVK6MznxFS8nv1oIGmvUGpGeIq/K57hBoIqKdgAGLiN5FFpuXzyO7JuGqv4repXMYu/cRzBx9AEEQ+qWgP8rmlfO49sJzGB1tYdf0FMywD7OxippUwVp1oFFXqCdr6C9dwHN/+0ksvvwiiIh2ArYIiejdYd0A+ibQG8BIhcmdGzh5/AnUGx2o4P9u5blhdrPRw57Dt6PW7EBLOzBYW/UVMS0/a0RN2KiNtNVBfdCHlX/n5LNfwb677mGrkIgqx4BFRO8Ko9xi0BrC3RMY7e5HWGtCWSPtvf/HZ2h5v3T9gjSGzow/5DkZDhD3N9FbvYbe5iaGEuKyLPPtQRMnvq3IgEVEVWPAIqJ3hZIkFTYaaMnNP3ehR4U//nV+NoAxGUK3O8vkA+/+ZkIJXgqphg9VmTvT0B2XI/9eCiKinYEBi4jeFT9pFckqLVUr7dc3SDHMD7fHUtHKJFQl8ro7gzA1EqokdfmAhXfaAU9EVA0OuRPRjuRag8bo/LHNw5Nb96DdsTlw4Qpy704ilEqXW9tg2RYkop2DAYuIdijrF5D643MCJQEqzEOWr1Ypubdu56hvH5qtcMUSFhHtEAxYRLQj+XDlyljFTUnLMPRrRg1q8rNQglcYBqgFbu2oq2n5+AUiop2AM1hEVDl/HI6EqMBtZi8qV1Zn0MkQoYkkX0XQmYSoLPGb3WFSBG4AXsu9dYPwmZ/T0mnif8+oKD/0GURE1WDAIqLKuZ1Xym1tv3gOw7NvI15axNrFRYzsnUfUHYetR34Oy2SpBChpEBpXzbISruT3jFvL4B5r+b0r+Pqf/xlGpibR3beA3bfdij0LNyGI+FVHROXitw4RVS4bDLD6vTcRry7Dbq5KoSpDZ3QMemUZw7UVhFENiZu7kiqWiWPYjU2o3iaiQR/1WKpcUulCIu/I5D1mGetxHxvLl3HljVfQWTiIQ4/+PHbt2QMiorIwYBFRdfzVgQbDq8uAtPSaE9PA2G7YNJXQJSFKwhMy7TY1oD4cSLgaoua2uKsOus0GsrExX/2yYSB/hzA2BGpyX6v7tmOSpOhfuYg3n34K9/3abwBsGhJRSRiwiKhSLgilEpxUFMBPTQVNqEYLqt0B3MHOSQzjqlOtDiLtrhyUipVbMiqtwkhahSYrBuHlk9xGd3d1YSatRCNVMDcI767k6a1dk7fYH+uIHiKinwYGLCKqjFHGrWBH4Fe1F7NYyuUl7W9+D4ObvZLqlg3gB+Ctq2HZxM9k+XSmXOjKfIDKtBuEz7dj+dWj8pqRCpgNNIiIysSARUSVyheIZnlWknRli1ULbng9PxrH+iqUz1MuMEnocjdI5croNK9W+YAF3070nyVPMnd2oXEVLZ2fTwgiovIwYBFRxZRfX+V2hboQ5EOWD0QSsFTe1rN+g7t77/VdVy5IuZtb22CkAmbdsToSrNxrW/Uq68KVv9rQ5AEORETl4KJRIqpQHnny7GR9sMr3MRQ/LipYriKl8ifb77dbf6xrMeYVKneUjmeKKhjC/LO44Z2ISsaARUQV8rHIP9oKS7Z4Zsz1rez+1aL85IbYfehyVSurvm95+9ZvK3nduIktU4Q2w4RFROViwCKiakn28QtDi3MH80F2gzAIfDUrz1Vhse0dxTB8/mpg8iN1XIjygczmj31Ac0FMmXwJaRCCiKhMDFhEVKGi/OSuHLRFlam4075CVQQnN9hu8h/6QXeji9/OR+KNv9Iw/6DtgpXJW4a+Q6hYwSKicnHInYgq5zp9vjJlbRG2UFSkbghG250+u13Ncu/R1vih9jxUmTxUaVyfh9f51YiccCeiMjFgEVHF8vME8ysFMwRhVIQtuWXW78Ny1wIafwahRWbz9p/2qSqA1Sm0W8+gXSDLK12ZyZD6n7vnftSdiKhUDFhEVDlXwfr6t16VIKTw0PsOY3mljyRNoOS2q9Xwgcsde6MkVenUbW+PMegPfNlKKYNeb4jUvT+waEV1nF1awdK1FZy/eAmdRh2Pvf99ICIqE2ewiKhyrtV3dSPFucUlJFK1entxBafPLOH3/vRzePmNcz5snfjv0/jHp76NfpLgM//6DfzBJz6LLz77PE68dhpvX7iM35HnX//uSQyzBCfPXMDy6hCLErLuOrRfKmOaqxqIqFQMWERUPSlh1eTryJ0raKXV165HODA/hSM3T+OvPv0UFi9exdz0CBZmJ/D3//QNfO7L38bHP/YoHv/AUawMUjwvIevI3in81xvnpbUYodVsyEdKu9FdVZja4ipFIqLyMGARUeUC/01kiyNzlD/eJlAWv/Londg9sQuf/IenkWqFQZzgC89+F4/efSsO7JuR9+V7sJ59cxG/dN9teOnUolSzLqHeaPpdWBfWNnD2ytV8iJ6IqEQMWERUPWMxOlLDMEW+QNQEErAU6oHCH/72L+LUpTV89l+eRRJbxPLe4/ceQRi4IVKN/3zpNXTqwK0HZ3yF61P/9gwWZsb8z6dHujg4O7W92Z2IqCwMWERUoWJJqNSt7ji8D2+dc9WmENkw9huuXOVpdnwEv/+bT+BL33kDobT9HrzjoLQQ6/7UnNfOLOHE6SV89KG70YzqePyuQ5jYPYWJdhtRGCHWGq+8dQZhLeAIFhGVilcRElH1pB04MdrEH338w/jmd76LB+65HecvX8PaxsCtecfDd+/Hb330IYx0W/jjJz+Cb730Ok4+dwlfOvE6fvfD9+P4HTf5MPbIHQcwM96UupbC7EQHv3Dvz2FuZASJW/HANiERlYgBi4gqtHU4c35UztjoCI4/eI/krQCH9k/i8L5xZKlbJhrjyY89gjQewqQJjh+7HUN5/MsP3w4r4SnQBm56a2SkhWOHF/wOrUN7Z6WClcJINazOTVhEVDIGLCKqkNq+WSkxuav+lAqkauVWiwaSuwL5Wx4H8h6tUAvktVBeMRqdKEBi6/KeRAKVQegWjfrFom4paQott1DVYOX9nMAiorIxYBFRhYpDm+G2uOdXE66vr8LFKqMzCUhuRktCU+qn3/273evXlq7g1MsvYmpuDivLl+R91le2Gs0Waq02alKwCiRY1bvTUtkCj8khotIxYBFRpYpjCKVylaeg7kgXyDL0NzMM+0P0eutoNerY2FiDToYIpEJVb7QxvX8enXYb3U4XqVSrIvn9Wq2G0FW5JJRZEyKTUBZJFSzihDsRlYwBi4gq50NWUWVSgZSfpATVGQ3Q7rSxa2xEqlYDCVIt2Cz25w4qCWAjI20fxHQir1l3ZqG0Ct2ZhPI4lFClM2kMxlK/UgYsYRFR2bimgYgqlJeWjN1+6CtZPmypwF/558avlIp8ZSqU8OXu3ZxWWIxvqTB/n3s/wsgPy1u7NdtVfLj/pmPIIqLyMGARUYWsz1U+D9l8FF1Zd7TNDZmo2PLuBXmOyruJebDKW4u2eM1uP/++PMVvOiIqGb92iKh6xgWnra+jG8tZ+V3gqlZBkbaKWa387xvWL9wwZ+WvRCwExTJTIqIyMWARUYWKryBXvXJH5GwHIbt9t1WI2i5m+SZg0Tq8oUzlfubiVv4R+es2KOa7mK+IqGQMWERUKaXs9qWErjW4FbLc8Tk3VqXc0Tk+cLksFm5Vsez2vWswanO9VWhtHsDcO0LFrzoiKhe/dYioei47bc1guYWjSv3ASPr1lqGf2jL5+YVblPsqs9efbWczi3zJKOfbiahkDFhEtAPcOOyeJ6Vgq0voWofQ2N767reNXn+fG4r3e7QstqtX7pstUNfbivlVhewTElF5GLCIqGJ5Iy8o2n9bYWl7wsoNuPuvqqItaG+sbhkfzRSKX3JBSgKXX33lE1s+MB8oxisiKhcDFhHtIG5hqM5j043zV9sVK5sfmbNVyDI3zGnZorR14wWI9nrBi4ioTAxYRFQ5ux2oLMJgq52XV6dcizCvRpntd6OoWrn1De5B/hbr3+KG5I28oHTeMswLWRpERGViwCKiihXLQVVxBaFUoqzOD3Z2w+y2qFxdj1zKv0fLvQtWvoil8hUP+XtM8am6KHi5MlYIIqIy8SxCIqqYKuJTMVvlWoAuHmVZXtUyeUVKUheyrNiXJQEs0/m91lpu+RqHzGYI5PfdOYRRUbRyGx3C4t8hIioLAxYRVWr7ZJt8Uh0rK2sYbA4QhTX0h5voNmtIJTC166G8vuHL7mncRzZM4GtaJkNvEOfVqjRGrxdjfX0dWt5488yUD28B92ARUckYsIiocn6VAvIa09p6H8tXlqRaJRUreSXub2BjdQVzs7PyuIfFxUsw0hJ0IazbqmNtYw23LOzFW6fP46a5Gbz6vTNoj9QxP74bURBKozDxtTHFChYRlYgBi4gqlF/y57euq3y+an5hDvP7pmF0iiwx2OhtINRWqlRSlRq0MTk9BhVnSIZDNOqBn7Fa31zDfbcdxkinifmZMWkTSlPQ6HxASxVNSMUmIRGVhwGLiCqU163ywXWTb3F3z93uKy0hqaYkNLUkKGVoNMdh2jFMouXpEDrrIotjH8QatT3yfOiTWqQi+V35xCiSgJb5vVmBZf2KiMrFgEVElQnkj78yMJRA5Yfbi0WhErSuXluW8GSQxkPf6suSoR9098ffJAnWV9b8AlGjM6RZ4tuMRmtsSstwStqDLWkfBvJ7frgruN6CJCIqAwMWEVVM+av88g0NEq6CPA2NjY1hMBhKsIr9Hqs0TuFm1fv9vlSotFSoQsTDgVS26lK9SvzqhkCqVnsmp1CTYGX82ob88Gf/mUREJWLAIqLK+J1V7ogbCUTK5JcSWpsfnXNh8SISqVTV5OXe5jpqYc1Xs7I0QUPenw6Hfn3D5uoGVjc2EEqIqvu2oPw8tNg3N1OsJJU6WVRj9YqISsWARUSV8W091xgMQ+n+ZdsLR5WUqg4ePOgrVOkggZ7aDZumGA77iPsDhFKdGvakbSihzFW/RnaN+qF2twU+kspW5BaPyue5gOU3w0f8qiOicvFbh4iqY4P8oOda3bcC8wF3lV/8J5Utoy3OXziHKFRSsUqQZTH6vb6EJ+1vmU4QaKlwSRALjPUzXPPz05KnahK45FmQ+AH6qNnkDBYRlYoBi4iqUyQed8Wf8mcNBv6m/ObRAI1mAzcfPgSTunagBKo4gZGbTlLoNMbAhTJr8gOiiw3vfujKpHAT8MafmmPRHBn1nUgmLCIqCwMWEVXKtQXDehOpBCUjt0CaflZec4HIBMVZg2Hkw1Lorgqs5fNaLpA15U06yaClZRgE8tgtu/LnF7o+Y35ItKtg1SYmuAeLiErFS2uIqHK1bndr5yhspv08latKuQOc88oW/FyV9AFRnKhTvD3fb6W2k9P1I6H9VYnyKy58jc8vMFwRUalYwSKiytU7bT97lbf2Aj+blWclne/H8oHLHfQMH55cpcv9cesbihf9iiy3VFTb/MpBtxPLtRU7uyfRchUsWB6XQ0SlYQWLiCqnpAUYdTp+qF0b6xeMugWiri+o5OYG2N1jI9Utnek8WNksn73S16td1hZhy+YLGtwgfGf+gFS43LWGDFdEVB4GLCKqnJvDau2Z8dWqQEJR4EOVa/UZH5qsyfIhdqT+2Bzl2ohuoN0FLLhbvqTUGP8byOQzdJzKvcHsnUcRKNauiKhcbBES0Q5g0RgdR79ehxn04U4k1Mrkg+7aryOVtmDmilZQ8lxvBS5r/b3LWu4KQuOvJpTKVeZ+nqI7N4fO1DSIiMrGChYRVU8F/pib7sIhqDRFqmNfoXLtP7hqlbxmU0lX0jbUcstcwHJ7sFyQkvf5QFU8dvfu6Bwt9zc9/pEbBuCJiMrDgEVEO4NUq6LRUTT334QgkVZgnMAOBxKsEphkmN9L0DISnkyW+iNzdJr5IOW2thv32O3IGg6R9Po4+KEnMDY7l2+HJyIqGVuERLQj5HuqArTmb0Fjcgq9t04iXr6MZGNNKlMuOCV+F5ZrD2apRiIhyw3Cm9i1CLVfy6AaTUwcuR37j92P1swsiIiqwoBFRDtCvs/KHZVjEXZ2Ydedx/KrBPs9JOvrSPqbSGOpaA3jomrlSl4BVL2JsFZDZ3ISjYkJBEHNf07AyhURVSiKwtCCiGiH2Grp+YAURghHRlGTWwdERD8bwsCucgaLiIiI6KdIGz0WZFqdOfnSc8dBRERERD+Rt088uxBmzdO+Fv/aC988EIV2QcKWe34aRPSes/fAoeP1ZvtJUGWSYf/TF06f/BqI6D1HIxxrhNnopm69ePTo0dX/AbEYnug3JOc7AAAAAElFTkSuQmCC",
         defaultPos: { x: 470, y: 220 }
       },
       {
@@ -1400,7 +1416,7 @@
         sources: [
           { label: "AMOS", url: "https://amospro.amoshair.co.kr/prd/dtl/list?anpPrdCd=PD2024000217IJZW" }
         ],
-        image: "assets/hair-mist-board/quickbond.png",
+        image: "data:image/png;base64,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",
         defaultPos: { x: 1870, y: 220 }
       },
       {
@@ -1441,7 +1457,7 @@
         sources: [
           { label: "Olive Young", url: "https://www.oliveyoung.co.kr/store/goods/getGoodsDetail.do?goodsNo=A000000226518" }
         ],
-        image: "assets/hair-mist-board/headspa7.png",
+        image: "data:image/png;base64,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",
         defaultPos: { x: 2220, y: 220 }
       },
       {
@@ -1525,7 +1541,7 @@
           { label: "Olive Young", url: "https://www.oliveyoung.co.kr/store/goods/getGoodsDetail.do?goodsNo=A000000185357" },
           { label: "OLAPLEX", url: "https://olaplex.com/products/olaplex-no-9-bond-protector-nourishing-hair-serum" }
         ],
-        image: "assets/hair-mist-board/olaplex.png",
+        image: "data:image/png;base64,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",
         defaultPos: { x: 470, y: 1320 }
       },
       {
@@ -2020,7 +2036,7 @@
         sources: [
           { label: "Olive Young", url: "https://www.oliveyoung.co.kr/store/goods/getGoodsDetail.do?goodsNo=A000000246309" }
         ],
-        image: "assets/hair-mist-board/tricell.png",
+        image: "data:image/png;base64,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",
         defaultPos: { x: 1825, y: 2420 }
       },
       {
@@ -2061,7 +2077,7 @@
         sources: [
           { label: "Moroccanoil", url: "https://www.moroccanoil.com/products/brumes-du-maroc-hair-body-fragrance-mist" }
         ],
-        image: "assets/hair-mist-board/moroccanoil.png",
+        image: "data:image/png;base64,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",
         defaultPos: { x: 2175, y: 2420 }
       },
       {
@@ -3574,6 +3590,374 @@
         ],
         image: "https://de89qjx90gu7m.cloudfront.net/familymall_prod/product/35f3f14e-0a43-4a9a-9381-205aee29bf20.jpg",
         defaultPos: { x: 820, y: 5080 }
+      },
+      {
+        id: "chahong-keratin-mist",
+        no: "59",
+        cluster: "daily-functional",
+        clusterLabel: "salon keratin mist",
+        tone: "mint",
+        title: "ChaHong 컨센트레이트 케라틴 미스트",
+        productLabel: "damage-care salon mist",
+        brand: "ChaHong",
+        brandKo: "차홍",
+        form: "헤어 미스트",
+        productName: "컨센트레이트 케라틴 미스트",
+        volumeMl: 150,
+        priceListDisplay: "39,000원",
+        priceSaleDisplay: "39,000원",
+        priceListKrw: 39000,
+        priceSaleKrw: 39000,
+        unitPriceKrwMl: 260,
+        claimDepth: 3.6,
+        concept: "손상모 케어 중심의 국내 살롱 오리진 케라틴 미스트",
+        manufacturer: "차홍",
+        note: "차홍 공식몰 현재가 기준",
+        url: "https://www.chahong.com/product/%EC%BB%A8%EC%84%BC%ED%8A%B8%EB%A0%88%EC%9D%B4%ED%8A%B8-%EC%BC%80%EB%9D%BC%ED%8B%B4-%EB%AF%B8%EC%8A%A4%ED%8A%B8/337/",
+        keyIngredients: "연꽃꽃추출물, 하이드롤라이즈드케라틴, 5가지 식물성 단백질, 5가지 식물성 오일",
+        alcohol: "?",
+        silicone: "?",
+        uspIngredients: "keratin mist + 식물성 단백질/오일 + 손상모 컨디셔닝",
+        ewg: "미확인",
+        performance: "공식 PDP 평점 5.0 / 리뷰 2건 노출",
+        tier: "A",
+        memoPlaceholder: "국내 살롱 오리진 데미지 케어 기준점",
+        evidence: [
+          "차홍 공식 PDP에 컨센트레이트 케라틴 미스트 150ml / 39,000원 노출",
+          "공식 설명에 연꽃꽃추출물, 하이드롤라이즈드 케라틴, 5가지 식물성 단백질·오일이 명시됩니다.",
+          "국내 유명 헤어살롱 차홍 브랜드가 직접 운영하는 공식몰 기준 reference입니다."
+        ],
+        sources: [
+          { label: "ChaHong mist category", url: "https://www.chahong.com/category/%EB%AF%B8%EC%8A%A4%ED%8A%B8/173/" }
+        ],
+        image: "https://www.chahong.com/web/product/big/202502/f642b9d051d6a347157caded94a726c0.jpg",
+        defaultPos: { x: 470, y: 5440 }
+      },
+      {
+        id: "oribe-runthrough",
+        no: "60",
+        cluster: "daily-functional",
+        clusterLabel: "detangling primer",
+        tone: "mint",
+        title: "Oribe Run-Through Detangling Primer",
+        productLabel: "salon detangle + heat care",
+        brand: "Oribe",
+        brandKo: "오리베",
+        form: "헤어 프라이머",
+        productName: "Run-Through Detangling Primer",
+        volumeMl: 175,
+        priceListDisplay: "$39",
+        priceSaleDisplay: "$39",
+        priceListKrw: Math.round(39 * FX_USD_KRW),
+        priceSaleKrw: Math.round(39 * FX_USD_KRW),
+        unitPriceKrwMl: Math.round((Math.round(39 * FX_USD_KRW) / 175) * 10) / 10,
+        claimDepth: 3.4,
+        concept: "detangling, heat protect, styling prep를 한 번에 파는 살롱 프라이머",
+        manufacturer: "Oribe USA",
+        note: "공식 PDP 5.9 oz 표기 -> ml당 비교 위해 약 175ml 환산",
+        url: "https://www.oribe.com/products/run-through-detangling-primer",
+        keyIngredients: "공식 PDP는 성분보다 detangling / cuticle seal / heat protect 효익 중심",
+        alcohol: "?",
+        silicone: "?",
+        uspIngredients: "detangle + cuticle seal + heat protect + styling prep",
+        ewg: "미확인",
+        performance: "공식 PDP 현재가/효익 확인",
+        tier: "A",
+        memoPlaceholder: "미국 salon-origin detangling benchmark",
+        evidence: [
+          "Oribe 공식 PDP에 Run-Through Detangling Primer $39, size 5.9 oz가 노출됩니다.",
+          "공식 설명에 detangling, heat protection, styling prep, cuticle sealing 효익이 함께 명시됩니다.",
+          "hairstylist Oribe Canales의 살롱 헤리티지를 가진 미국 프리미엄 브랜드 reference입니다."
+        ],
+        sources: [
+          { label: "Who What Wear", url: "https://www.whowhatwear.com/best-hair-styling-products" }
+        ],
+        image: "https://www.oribe.com/cdn/shop/products/1200Wx1200H-400395_697c9ba8-122b-4938-9fb0-9a184ea4a41f.jpg?v=1691604106",
+        defaultPos: { x: 820, y: 5440 }
+      },
+      {
+        id: "bumble-hio-primer",
+        no: "61",
+        cluster: "daily-functional",
+        clusterLabel: "heat/uv primer",
+        tone: "mint",
+        title: "Bumble and bumble Hairdresser's Invisible Oil Primer",
+        productLabel: "leave-in + heat/uv protect",
+        brand: "Bumble and bumble",
+        brandKo: "범블 앤 범블",
+        form: "헤어 프라이머",
+        productName: "Hairdresser's Invisible Oil Heat/UV Protective Primer",
+        volumeMl: 251,
+        priceListDisplay: "$34",
+        priceSaleDisplay: "$34",
+        priceListKrw: Math.round(34 * FX_USD_KRW),
+        priceSaleKrw: Math.round(34 * FX_USD_KRW),
+        unitPriceKrwMl: Math.round((Math.round(34 * FX_USD_KRW) / 251) * 10) / 10,
+        claimDepth: 3.7,
+        concept: "leave-in conditioner + primer + heat/UV protect를 묶은 미국 살롱 프라이머",
+        manufacturer: "Bumble and bumble / The Estee Lauder Companies",
+        note: "공식 site data 기준 8.5 fl oz / $34",
+        url: "https://www.bumbleandbumble.com/product/19055/31247/style/pre-stylers/hairdressers-invisible-oil-heatuv-protective-primer-for-dry-frizzy-hair",
+        keyIngredients: "6-oil blend, hydrolyzed vegetable/wheat protein, sodium hyaluronate, UV filters",
+        alcohol: "X",
+        silicone: "O",
+        uspIngredients: "6-oil blend + 단백질 + hyaluronate + UV filters",
+        ewg: "미확인",
+        performance: "공식 설명상 86% hydration / frizz 50% reduction consumer test",
+        tier: "A",
+        memoPlaceholder: "미국 salon-origin prep primer benchmark",
+        evidence: [
+          "Bumble and bumble 공식 site data에 8.5 fl oz / $34와 current product image가 노출됩니다.",
+          "공식 설명에 heat tools up to 450F / UV filters / leave-in conditioner / frizz reduction이 함께 명시됩니다.",
+          "뉴욕 salon origin 브랜드가 오랫동안 밀어온 prep primer 문법 reference입니다."
+        ],
+        sources: [
+          { label: "Allure review", url: "https://www.allure.com/review/bumble-bumble-hairdressers-invisible-oil-primer-review" }
+        ],
+        image: "https://www.bumbleandbumble.com/media/images/products/640x520/bb_sku_B1Y901_56305_640x520_0.jpg",
+        defaultPos: { x: 1170, y: 5440 }
+      },
+      {
+        id: "ouai-leave-in",
+        no: "62",
+        cluster: "daily-functional",
+        clusterLabel: "anti-frizz leave-in",
+        tone: "mint",
+        title: "OUAI Leave In Conditioner",
+        productLabel: "stylist leave-in mist",
+        brand: "OUAI",
+        brandKo: "오아이",
+        form: "리브인 컨디셔너 미스트",
+        productName: "Leave In Conditioner",
+        volumeMl: 139,
+        priceListDisplay: "$32",
+        priceSaleDisplay: "$32",
+        priceListKrw: Math.round(32 * FX_USD_KRW),
+        priceSaleKrw: Math.round(32 * FX_USD_KRW),
+        unitPriceKrwMl: Math.round((Math.round(32 * FX_USD_KRW) / 139) * 10) / 10,
+        claimDepth: 3.5,
+        concept: "anti-frizz, detangle, breakage protect를 묶은 hairstylist-founded leave-in mist",
+        manufacturer: "OUAI",
+        note: "공식 PDP full size 4.7 fl oz / $32 기준",
+        url: "https://theouai.com/products/leave-in-conditioner",
+        keyIngredients: "panthenol, vitamin E, amino acids, tamarind seed extract",
+        alcohol: "?",
+        silicone: "?",
+        uspIngredients: "anti-frizz + detangle + heat protect + breakage care",
+        ewg: "미확인",
+        performance: "공식 PDP 현재가 확인 / 다수 2차 source에서 hero leave-in으로 반복 노출",
+        tier: "A",
+        memoPlaceholder: "hairstylist-founded leave-in spray benchmark",
+        evidence: [
+          "OUAI 공식 product page data에 Full Size 4.7 fl oz / $32가 노출됩니다.",
+          "공식 meta description에 anti-frizz, heat protection, breakage protect, seamless detangling이 함께 명시됩니다.",
+          "celebrity hairstylist Jen Atkin이 만든 브랜드의 대표 leave-in spray reference입니다."
+        ],
+        sources: [
+          { label: "Allure review", url: "https://www.allure.com/review/ouai-leave-in-conditioner" }
+        ],
+        image: "https://theouai.com/cdn/shop/files/Product-Leave-in-1316x1526-grey_a91e2b65-f6e4-43e0-bff6-c77d18da04db_1024x1024.jpg?v=1779300397",
+        defaultPos: { x: 1520, y: 5440 }
+      },
+      {
+        id: "phyto-heat-protection",
+        no: "63",
+        cluster: "bond-extended",
+        clusterLabel: "pharmacy repair heat",
+        tone: "amber",
+        title: "PHYTO 230°C Heat Protection Spray Anti-Breakage",
+        productLabel: "pharmacy heat repair",
+        brand: "PHYTO",
+        brandKo: "피토",
+        form: "히트 프로텍션 스프레이",
+        productName: "230°C Heat Protection Spray Anti-Breakage",
+        volumeMl: 150,
+        priceListDisplay: "$30",
+        priceSaleDisplay: "$30",
+        priceListKrw: Math.round(30 * FX_USD_KRW),
+        priceSaleKrw: Math.round(30 * FX_USD_KRW),
+        unitPriceKrwMl: Math.round((Math.round(30 * FX_USD_KRW) / 150) * 10) / 10,
+        claimDepth: 4,
+        concept: "230C heat protect, anti-breakage, keratin repair를 묶은 약국/더마 인접 레퍼런스",
+        manufacturer: "PHYTO USA",
+        note: "공식 US PDP는 효익/가격 중심이라 ml당 비교를 위해 통용 pack spec 150ml 기준으로 환산",
+        url: "https://us.phyto.com/products/heat-protection-spray-anti-breakage",
+        keyIngredients: "Keratin A18+, black oat, lupin, white mallow",
+        alcohol: "?",
+        silicone: "X",
+        uspIngredients: "biomimetic keratin + amino acids + botanical shine complex",
+        ewg: "미확인",
+        performance: "공식 230C/446F heat protect, 8.6% hair temperature reduction, 87% beauty survey",
+        tier: "A",
+        memoPlaceholder: "pharmacy/derma-adjacent heat repair benchmark",
+        evidence: [
+          "PHYTO 공식 PDP에 $30 현재가와 230C/446F heat protection, anti-breakage 효익이 함께 노출됩니다.",
+          "공식 설명에 Keratin A18+, black oat/lupin 유래 botanical keratin, white mallow 소구가 직접 명시됩니다.",
+          "미국 공식 PDP에는 용량 텍스트가 전면 노출되지 않아, 보드의 ml당 단가 계산은 통용 pack spec 150ml 기준 환산값입니다."
+        ],
+        sources: [],
+        image: "https://us.phyto.com/cdn/shop/files/Repair_1_4.png?v=1715788202",
+        defaultPos: { x: 1870, y: 5440 }
+      },
+      {
+        id: "itsa10-miracle-leave-in",
+        no: "64",
+        cluster: "repair-serum",
+        clusterLabel: "multi-benefit leave-in",
+        tone: "sky",
+        title: "It's a 10 Miracle Leave-In Product",
+        productLabel: "10-benefit leave-in",
+        brand: "It's a 10 Haircare",
+        brandKo: "잇츠어텐",
+        form: "리브인 컨디셔너 미스트",
+        productName: "Miracle Leave-In Product",
+        volumeMl: 118,
+        priceListDisplay: "$21",
+        priceSaleDisplay: "$21",
+        priceListKrw: Math.round(21 * FX_USD_KRW),
+        priceSaleKrw: Math.round(21 * FX_USD_KRW),
+        unitPriceKrwMl: Math.round((Math.round(21 * FX_USD_KRW) / 118) * 10) / 10,
+        claimDepth: 3.4,
+        concept: "detangle, thermal protect, UV/color protect를 한 번에 파는 멀티베네핏 leave-in",
+        manufacturer: "It's A 10 Haircare",
+        note: "공식 PDP 4 oz / $21 variant 기준",
+        url: "https://itsa10haircare.com/products/miracle-leave-in-product",
+        keyIngredients: "sunflower seed extract, green tea leaf extract, silk amino acids, aloe vera, panthenol",
+        alcohol: "?",
+        silicone: "?",
+        uspIngredients: "식물 추출물 + silk amino acids + 보습 성분 기반 멀티베네핏",
+        ewg: "미확인",
+        performance: "공식 10 benefits / thermal protector / award-winning leave-in copy 확인",
+        tier: "A",
+        memoPlaceholder: "mass prestige leave-in benchmark",
+        evidence: [
+          "It's a 10 공식 PDP의 4 oz variant에 $21 현재가와 대표 이미지가 노출됩니다.",
+          "공식 '10 Benefits' 아코디언에 thermal protector, detangle, UV protection, protein replacement, split-end prevention이 직접 정리돼 있습니다.",
+          "공식 ingredient summary에 sunflower seed extract, green tea leaf extract, silk amino acids, aloe vera, panthenol이 소개됩니다."
+        ],
+        sources: [],
+        image: "https://itsa10haircare.com/cdn/shop/files/Conditioning_Leave_in_4oz.jpg?v=1763485416",
+        defaultPos: { x: 2220, y: 5440 }
+      },
+      {
+        id: "unite-7seconds",
+        no: "65",
+        cluster: "daily-functional",
+        clusterLabel: "salon detangler",
+        tone: "amber",
+        title: "UNITE Hair 7SECONDS Detangler",
+        productLabel: "protein detangler",
+        brand: "UNITE",
+        brandKo: "유나이트",
+        form: "리브인 디탱글러 미스트",
+        productName: "7SECONDS Detangler",
+        volumeMl: 236,
+        priceListDisplay: "$42.5",
+        priceSaleDisplay: "$42.5",
+        priceListKrw: Math.round(42.5 * FX_USD_KRW),
+        priceSaleKrw: Math.round(42.5 * FX_USD_KRW),
+        unitPriceKrwMl: Math.round((Math.round(42.5 * FX_USD_KRW) / 236) * 10) / 10,
+        claimDepth: 3.8,
+        concept: "protein-based detangle, heat/UV protect, color-lock를 묶은 salon detangler",
+        manufacturer: "UNITE",
+        note: "공식 PDP 8oz/236ml variant 기준",
+        url: "https://unitehair.com/products/7seconds-detangler",
+        keyIngredients: "official copy: protein-based formula",
+        alcohol: "?",
+        silicone: "?",
+        uspIngredients: "protein-based detangler + cuticle seal + thermal/UV protect",
+        ewg: "미확인",
+        performance: "공식 benefits와 Q&A 기준 450F heat protection 확인",
+        tier: "A",
+        memoPlaceholder: "salon detangling benchmark",
+        evidence: [
+          "UNITE 공식 PDP의 8oz/236ml variant에 $42.5 현재가와 full-size product image가 노출됩니다.",
+          "공식 설명에 protein-based formula, cuticle sealing, heat and UV protection, color lock, extension-safe 포인트가 함께 적혀 있습니다.",
+          "공식 Q&A에는 heat tools up to 450 degrees 보호 문구가 직접 노출됩니다."
+        ],
+        sources: [],
+        image: "https://unitehair.com/cdn/shop/files/PDP_ProductImages_Silo_FullSize_7SECONDSDetangler.jpg?v=1753463237",
+        defaultPos: { x: 2570, y: 5440 }
+      },
+      {
+        id: "randco-sun-catcher",
+        no: "66",
+        cluster: "daily-functional",
+        clusterLabel: "vitamin c leave-in",
+        tone: "amber",
+        title: "R+Co SUN CATCHER Power C Boosting Leave-In Conditioner",
+        productLabel: "vitamin c leave-in",
+        brand: "R+Co",
+        brandKo: "알플러스코",
+        form: "리브인 컨디셔너",
+        productName: "SUN CATCHER Power C Boosting Leave-In Conditioner",
+        volumeMl: 124,
+        priceListDisplay: "$32",
+        priceSaleDisplay: "$32",
+        priceListKrw: Math.round(32 * FX_USD_KRW),
+        priceSaleKrw: Math.round(32 * FX_USD_KRW),
+        unitPriceKrwMl: Math.round((Math.round(32 * FX_USD_KRW) / 124) * 10) / 10,
+        claimDepth: 3.5,
+        concept: "soften, seal, detangle, anti-frizz를 묶은 vitamin C leave-in",
+        manufacturer: "R+Co",
+        note: "공식 PDP 4.2 oz / $32 기준",
+        url: "https://www.randco.com/products/sun-catcher-vitamin-c-leave-in-conditioner",
+        keyIngredients: "official naming/copy: vitamin C leave-in",
+        alcohol: "?",
+        silicone: "?",
+        uspIngredients: "soften + seal + detangle + anti-frizz + styling base",
+        ewg: "미확인",
+        performance: "공식 current price, damp/dry use, layered styling copy 확인",
+        tier: "A",
+        memoPlaceholder: "editor-loved leave-in benchmark",
+        evidence: [
+          "R+Co 공식 PDP의 4.2 OZ variant에 $32 현재가와 canonical URL이 확인됩니다.",
+          "공식 설명에 soften, seal, detangle, fight frizz, damp or dry use, styling products beneath layering 포인트가 직접 명시됩니다.",
+          "공식 sitemap과 PDP 이미지 title이 SUN CATCHER Power C Boosting Leave-In Conditioner로 일치합니다."
+        ],
+        sources: [],
+        image: "https://www.randco.com/cdn/shop/products/SUN-CATCHER-Power-C-Boosting-Leave-In-Conditioner.png?v=1762442077",
+        defaultPos: { x: 2920, y: 5440 }
+      },
+      {
+        id: "davines-oi-milk",
+        no: "67",
+        cluster: "repair-serum",
+        clusterLabel: "hair milk leave-in",
+        tone: "sky",
+        title: "Davines OI All In One Milk",
+        productLabel: "multi-functional hair milk",
+        brand: "Davines",
+        brandKo: "다비네스",
+        form: "헤어 밀크/리브인",
+        productName: "OI All In One Milk",
+        volumeMl: 135,
+        priceListDisplay: "$46",
+        priceSaleDisplay: "$46",
+        priceListKrw: Math.round(46 * FX_USD_KRW),
+        priceSaleKrw: Math.round(46 * FX_USD_KRW),
+        unitPriceKrwMl: Math.round((Math.round(46 * FX_USD_KRW) / 135) * 10) / 10,
+        claimDepth: 3.6,
+        concept: "frizz control, detangle, heat protect, shine를 묶은 multi-functional hair milk",
+        manufacturer: "Davines",
+        note: "공식 PDP full size 135 ml / $46 기준",
+        url: "https://us.davines.com/products/oi-all-in-one-milk",
+        keyIngredients: "Roucou oil, provitamin B5, functional amino complex",
+        alcohol: "?",
+        silicone: "?",
+        uspIngredients: "oil + provitamin B5 + amino complex 기반 컨디셔닝/열보호",
+        ewg: "미확인",
+        performance: "공식 bestseller copy / 446F heat protection / 135ml $46 확인",
+        tier: "A",
+        memoPlaceholder: "premium salon hair milk benchmark",
+        evidence: [
+          "Davines 공식 PDP의 135 ml variant에 $46 현재가와 대표 이미지가 노출됩니다.",
+          "공식 설명에 frizz control, detangling, heat protection up to 446F, shine/softness, fine-to-medium hair 적합성이 명시됩니다.",
+          "공식 copy에 Roucou oil, provitamin B5, functional amino complex가 직접 소개됩니다."
+        ],
+        sources: [],
+        image: "https://us.davines.com/cdn/shop/files/Davines-76119UCL-OI-ALL-IN-ONE-MILK-135ml-8004608298526-1.jpg?v=1764175189",
+        defaultPos: { x: 3270, y: 5440 }
       }
     ];
 
@@ -3750,76 +4134,60 @@
     }
 
     const deepDiveIds = new Set([
-      "unove", "healingbird", "kundal", "miseen",
-      "hairplus", "quickbond", "headspa7", "vamood",
-      "olaplex", "livingproof", "redken", "k18",
-      "epres", "aveda", "wella", "tricell",
-      "alterna", "sebastian", "bondiboost", "matrix",
-      "ogx-bond", "nym-toughlove", "sheamoisture-bond", "sauce-beauty",
-      "aromatica", "ratedgreen", "tocobo", "leviemer", "ayunche",
-      "thesaem", "rikera", "kundal-collagen", "bifidolab",
-      "sw19-3pm", "sw19-midnight", "white-sunday", "bellista",
-      "doterra", "silktherapy-bond", "elastine-biobond17", "pinkghost"
+      "unove", "healingbird", "kundal", "miseen", "hairplus", "quickbond", "headspa7", "vamood",
+      "olaplex", "livingproof", "redken", "k18", "epres", "aveda", "wella", "tricell",
+      "moroccanoil", "kerastase", "alterna", "sebastian", "bondiboost", "matrix",
+      "ogx-bond", "nym-toughlove", "sheamoisture-bond", "sauce-beauty", "aromatica",
+      "ratedgreen", "tocobo", "leviemer", "ayunche", "thesaem", "rikera", "kundal-collagen",
+      "bifidolab", "sw19-3pm", "sw19-midnight", "doterra", "silktherapy-bond",
+      "elastine-biobond17", "daleaf-hairpack-mist", "jennyhouse-quickdry",
+      "silktherapy-silkmist", "chahong-keratin-mist", "oribe-runthrough", "bumble-hio-primer",
+      "ouai-leave-in", "phyto-heat-protection", "itsa10-miracle-leave-in", "unite-7seconds",
+      "randco-sun-catcher", "davines-oi-milk"
     ]);
 
     const clusterToneMap = {
-      "domestic-repair": "sky",
-      "domestic-bond": "olive",
-      "domestic-functional": "amber",
-      "global-direct": "mint",
-      "global-adjacent": "amber",
-      "global-mass-bond": "amber",
+      "bond-hero": "olive",
+      "bond-extended": "mint",
+      "repair-serum": "sky",
+      "daily-functional": "amber",
       "scent-led": "rose",
-      "premium-ceiling": "violet"
+      "luxury-fragrance": "violet"
     };
 
     const clusterLabelMap = {
-      "domestic-repair": "국내 성분-서사 확장",
-      "domestic-bond": "국내 본딩/살롱 리페어",
-      "domestic-functional": "국내 기능성 리페어/열보호",
-      "global-direct": "글로벌 본딩 direct",
-      "global-adjacent": "글로벌 본딩 adjacent",
-      "global-mass-bond": "글로벌 매스 본딩/리페어 확장",
-      "scent-led": "국내 퍼퓸/클린/감성 SKU",
-      "premium-ceiling": "프리미엄/살롱 ceiling"
+      "bond-hero": "본딩 히어로",
+      "bond-extended": "본딩 확장",
+      "repair-serum": "컨디셔닝 리페어",
+      "daily-functional": "데일리 기능",
+      "scent-led": "향 중심",
+      "luxury-fragrance": "글로벌 럭셔리"
     };
 
     const sectionStyleMap = {
-      "domestic-repair": {
-        bg: "rgba(221, 233, 247, 0.42)",
-        line: "rgba(54, 95, 139, 0.22)",
-        band: "rgba(221, 233, 247, 0.5)",
-        headerBg: "rgba(247, 251, 255, 0.98)"
-      },
-      "domestic-bond": {
+      "bond-hero": {
         bg: "rgba(222, 236, 217, 0.42)",
         line: "rgba(71, 113, 60, 0.22)",
         band: "rgba(222, 236, 217, 0.52)",
         headerBg: "rgba(248, 252, 245, 0.98)"
       },
-      "domestic-functional": {
-        bg: "rgba(244, 232, 214, 0.4)",
-        line: "rgba(143, 103, 42, 0.2)",
-        band: "rgba(244, 232, 214, 0.5)",
-        headerBg: "rgba(255, 251, 245, 0.98)"
-      },
-      "global-direct": {
+      "bond-extended": {
         bg: "rgba(216, 236, 228, 0.42)",
         line: "rgba(63, 108, 92, 0.22)",
         band: "rgba(216, 236, 228, 0.52)",
         headerBg: "rgba(246, 252, 249, 0.98)"
       },
-      "global-adjacent": {
-        bg: "rgba(243, 228, 197, 0.4)",
-        line: "rgba(142, 99, 34, 0.2)",
-        band: "rgba(243, 228, 197, 0.5)",
-        headerBg: "rgba(255, 251, 244, 0.98)"
+      "repair-serum": {
+        bg: "rgba(221, 233, 247, 0.42)",
+        line: "rgba(54, 95, 139, 0.22)",
+        band: "rgba(221, 233, 247, 0.5)",
+        headerBg: "rgba(247, 251, 255, 0.98)"
       },
-      "global-mass-bond": {
-        bg: "rgba(243, 228, 197, 0.34)",
-        line: "rgba(142, 99, 34, 0.18)",
-        band: "rgba(243, 228, 197, 0.46)",
-        headerBg: "rgba(255, 251, 244, 0.98)"
+      "daily-functional": {
+        bg: "rgba(244, 232, 214, 0.4)",
+        line: "rgba(143, 103, 42, 0.2)",
+        band: "rgba(244, 232, 214, 0.5)",
+        headerBg: "rgba(255, 251, 245, 0.98)"
       },
       "scent-led": {
         bg: "rgba(243, 221, 225, 0.42)",
@@ -3827,13 +4195,118 @@
         band: "rgba(243, 221, 225, 0.52)",
         headerBg: "rgba(255, 248, 250, 0.98)"
       },
-      "premium-ceiling": {
+      "luxury-fragrance": {
         bg: "rgba(232, 222, 241, 0.42)",
         line: "rgba(102, 80, 127, 0.2)",
         band: "rgba(232, 222, 241, 0.52)",
         headerBg: "rgba(251, 248, 255, 0.98)"
       }
     };
+
+    const productTagToneMap = {
+      "살롱/헤어드레서": "mint",
+      "살롱 프로페셔널": "sky",
+      "프리미엄 살롱 비교군": "violet",
+      "약국/더마 포지션": "amber"
+    };
+
+    const segmentAssignments = {
+      "bond-hero": [
+        "hairplus", "quickbond", "vamood", "olaplex", "livingproof", "k18", "epres",
+        "silktherapy-bond", "elastine-biobond17"
+      ],
+      "bond-extended": [
+        "miseen", "redken", "aveda", "alterna", "sebastian", "bondiboost", "matrix",
+        "ogx-bond", "nym-toughlove", "sheamoisture-bond", "sauce-beauty", "phyto-heat-protection"
+      ],
+      "repair-serum": [
+        "unove", "kundal", "leviemer", "thesaem", "kundal-collagen", "bifidolab",
+        "doterra", "dalba-hair-serum", "itsa10-miracle-leave-in", "davines-oi-milk"
+      ],
+      "daily-functional": [
+        "healingbird", "headspa7", "wella", "tricell", "tocobo", "ayunche", "rikera",
+        "growus-nowash", "jennyhouse-quickdry", "daleaf-hairpack-mist", "silktherapy-silkmist",
+        "ratedgreen", "chahong-keratin-mist", "oribe-runthrough", "bumble-hio-primer",
+        "ouai-leave-in", "unite-7seconds", "randco-sun-catcher"
+      ],
+      "scent-led": [
+        "roundaround", "bodyholic-potion", "bodyholic-staynudie", "tone28", "anillo",
+        "moroccanoil", "kerastase", "aromatica", "sw19-3pm", "sw19-midnight", "white-sunday",
+        "bellista", "pinkghost", "narca", "sennok-babyblusher", "kerasys-caviar"
+      ],
+      "luxury-fragrance": [
+        "byredo", "dior"
+      ]
+    };
+
+    const productTagOverrides = {
+      olaplex: ["프리미엄 살롱 비교군"],
+      livingproof: ["프리미엄 살롱 비교군"],
+      k18: ["프리미엄 살롱 비교군"],
+      redken: ["살롱 프로페셔널", "프리미엄 살롱 비교군"],
+      aveda: ["살롱 프로페셔널", "프리미엄 살롱 비교군"],
+      wella: ["살롱 프로페셔널", "프리미엄 살롱 비교군"],
+      sebastian: ["살롱 프로페셔널"],
+      matrix: ["살롱 프로페셔널"],
+      ayunche: ["살롱 프로페셔널"],
+      moroccanoil: ["프리미엄 살롱 비교군"],
+      kerastase: ["살롱 프로페셔널", "프리미엄 살롱 비교군"],
+      "jennyhouse-quickdry": ["살롱/헤어드레서"],
+      "chahong-keratin-mist": ["살롱/헤어드레서"],
+      "oribe-runthrough": ["살롱/헤어드레서", "프리미엄 살롱 비교군"],
+      "bumble-hio-primer": ["살롱/헤어드레서", "프리미엄 살롱 비교군"],
+      "ouai-leave-in": ["살롱/헤어드레서", "프리미엄 살롱 비교군"],
+      "unite-7seconds": ["살롱 프로페셔널"],
+      "randco-sun-catcher": ["살롱 프로페셔널"],
+      "davines-oi-milk": ["살롱 프로페셔널", "프리미엄 살롱 비교군"],
+      "phyto-heat-protection": ["약국/더마 포지션"]
+    };
+
+    const segmentLayoutConfig = {
+      "bond-hero": { cols: 4, insetX: 42, insetTop: 210, gapX: 350, gapY: 760 },
+      "bond-extended": { cols: 4, insetX: 42, insetTop: 210, gapX: 350, gapY: 760 },
+      "repair-serum": { cols: 4, insetX: 42, insetTop: 210, gapX: 350, gapY: 760 },
+      "daily-functional": { cols: 4, insetX: 42, insetTop: 210, gapX: 350, gapY: 780 },
+      "scent-led": { cols: 4, insetX: 42, insetTop: 210, gapX: 350, gapY: 760 },
+      "luxury-fragrance": { cols: 2, insetX: 42, insetTop: 210, gapX: 350, gapY: 760 }
+    };
+
+    function applySegmentModel() {
+      const assignmentById = {};
+      const orderById = {};
+
+      Object.entries(segmentAssignments).forEach(([segmentId, ids]) => {
+        ids.forEach((id, index) => {
+          assignmentById[id] = segmentId;
+          orderById[id] = index;
+        });
+      });
+
+      products.forEach((product, index) => {
+        const assignedSegment = assignmentById[product.id] || product.cluster || "daily-functional";
+        product.cluster = assignedSegment;
+        product.clusterLabel = clusterLabelMap[assignedSegment] || product.clusterLabel || assignedSegment;
+        product.tone = clusterToneMap[assignedSegment] || product.tone || "sky";
+        product.metaTags = productTagOverrides[product.id] || [];
+        product.segmentOrder = Number.isFinite(orderById[product.id]) ? orderById[product.id] : 1000 + index;
+      });
+
+      sections.forEach((section) => {
+        const layout = segmentLayoutConfig[section.id];
+        if (!layout) return;
+        products
+          .filter((product) => product.cluster === section.id)
+          .sort((a, b) => a.segmentOrder - b.segmentOrder)
+          .forEach((product, index) => {
+            const col = index % layout.cols;
+            const row = Math.floor(index / layout.cols);
+            product.defaultPos = {
+              x: section.x + layout.insetX + (col * layout.gapX),
+              y: section.y + layout.insetTop + (row * layout.gapY)
+            };
+          });
+      });
+    }
 
     const detailCatalog = {
       vamood: {
@@ -4733,6 +5206,78 @@
           "케라틴 + 17종 아미노산을 앞세운 대중형 본딩 앰플 문법으로 해석하는 편이 적절합니다."
         ]
       },
+      "oribe-runthrough": {
+        ingredientsStatus: "partial",
+        fullIngredientsSource: "Oribe 공식 PDP",
+        fullIngredientsNote: "이번 턴에는 full INCI 전체를 옮기진 않았지만, detangling primer 포지션과 anti-frizz / heat protection / hydration 핵심 효익은 공식 페이지에서 직접 확인했습니다.",
+        insightBullets: [
+          "헤어드레서 출신 prestige 브랜드가 detangling primer를 어떻게 고급화하는지 보여주는 대표 레퍼런스입니다.",
+          "Olaplex 같은 구조 복구군과는 역할이 다르지만, 실제 비교구매 장바구니에는 같이 들어가기 쉬운 프리미엄 살롱 비교군입니다."
+        ],
+        reviewHighlights: [
+          "Oribe는 살롱 감도와 사용감 완성도로 비교되는 경우가 많아, 본딩 hero보다도 프리미엄 사용감 앵커로 읽는 편이 적절합니다."
+        ]
+      },
+      "phyto-heat-protection": {
+        ingredientsStatus: "partial",
+        fullIngredientsSource: "PHYTO US 공식 PDP",
+        fullIngredientsNote: "미국 공식 페이지에서 Keratin A18+, botanical keratin, white mallow, silicone-free / PEG-free / vegan 포인트를 확인했습니다. ml 비교를 위한 150ml 값은 pack spec 기준 보조 정리입니다.",
+        insightBullets: [
+          "약국/더마 포지션으로 읽을 수 있는 몇 안 되는 헤어미스트 레퍼런스라 보드 안에서 역할이 분명합니다.",
+          "bond hero보다는 열보호와 anti-breakage 기능형에 가깝지만, 과학적 신뢰감은 꽤 강하게 가져갑니다."
+        ],
+        reviewHighlights: [
+          "공식 메시지는 230°C/446°F 보호, frizz reduction, breakage protection에 집중되어 있어 살롱 감성보다는 기능 신뢰형 문법이 강합니다."
+        ]
+      },
+      "itsa10-miracle-leave-in": {
+        ingredientsStatus: "partial",
+        fullIngredientsSource: "It's a 10 Haircare 공식 PDP",
+        fullIngredientsNote: "공식 페이지에서 sunflower seed extract, green tea leaf extract, silk amino acids, aloe vera, panthenol과 열보호/UV/detangle 효익을 확인했습니다.",
+        insightBullets: [
+          "미국 mass-premium leave-in의 교과서 같은 SKU라, 본딩보다는 다기능 컨디셔닝 리페어 기준점으로 좋습니다.",
+          "4oz $21 가격대는 국내 데일리 리페어군과 비교할 때도 꽤 현실적인 환산값을 만듭니다."
+        ],
+        reviewHighlights: [
+          "소비자에게는 bond science보다도 detangle, softness, heat protection, split-end care를 한 번에 해결하는 멀티 기능 제품으로 먼저 읽힙니다."
+        ]
+      },
+      "unite-7seconds": {
+        ingredientsStatus: "partial",
+        fullIngredientsSource: "UNITE Hair 공식 PDP",
+        fullIngredientsNote: "공식 페이지에서 protein-based formula, heat protection up to 450°F, UV protection, color lock, extension-safe 포인트를 확인했습니다.",
+        insightBullets: [
+          "미국 살롱 프로페셔널 detangler의 대표격이라, 데일리 기능형 세그 안에서 매우 좋은 benchmark입니다.",
+          "즉각적인 빗질 편의와 열보호를 함께 파는 방식이 한국 quick-dry/anti-frizz SKU와 비교하기 좋습니다."
+        ],
+        reviewHighlights: [
+          "구매 이유가 구조 복구보다는 detangling과 daily manageability에 더 가까워, 살롱 origin이어도 메인 세그는 데일리 기능형으로 두는 편이 자연스럽습니다."
+        ]
+      },
+      "randco-sun-catcher": {
+        ingredientsStatus: "partial",
+        fullIngredientsSource: "R+Co 공식 PDP",
+        fullIngredientsNote: "공식 페이지에서 soften, seal, detangle, frizz control, damp/dry layering 사용 장면을 확인했습니다.",
+        insightBullets: [
+          "editorial/salon brand가 leave-in conditioner를 얼마나 가볍고 라이프스타일형으로 푸는지 보여주는 미국 레퍼런스입니다.",
+          "bond story보다 anti-frizz와 detangle, layering usability를 먼저 파는 SKU라 데일리 기능형에 가깝습니다."
+        ],
+        reviewHighlights: [
+          "스타일링 전 단계 프라이머에 가까워, 과학 서사보다는 루틴 호환성과 부드러운 사용감이 비교 포인트가 됩니다."
+        ]
+      },
+      "davines-oi-milk": {
+        ingredientsStatus: "partial",
+        fullIngredientsSource: "Davines US 공식 PDP",
+        fullIngredientsNote: "공식 페이지에서 Roucou oil, provitamin B5, functional amino complex, 446°F heat protection, bestseller multi-functional milk 포인트를 확인했습니다.",
+        insightBullets: [
+          "미국/글로벌 살롱 프로페셔널 헤어 밀크 중 가장 전형적인 프리미엄 benchmark 중 하나입니다.",
+          "세럼형 데일리 리페어 세그 안에서도 가격 상단과 살롱 전문성 태그를 같이 보여줄 수 있는 카드입니다."
+        ],
+        reviewHighlights: [
+          "소비자는 bond hero로 보기보다 frizz control, detangling, softness, shine를 고급스럽게 해결하는 살롱 milk로 읽을 가능성이 큽니다."
+        ]
+      },
       pinkghost: {
         ingredientsStatus: "missing",
         fullIngredientsSource: "다나와",
@@ -4743,15 +5288,15 @@
       }
     });
 
-    const LAYOUT_MIGRATION_PRODUCT_IDS = new Set([
-      "narca",
-      "dalba-hair-serum",
-      "growus-nowash",
-      "jennyhouse-quickdry",
-      "sennok-babyblusher",
-      "daleaf-hairpack-mist",
-      "kerasys-caviar",
-      "silktherapy-silkmist"
+    applySegmentModel();
+
+    const LAYOUT_RESET_IDS = new Set([
+      ...products.map((product) => product.id),
+      ...noteCards.map((note) => note.id),
+      "positioning-map",
+      "table-core",
+      "table-extended",
+      "target-card"
     ]);
 
     const state = loadState();
@@ -4777,14 +5322,15 @@
       try {
         const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
         const positions = { ...(parsed.positions || {}) };
-        if ((parsed.layoutVersion || 1) < LAYOUT_VERSION) {
-          for (const id of LAYOUT_MIGRATION_PRODUCT_IDS) {
+        const needsLayoutReset = (parsed.layoutVersion || 1) < LAYOUT_VERSION;
+        if (needsLayoutReset) {
+          for (const id of LAYOUT_RESET_IDS) {
             delete positions[id];
           }
         }
         return {
           layoutVersion: LAYOUT_VERSION,
-          view: parsed.view || { ...WORLD_DEFAULT },
+          view: needsLayoutReset ? { ...WORLD_DEFAULT } : (parsed.view || { ...WORLD_DEFAULT }),
           positions,
           memos: parsed.memos || {},
           noteBodies: parsed.noteBodies || {},
@@ -4916,6 +5462,16 @@
       `;
     }
 
+    function renderProductTagChips(tags, extraClass = "") {
+      if (!tags?.length) return "";
+      const className = extraClass ? `product-tags ${extraClass}` : "product-tags";
+      return `
+        <div class="${escapeHtml(className)}">
+          ${tags.map((tag) => `<span class="tag-chip ${escapeHtml(productTagToneMap[tag] || "sky")}">${escapeHtml(tag)}</span>`).join("")}
+        </div>
+      `;
+    }
+
     function getItemPosition(item) {
       if (state.positions[item.id]) return state.positions[item.id];
       if (item.defaultPos) return item.defaultPos;
@@ -4927,28 +5483,7 @@
     }
 
     function getSectionBounds(section) {
-      const cards = products.filter((product) => getBoardSectionId(product) === section.id);
-      if (!cards.length) {
-        return { x: section.x, y: section.y, w: section.w, h: section.h };
-      }
-      const bounds = cards.reduce((acc, product) => {
-        const pos = getItemPosition(product);
-        acc.minX = Math.min(acc.minX, pos.x);
-        acc.minY = Math.min(acc.minY, pos.y);
-        acc.maxX = Math.max(acc.maxX, pos.x + 330);
-        acc.maxY = Math.max(acc.maxY, pos.y + 352);
-        return acc;
-      }, { minX: Infinity, minY: Infinity, maxX: -Infinity, maxY: -Infinity });
-      const x = Math.min(section.x, bounds.minX - 32);
-      const y = Math.min(section.y, bounds.minY - 116);
-      const right = Math.max(section.x + section.w, bounds.maxX + 32);
-      const bottom = Math.max(section.y + section.h, bounds.maxY + 32);
-      return {
-        x,
-        y,
-        w: right - x,
-        h: bottom - y
-      };
+      return { x: section.x, y: section.y, w: section.w, h: section.h };
     }
 
     function isInteractiveBoardTarget(target) {
@@ -4980,6 +5515,7 @@
         product.clusterLabel,
         product.productLabel,
         product.concept,
+        (product.metaTags || []).join(" "),
         product.keyIngredients,
         product.performance,
         product.note,
@@ -5115,7 +5651,7 @@
         <div class="drawer-metric"><strong>ml당 단가</strong><span>${escapeHtml(formatUnit(product.unitPriceKrwMl))}</span></div>
       `;
       drawerProductTitle.textContent = product.title;
-      drawerProductSubtitle.textContent = `${clusterLabelMap[product.cluster]} · ${product.brandKo} / ${product.brand} · 근거 ${product.tier}`;
+      drawerProductSubtitle.textContent = `${clusterLabelMap[product.cluster]} · ${product.brandKo} / ${product.brand}${product.metaTags?.length ? ` · ${product.metaTags.join(" / ")}` : ""} · 근거 ${product.tier}`;
       drawerScroll.innerHTML = `
         <section class="drawer-card">
           <div class="item-heading" style="margin-bottom:12px;">
@@ -5123,6 +5659,7 @@
             <span class="item-chip ${product.tone}">${escapeHtml(product.clusterLabel)}</span>
             <span class="tier-chip tier-${product.tier.toLowerCase()}">${escapeHtml(product.tier)} 근거</span>
           </div>
+          ${renderProductTagChips(product.metaTags, "compact")}
           <div class="drawer-grid">${priceRows}</div>
           ${detailPageRow}
         </section>
@@ -5236,6 +5773,7 @@
       for (const section of sections) {
         const bounds = getSectionBounds(section);
         const styles = sectionStyleMap[section.id] || {};
+        const count = products.filter((product) => product.cluster === section.id).length;
         const node = document.createElement("section");
         node.className = "section-panel";
         node.style.left = bounds.x + "px";
@@ -5247,7 +5785,7 @@
         if (styles.band) node.style.setProperty("--section-band", styles.band);
         if (styles.headerBg) node.style.setProperty("--section-header-bg", styles.headerBg);
         node.innerHTML = `
-          <header>${escapeHtml(section.title)}</header>
+          <header>${escapeHtml(section.title)}<strong>${count}개</strong></header>
           <p>${escapeHtml(section.blurb)}</p>
         `;
         world.appendChild(node);
@@ -5304,6 +5842,7 @@
           <h3>${escapeHtml(product.title)}</h3>
           <div class="product-meta">${escapeHtml(product.volumeMl)}ml | 할인 ${escapeHtml(product.priceSaleDisplay)} | ml당 ${escapeHtml(formatUnit(product.unitPriceKrwMl))}</div>
           <div class="product-score">과학 소구 강도 ${escapeHtml(product.claimDepth.toFixed(1))}/5 · ${escapeHtml(clusterLabelMap[product.cluster])}</div>
+          ${renderProductTagChips(product.metaTags)}
           <div class="cta-row">
             <a class="source-chip primary" href="${escapeHtml(product.url)}" target="_blank" rel="noreferrer">상세페이지</a>
           </div>
@@ -5333,7 +5872,7 @@
       const card = document.createElement("article");
       card.className = "board-item panel-card map-card";
       card.dataset.itemId = "positioning-map";
-      const pos = getItemPosition({ id: "positioning-map", defaultPos: { x: 3020, y: 140 } });
+      const pos = getItemPosition({ id: "positioning-map", defaultPos: { x: 3490, y: 140 } });
       card.style.left = pos.x + "px";
       card.style.top = pos.y + "px";
       const eligible = products.filter((product) => product.mapEligible !== false);
@@ -5411,12 +5950,12 @@
             <p>쭈드레님이 실제로 노려야 할 공간을 보기 위해, 가격은 ml당 단가로 통일했고 메시지 강도는 향 중심 ~ direct multi-bond까지 5단계로 정성 점수화했습니다. 숫자 점 위에 마우스를 올리면 미니 카드가, 클릭하면 우측 상세 패널이 열립니다.</p>
           </div>
           <div class="map-legend">
-            <span class="legend-chip"><span class="legend-dot" style="background:#4f7aa8"></span>국내 대중 손상케어</span>
-            <span class="legend-chip"><span class="legend-dot" style="background:#648249"></span>국내 본딩/직접 경쟁</span>
-            <span class="legend-chip"><span class="legend-dot" style="background:#4c7f70"></span>글로벌 본딩 direct</span>
-            <span class="legend-chip"><span class="legend-dot" style="background:#b27a2c"></span>글로벌 adjacent / mass bond</span>
-            <span class="legend-chip"><span class="legend-dot" style="background:#b66377"></span>향 중심 한국 SKU</span>
-            <span class="legend-chip"><span class="legend-dot" style="background:#7e63a2"></span>프리미엄/럭셔리</span>
+            <span class="legend-chip"><span class="legend-dot" style="background:#648249"></span>본딩 히어로</span>
+            <span class="legend-chip"><span class="legend-dot" style="background:#4c7f70"></span>본딩 확장</span>
+            <span class="legend-chip"><span class="legend-dot" style="background:#4f7aa8"></span>컨디셔닝 리페어</span>
+            <span class="legend-chip"><span class="legend-dot" style="background:#b27a2c"></span>데일리 기능</span>
+            <span class="legend-chip"><span class="legend-dot" style="background:#b66377"></span>향 중심</span>
+            <span class="legend-chip"><span class="legend-dot" style="background:#7e63a2"></span>글로벌 럭셔리</span>
           </div>
           <div class="map-svg-wrap">
             <svg viewBox="0 0 ${width} ${height}" width="100%" height="100%" aria-label="헤어미스트 포지셔닝맵">
@@ -5525,7 +6064,7 @@
       const card = document.createElement("article");
       card.className = "board-item panel-card target-card";
       card.dataset.itemId = "target-card";
-      const pos = getItemPosition({ id: "target-card", defaultPos: { x: 430, y: 5760 } });
+      const pos = getItemPosition({ id: "target-card", defaultPos: { x: 3490, y: 8600 } });
       card.style.left = pos.x + "px";
       card.style.top = pos.y + "px";
       card.innerHTML = `
@@ -5612,7 +6151,7 @@
       renderMapCard();
       renderTableCard(
         "core",
-        3020,
+        3490,
         1650,
         Array.from(deepDiveIds),
         "딥다이브 매트릭스",
@@ -5620,7 +6159,7 @@
       );
       renderTableCard(
         "extended",
-        3020,
+        3490,
         3440,
         products.filter((product) => !deepDiveIds.has(product.id)).map((product) => product.id),
         "확장 가격군 매트릭스",
