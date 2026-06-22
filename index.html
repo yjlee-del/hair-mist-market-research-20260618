@@ -5980,7 +5980,7 @@
         product.title,
         product.productLabel
       ].join(" ").toLowerCase();
-      return /미스트|mist/.test(haystack);
+      return /미스트|mist|스프레이|spray/.test(haystack);
     }
 
     function shouldShowPinnedMapLabel(product) {
@@ -6722,7 +6722,7 @@
             <span class="item-chip mint">포지셔닝맵</span>
             <span class="item-chip amber">x = ml당 단가</span>
             <span class="item-chip rose">y = 본딩/리페어 과학 소구 강도</span>
-            <span class="item-chip olive">점선 원 = 미스트 외 제형</span>
+            <span class="item-chip olive">점선 원 = 미스트/스프레이 외 제형</span>
           </div>
           <span class="meta-signal">hover = 미니 카드 / click = 상세 패널</span>
         </div>
