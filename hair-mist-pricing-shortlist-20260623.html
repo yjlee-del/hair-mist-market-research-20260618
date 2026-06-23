@@ -1,0 +1,897 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>헤어미스트 가격결정용 숏리스트 보드</title>
+  <style>
+    :root {
+      --bg: #f5efe3;
+      --panel: rgba(255, 252, 246, 0.94);
+      --panel-strong: rgba(255, 255, 255, 0.98);
+      --line: rgba(63, 54, 41, 0.12);
+      --text: #2b241d;
+      --muted: #6d6458;
+      --shadow: 0 24px 52px rgba(60, 44, 20, 0.10);
+      --radius: 24px;
+      --drawer-width: 420px;
+      font-family: "Pretendard", "SUIT", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.72), transparent 30%),
+        linear-gradient(180deg, #f7f1e6 0%, #f2ebdf 100%);
+    }
+    .shell {
+      min-height: 100vh;
+      padding: 28px 24px 40px;
+    }
+    .hero {
+      max-width: 1680px;
+      margin: 0 auto 18px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 260px;
+      gap: 18px;
+    }
+    .hero-main,
+    .meta-card,
+    .summary-card,
+    .legend-panel,
+    .chart-card,
+    .table-card,
+    .drawer {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .hero-main {
+      padding: 24px 26px;
+    }
+    .hero-main h1 {
+      margin: 0 0 10px;
+      font-size: 34px;
+      line-height: 1.12;
+      letter-spacing: -0.03em;
+    }
+    .hero-main p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.68;
+    }
+    .hero-side {
+      display: grid;
+      gap: 12px;
+    }
+    .meta-card {
+      padding: 16px 18px;
+    }
+    .meta-label {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .meta-value {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+    .summary-grid {
+      max-width: 1680px;
+      margin: 0 auto 18px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .summary-card {
+      padding: 16px 18px;
+    }
+    .summary-card h2 {
+      margin: 0 0 10px;
+      font-size: 15px;
+      letter-spacing: -0.02em;
+    }
+    .summary-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.58;
+    }
+    .legend-panel {
+      max-width: 1680px;
+      margin: 0 auto 18px;
+      padding: 18px 20px 20px;
+    }
+    .legend-title {
+      margin: 0 0 12px;
+      font-size: 16px;
+      font-weight: 800;
+    }
+    .legend-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .legend-chip {
+      border: 1px solid rgba(63,54,41,0.09);
+      background: rgba(255,255,255,0.72);
+      border-radius: 999px;
+      padding: 10px 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text);
+      cursor: pointer;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, opacity 0.16s ease;
+    }
+    .legend-chip:hover { transform: translateY(-1px); }
+    .legend-chip.is-active {
+      box-shadow: inset 0 0 0 1px rgba(43,36,29,0.18), 0 12px 24px rgba(60,44,20,0.10);
+      background: rgba(255,255,255,0.96);
+    }
+    .legend-chip.is-dimmed { opacity: 0.34; }
+    .legend-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      display: inline-block;
+      flex: 0 0 auto;
+    }
+    .legend-copy strong {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 2px;
+    }
+    .legend-copy span {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.35;
+      max-width: 270px;
+    }
+    .content {
+      max-width: 1680px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) var(--drawer-width);
+      gap: 18px;
+      align-items: start;
+    }
+    .left-column {
+      display: grid;
+      gap: 18px;
+    }
+    .chart-card,
+    .table-card {
+      padding: 18px;
+    }
+    .chart-card h2,
+    .table-card h2 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      letter-spacing: -0.02em;
+    }
+    .chart-card p,
+    .table-card p {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .chart-wrap {
+      border: 1px solid rgba(63,54,41,0.08);
+      border-radius: 20px;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(251,248,241,0.96));
+    }
+    .chart-foot {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .chart-foot span {
+      flex: 1 1 240px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      background: rgba(63,54,41,0.05);
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .axis-label {
+      font-size: 12px;
+      fill: #2b241d;
+      font-weight: 800;
+    }
+    .grid-label {
+      font-size: 11px;
+      fill: #7c7267;
+    }
+    .plot-point {
+      cursor: pointer;
+      transition: opacity 0.16s ease;
+    }
+    .plot-point.dimmed { opacity: 0.16; }
+    .plot-point circle {
+      transition: transform 0.16s ease, filter 0.16s ease, stroke-width 0.16s ease;
+      transform-origin: center;
+    }
+    .plot-point:hover circle.main,
+    .plot-point.is-active circle.main {
+      transform: scale(1.12);
+      filter: drop-shadow(0 10px 18px rgba(43,36,29,0.18));
+      stroke-width: 4;
+    }
+    .point-hit {
+      cursor: pointer;
+    }
+    .point-label {
+      font-size: 11px;
+      font-weight: 700;
+      fill: #3f372e;
+    }
+    .point-label.dimmed { opacity: 0.45; }
+    .table-tools {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 14px;
+      flex-wrap: wrap;
+    }
+    .table-note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-left: auto;
+    }
+    .search-input {
+      width: min(360px, 100%);
+      height: 40px;
+      border-radius: 999px;
+      border: 1px solid rgba(63,54,41,0.12);
+      padding: 0 14px;
+      background: rgba(255,255,255,0.84);
+      font-size: 13px;
+      outline: none;
+    }
+    .table-wrap {
+      overflow: auto;
+      border: 1px solid rgba(63,54,41,0.08);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.72);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1180px;
+    }
+    thead th {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: rgba(248,243,235,0.98);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      padding: 12px 10px;
+      border-bottom: 1px solid rgba(63,54,41,0.08);
+      text-align: left;
+    }
+    tbody tr {
+      cursor: pointer;
+      transition: background 0.14s ease;
+    }
+    tbody tr:hover {
+      background: rgba(255,255,255,0.9);
+    }
+    tbody tr.is-active {
+      background: rgba(255,255,255,0.96);
+    }
+    tbody tr.dimmed {
+      opacity: 0.38;
+    }
+    td {
+      padding: 12px 10px;
+      border-bottom: 1px solid rgba(63,54,41,0.06);
+      font-size: 13px;
+      line-height: 1.48;
+      vertical-align: top;
+    }
+    .cell-title strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
+    .cell-title span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 28px;
+      padding: 0 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      background: rgba(63,54,41,0.07);
+      color: var(--text);
+      white-space: nowrap;
+    }
+    .pill.segment {
+      color: white;
+    }
+    .pill.small {
+      height: 24px;
+      padding: 0 8px;
+    }
+    .drawer {
+      position: sticky;
+      top: 24px;
+      padding: 18px;
+      min-height: 420px;
+    }
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .drawer h3 {
+      margin: 0 0 6px;
+      font-size: 24px;
+      line-height: 1.26;
+      letter-spacing: -0.03em;
+    }
+    .drawer-sub {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .metric {
+      padding: 12px 13px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(63,54,41,0.08);
+    }
+    .metric strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .metric span {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .detail-block {
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.74);
+      border: 1px solid rgba(63,54,41,0.08);
+      margin-bottom: 12px;
+    }
+    .detail-block h4 {
+      margin: 0 0 8px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .detail-block p,
+    .detail-block li {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.58;
+    }
+    .detail-block ul {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 4px;
+    }
+    .source-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .source-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(43,36,29,0.06);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .methodology {
+      max-width: 1680px;
+      margin: 18px auto 0;
+      padding: 16px 18px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.58);
+      border: 1px solid rgba(63,54,41,0.08);
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .methodology strong {
+      color: var(--text);
+    }
+    @media (max-width: 1280px) {
+      .content {
+        grid-template-columns: 1fr;
+      }
+      .drawer {
+        position: static;
+      }
+      .hero,
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 780px) {
+      .shell {
+        padding: 18px 14px 28px;
+      }
+      .hero-main h1 {
+        font-size: 28px;
+      }
+      .metric-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <section class="hero">
+      <article class="hero-main">
+        <h1>헤어미스트 가격결정용 숏리스트 보드</h1>
+        <p>오롯 헤어미스트 가격 결정을 위해, 정말 유사하게 봐야 하는 16개 제품만 남기고 다시 정리했습니다. 이번 보드는 “가격이 왜 비싸게 형성되는가”와 “실제 포뮬러/claim 설득력이 그 가격을 받칠 수 있는가”를 함께 보는 용도입니다. 해외 제품은 본국 current price를 기준으로, 한국 제품은 국내 current price를 기준으로 잡았고, 한국 현재 판매 여부는 주요 리테일 검색 결과를 따로 붙였습니다.</p>
+      </article>
+      <div class="hero-side">
+        <article class="meta-card">
+          <div class="meta-label">현재 비교 SKU</div>
+          <div class="meta-value">16개</div>
+        </article>
+        <article class="meta-card">
+          <div class="meta-label">국내 판매 흔적</div>
+          <div class="meta-value">8개</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="summary-grid">
+      <article class="summary-card">
+        <h2>평균 100ml 단가</h2>
+        <p>36,572원입니다. 중앙값은 37,273원이라, 이 보드 안에서도 imported premium과 mass/K-뷰티 하단이 꽤 크게 갈립니다.</p>
+      </article>
+      <article class="summary-card">
+        <h2>정당화 강한 프리미엄</h2>
+        <p>epres, K18, Aveda처럼 과학 서사와 가격 상단이 같이 움직이는 제품은 따로 떼어 보는 편이 맞습니다.</p>
+      </article>
+      <article class="summary-card">
+        <h2>비싼데 설득력 약한 후보</h2>
+        <p>Seb, NUXE, SENNOK, Pinkghost은 가격은 높은데 실제 포뮬러는 본딩보다 실리콘/스타일링/감성값이 더 크다고 읽히는 쪽입니다.</p>
+      </article>
+      <article class="summary-card">
+        <h2>가성비 본딩 참고군</h2>
+        <p>Matrix은 본딩 문법 대비 가격이 비교적 낮아, 왜 저렴한지 구조를 보기 좋은 제품들입니다.</p>
+      </article>
+    </section>
+
+    <section class="legend-panel">
+      <h2 class="legend-title">세그 필터</h2>
+      <div id="legend" class="legend-grid"></div>
+    </section>
+
+    <section class="content">
+      <div class="left-column">
+        <article class="chart-card">
+          <h2>가격 vs claim 설득력</h2>
+          <p>x축은 기준 시장 가격을 KRW로 환산한 100ml 단가, y축은 이번 숏리스트 안에서의 claim 설득력 점수입니다. 오른쪽 아래로 갈수록 “비싼데 실제 포뮬러/claim 설득력은 약한” 케이스로 읽기 쉽습니다.</p>
+          <div class="chart-wrap">
+            <svg id="scatter" viewBox="0 0 1220 620" width="100%" height="100%" aria-label="가격과 claim 설득력 산점도"></svg>
+          </div>
+          <div class="chart-foot">
+            <span>실선 점은 분사형 미스트/스프레이, 점선 점은 크림/밤/마스크처럼 도포형 제품입니다.</span>
+            <span>이 보드의 y축은 “실제 결합 메커니즘이 얼마나 명시적이고 설득력 있게 확인됐는가”를 기준으로 수동 점수화했습니다.</span>
+          </div>
+        </article>
+
+        <article class="table-card">
+          <h2>한눈 비교표</h2>
+          <p>행을 누르면 오른쪽 상세 패널에서 왜 비싼지, 가격 방어가 약한 포인트가 뭔지, 한국 유통 상황은 어떤지까지 바로 볼 수 있습니다.</p>
+          <div class="table-tools">
+            <input id="search" class="search-input" type="search" placeholder="브랜드, 제품명, 메커니즘으로 검색" />
+            <div class="table-note">해외 가격은 비교 편의를 위해 USD 1,512원 / GBP 2,018원 가정으로 환산했습니다.</div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>제품</th>
+                  <th>세그</th>
+                  <th>기준가</th>
+                  <th>용량</th>
+                  <th>100ml당</th>
+                  <th>제형</th>
+                  <th>실리콘</th>
+                  <th>알코올</th>
+                  <th>USP claim</th>
+                  <th>실제 포뮬러 해석</th>
+                  <th>한국 판매</th>
+                  <th>가격 판독</th>
+                </tr>
+              </thead>
+              <tbody id="table-body"></tbody>
+            </table>
+          </div>
+        </article>
+      </div>
+
+      <aside id="drawer" class="drawer"></aside>
+    </section>
+
+    <section class="methodology">
+      <strong>리서치 메모</strong><br>
+      1. 가격은 2026년 6월 23일 접근 가능한 공식몰/주요 리테일 페이지 기준으로 정리했습니다.<br>
+      2. 한국 판매 여부는 주요 국내 채널 검색 결과 기준입니다. exact SKU가 안 잡히면 “미확인”이나 “variant만 확인”으로 남겼습니다.<br>
+      3. “실리콘/알코올”은 소비자 사용감에 큰 영향을 주는 휘발성 알코올과 대표 실리콘 위주로 봤고, full INCI를 확보하지 못한 SKU는 보수적으로 “확인불가” 처리했습니다.<br>
+      4. 이 보드는 기존 전체 맵이 아니라 최종 가격결정용 숏리스트라, 퍼퓸/UV protect 제품도 “왜 가격이 올라가는지”를 보기 위한 참고군으로 함께 남겨뒀습니다.
+    </section>
+  </div>
+
+  <script>
+    const segments = [{"id":"disulfide-bond","title":"이황화 결합 본딩","color":"#6b8d2a","description":"broken disulfide bond처럼 이황화 결합을 직접 말하는 제품"},{"id":"bond-tech-core","title":"본딩 기술 중심","color":"#2d7f8a","description":"결합명은 덜 직접적이어도 내부 구조 강화 본딩을 메인으로 미는 제품"},{"id":"silicone-bond-story","title":"실리콘 코팅형 본딩","color":"#d3a768","description":"bond를 말하지만 실제 체감은 실리콘/코팅/스타일링 결과감이 더 큰 제품"},{"id":"nonbond-functional","title":"비본딩 기능형 케어","color":"#4f78b8","description":"열보호, 엉킴 방지, UV, 윤기 같은 기능이 본딩보다 앞서는 제품"},{"id":"hair-perfume","title":"헤어 퍼퓸 포지셔닝","color":"#bf6c8c","description":"케어보다 향과 무드가 먼저 읽히는 제품"}];
+    const products = [{"id":"epres","title":"epres Bond Repair Treatment","shortLabel":"epres","brand":"epres","segmentId":"disulfide-bond","volumeMl":150,"form":"분사형 treatment","formFactor":"spray","primaryPriceText":"$50","primaryPriceKrw":75600,"primaryPriceMarket":"US","primaryPriceSourceLabel":"epres 공식몰","primaryPriceSourceUrl":"https://epres.com/products/bond-repair-treatment","koreaStatus":"unconfirmed","koreaStatusNote":"이번 턴 검색 기준 국내 주요 리테일 판매 페이지를 확인하지 못했습니다.","silicone":"X","alcohol":"O","uspClaim":"이황화결합 direct","actualMechanism":"broken disulfide bonds를 직접 repair한다고 공식 명시","actualEffect":"이황화결합 중심 구조 복구 treatment","mechanismConfidence":"공식 명시","credibilityScore":4.9,"pricingRead":"strong","whyExpensive":["이황화결합 direct claim이 매우 선명합니다.","4성분 미니멀 포뮬러로 chemistry 서사가 강합니다.","일반 mass 미스트가 아니라 treatment protocol SKU입니다."],"weakPoints":["데일리 leave-in mist와 사용 맥락이 다릅니다.","starter kit 가격이라 소비자 체감 진입가가 높게 읽힙니다."],"reviewSignal":"리뷰보다 과학 스토리와 inventor credibility가 더 크게 소비되는 제품","compareNote":"과학형 본딩을 세게 말하는 프리미엄 ceiling 비교군","koreaPriceText":"","koreaPriceKrw":null,"koreaAvailabilityUrl":"","sourceLinks":[{"label":"가격/공식 PDP","url":"https://epres.com/products/bond-repair-treatment"}],"pricePer100mlKrw":50400,"koreaMarkupPct":null},{"id":"k18","title":"K18 Professional Molecular Repair Mist","shortLabel":"K18","brand":"K18","segmentId":"disulfide-bond","volumeMl":150,"form":"분사형 pro mist","formFactor":"spray","primaryPriceText":"$56","primaryPriceKrw":84672,"primaryPriceMarket":"US","primaryPriceSourceLabel":"K18 Pro","primaryPriceSourceUrl":"https://www.k18hairpro.com/products/molecular-repair-hair-mist","koreaStatus":"unconfirmed","koreaStatusNote":"이번 턴 검색 기준 국내에서는 동일 미스트보다 다른 K18 hero SKU 노출이 더 많았고, exact mist 판매 페이지는 확인하지 못했습니다.","silicone":"X","alcohol":"O","uspClaim":"molecular repair","actualMechanism":"K18 peptide가 keratin chain reconnect + covalent/disulfide reconformation에 관여","actualEffect":"분자 복구 pre-service mist","mechanismConfidence":"공식 명시","credibilityScore":4.8,"pricingRead":"strong","whyExpensive":["프로 전용 포지션과 살롱 게이트가 강합니다.","K18 peptide IP와 molecular repair 서사가 가격을 방어합니다.","일반 소비재보다 작은 프로 시장 구조라 unit price가 높습니다."],"weakPoints":["데일리 헤어미스트가 아니라 프리서비스 용도입니다.","사용 목적이 달라 오롯 데일리 미스트와 1:1 판가 비교는 과도할 수 있습니다."],"reviewSignal":"대중 리뷰보다 전문가/살롱 상징성이 더 큰 science ceiling SKU","compareNote":"가격 상단을 정당화하는 과학형 살롱 레퍼런스","koreaPriceText":"","koreaPriceKrw":null,"koreaAvailabilityUrl":"","sourceLinks":[{"label":"가격/공식 PDP","url":"https://www.k18hairpro.com/products/molecular-repair-hair-mist"}],"pricePer100mlKrw":56448,"koreaMarkupPct":null},{"id":"aveda","title":"Aveda Botanical Repair Styling Creme","shortLabel":"Aveda","brand":"Aveda","segmentId":"bond-tech-core","volumeMl":150,"form":"도포형 styling creme","formFactor":"apply","primaryPriceText":"$38","primaryPriceKrw":57456,"primaryPriceMarket":"US","primaryPriceSourceLabel":"Aveda 공식몰","primaryPriceSourceUrl":"https://www.aveda.com/product/17770/110747/styling/cream/botanical-repair-bond-building-styling-creme?size=5_fl_oz%2F150_ml","koreaStatus":"confirmed","koreaStatusNote":"올리브영/SSG 판매 확인. SSG 검색 결과 기준 최적가 39,984원, 정가 49,000원 노출.","silicone":"X","alcohol":"X","uspClaim":"bond-building","actualMechanism":"Hydroxypropylgluconamide / Hydroxypropylammonium Gluconate 기반 수소/이온결합 추정","actualEffect":"실리콘 프리 구조 강화 + 정돈감","mechanismConfidence":"공식 결합명 미공개 / 성분 기반 추정","credibilityScore":4,"pricingRead":"strong","whyExpensive":["Aveda 살롱 브랜드 신뢰가 강합니다.","실리콘 프리인데도 bond-building + 결과감을 동시에 팝니다.","식물성 오일 + FiberHance 계열 서사가 premium clean salon 쪽을 만듭니다."],"weakPoints":["미스트가 아니라 크림이라 사용감 비교가 완전 같지는 않습니다.","결합명을 직접 밝히는 direct chemistry는 아닙니다."],"reviewSignal":"브랜드 신뢰와 plant-tech positioning이 먼저 읽히는 실리콘 프리 살롱 비교군","compareNote":"과학형이되 너무 clinical하지 않은 premium salon benchmark","koreaPriceText":"SSG 최적가 39,984원","koreaPriceKrw":39984,"koreaAvailabilityUrl":"https://www.ssg.com/search.ssg?target=all&query=Aveda%20Botanical%20Repair%20Styling%20Creme","sourceLinks":[{"label":"가격/공식 PDP","url":"https://www.aveda.com/product/17770/110747/styling/cream/botanical-repair-bond-building-styling-creme?size=5_fl_oz%2F150_ml"},{"label":"국내 판매 검색","url":"https://www.ssg.com/search.ssg?target=all&query=Aveda%20Botanical%20Repair%20Styling%20Creme"}],"pricePer100mlKrw":38304,"koreaMarkupPct":-30},{"id":"bondiboost","title":"Bondi Boost Bond Builder+ Leave-In","shortLabel":"Bondi","brand":"Bondi Boost","segmentId":"bond-tech-core","volumeMl":100,"form":"도포형 leave-in mask","formFactor":"apply","primaryPriceText":"$24.75","primaryPriceKrw":37422,"primaryPriceMarket":"US","primaryPriceSourceLabel":"Ulta","primaryPriceSourceUrl":"https://www.ulta.com/p/rapid-repair-bond-builder-leave-in-hair-mask-damaged-hair-pimprod2047332?sku=2628975","koreaStatus":"unconfirmed","koreaStatusNote":"이번 턴 검색 기준 국내 주요 리테일 exact SKU 판매 페이지를 확인하지 못했습니다.","silicone":"X","alcohol":"X","uspClaim":"본딩 일반","actualMechanism":"Diethylhexyl Maleate 기반 maleate 계열 본딩 문법 추정 + 단백질 보강","actualEffect":"실리콘 프리 본딩 leave-in","mechanismConfidence":"브랜드는 rebuild broken bonds만 명시 / 성분 기반 추정","credibilityScore":3.8,"pricingRead":"value","whyExpensive":["broken bonds rebuild와 split-end repair를 같이 말합니다.","실리콘 프리 본딩군이라 clean-minded 소비자에게 설득력이 있습니다."],"weakPoints":["결합 타입 direct claim은 없습니다.","leave-in mask 포맷이라 spray benchmark와는 사용성이 다릅니다."],"reviewSignal":"Ulta 리뷰 수와 반응이 좋아 mass-premium 본딩군 안에서 시장 검증력은 꽤 강한 편","compareNote":"본딩 문법이 있는데 생각보다 저렴한 쪽의 대표 참고군","koreaPriceText":"","koreaPriceKrw":null,"koreaAvailabilityUrl":"","sourceLinks":[{"label":"가격/Ulta","url":"https://www.ulta.com/p/rapid-repair-bond-builder-leave-in-hair-mask-damaged-hair-pimprod2047332?sku=2628975"}],"pricePer100mlKrw":37422,"koreaMarkupPct":null},{"id":"matrix","title":"Matrix Build-A-Bond Leave-In Balm","shortLabel":"Matrix","brand":"Matrix","segmentId":"bond-tech-core","volumeMl":100.6,"form":"도포형 leave-in balm","formFactor":"apply","primaryPriceText":"$24.70","primaryPriceKrw":37346,"primaryPriceMarket":"US","primaryPriceSourceLabel":"Ulta","primaryPriceSourceUrl":"https://www.ulta.com/p/instacure-build-a-bond-super-sealing-leave-in-balm-very-damaged-hair-pimprod2046595?sku=2626899","koreaStatus":"mixed","koreaStatusNote":"국내 검색에서는 같은 Instacure Build-A-Bond 라인의 75ml variant 판매 흔적이 확인되지만, exact 100.6ml balm은 current page를 확인하지 못했습니다.","silicone":"O","alcohol":"X","uspClaim":"본딩 일반","actualMechanism":"공식 FAQ 기준 hydrogen bond matrix reform + 표면은 실리콘 smoothing","actualEffect":"수소결합 축 구조 강화 + 즉각 매끈함","mechanismConfidence":"공식 FAQ 명시","credibilityScore":3.9,"pricingRead":"value","whyExpensive":["공식적으로 hydrogen bond matrix를 직접 설명합니다.","Citric Acid + Squalane + salon group 신뢰가 함께 작동합니다."],"weakPoints":["결과감의 상당 부분은 Dimethicone/Amodimethicone이 담당합니다.","미스트가 아니라 balm이라 사용 순간의 무게감이 다릅니다."],"reviewSignal":"즉각적인 부드러움 평가는 좋지만 구조 복구 체감은 사용자별 편차가 있다는 메모가 남아 있습니다.","compareNote":"과학 claim 대비 가격이 비교적 낮은 가성비형 본딩 reference","koreaPriceText":"국내 검색상 75ml variant 노출","koreaPriceKrw":null,"koreaAvailabilityUrl":"https://www.ssg.com/search.ssg?target=all&query=Matrix%20Build%20A%20Bond%20Leave%20in%20Balm","sourceLinks":[{"label":"가격/Ulta","url":"https://www.ulta.com/p/instacure-build-a-bond-super-sealing-leave-in-balm-very-damaged-hair-pimprod2046595?sku=2626899"},{"label":"국내 판매 검색","url":"https://www.ssg.com/search.ssg?target=all&query=Matrix%20Build%20A%20Bond%20Leave%20in%20Balm"}],"pricePer100mlKrw":37123,"koreaMarkupPct":null},{"id":"silktherapy-bond","title":"Silk Therapy 본드 앤 리페어 본딩 앰플","shortLabel":"SilkT","brand":"Silk Therapy","segmentId":"bond-tech-core","volumeMl":100,"form":"분사형 본딩 앰플","formFactor":"spray","primaryPriceText":"30,000원","primaryPriceKrw":30000,"primaryPriceMarket":"KR","primaryPriceSourceLabel":"LG생활건강 보도자료","primaryPriceSourceUrl":"https://www.lg.co.kr/media/release/25929","koreaStatus":"mixed","koreaStatusNote":"출시/권장소비자가는 확인되지만, 단품 다나와 가격비교는 중지 상태입니다. Gmarket에서는 본드앤리페어 구성 세트 페이지가 검색됩니다.","silicone":"확인불가","alcohol":"확인불가","uspClaim":"본딩 일반","actualMechanism":"단백질 침투 + 살롱 본딩 서사, 특정 결합 direct claim은 미공개","actualEffect":"손상 큐티클 보강 + 즉각 컨디셔닝 가능성이 큼","mechanismConfidence":"공식 결합 타입 미공개","credibilityScore":3,"pricingRead":"mixed","whyExpensive":["국내 대형사/살롱 포지셔닝과 본딩 키워드 자체가 가격을 만듭니다.","100ml 소용량이라 절대 가격은 중간이어도 ml당 단가는 올라갑니다."],"weakPoints":["full INCI를 이번 턴에서 직접 확보하지 못했습니다.","specific bond chemistry보다 단백질/살롱 케어 무드가 더 큽니다."],"reviewSignal":"출시 초기형 reference라 시장 검증력보다 카테고리 메시지 비교 가치가 더 큽니다.","compareNote":"국내 본딩 서사형 SKU가 3만원을 어떻게 방어하는지 보는 레퍼런스","koreaPriceText":"단품 비교중지 / Gmarket 구성세트 검색","koreaPriceKrw":null,"koreaAvailabilityUrl":"https://www.gmarket.co.kr/n/search?keyword=%EC%8B%A4%ED%81%AC%ED%85%8C%EB%9D%BC%ED%94%BC%20%EB%B3%B8%EB%93%9C%20%EC%95%A4%20%EB%A6%AC%ED%8E%98%EC%96%B4%20%EB%B3%B8%EB%94%A9%20%EC%95%B0%ED%94%8C","sourceLinks":[{"label":"가격/출시 근거","url":"https://www.lg.co.kr/media/release/25929"},{"label":"국내 판매 검색","url":"https://www.gmarket.co.kr/n/search?keyword=%EC%8B%A4%ED%81%AC%ED%85%8C%EB%9D%BC%ED%94%BC%20%EB%B3%B8%EB%93%9C%20%EC%95%A4%20%EB%A6%AC%ED%8E%98%EC%96%B4%20%EB%B3%B8%EB%94%A9%20%EC%95%B0%ED%94%8C"}],"pricePer100mlKrw":30000,"koreaMarkupPct":null},{"id":"sauce-beauty","title":"Sauce Beauty Bond-Repairing Spray Mask","shortLabel":"Sauce","brand":"Sauce Beauty","segmentId":"bond-tech-core","volumeMl":236.6,"form":"분사형 spray mask","formFactor":"spray","primaryPriceText":"$17.99","primaryPriceKrw":27201,"primaryPriceMarket":"US","primaryPriceSourceLabel":"Ulta","primaryPriceSourceUrl":"https://www.ulta.com/p/guacamole-whip-bond-repairing-leave-in-spray-mask-mkt77005605?sku=77008889","koreaStatus":"unconfirmed","koreaStatusNote":"이번 턴 검색 기준 국내 주요 리테일 판매 페이지를 확인하지 못했습니다.","silicone":"X","alcohol":"X","uspClaim":"본딩 일반","actualMechanism":"특정 결합 direct claim 없음. Oxidized Keratin + Quinoa + Protein 기반 보강","actualEffect":"protein-rich 손상 보강 + 즉각 컨디셔닝","mechanismConfidence":"공식 결합 타입 미공개","credibilityScore":3,"pricingRead":"value","whyExpensive":["bond-repairing spray mask라는 카테고리명 자체가 신선합니다.","functional keratin + quinoa + avocado 같은 콘셉트 조합이 제품 느낌을 만듭니다."],"weakPoints":["구체 결합명이나 proprietary chemistry는 없습니다.","리뷰 수가 1개 수준이라 시장 검증이 매우 약합니다."],"reviewSignal":"지금은 performance proof보다 콘셉트 reference 성격이 강합니다.","compareNote":"가격은 낮지만 본딩 directness도 약한 protein repair spray","koreaPriceText":"","koreaPriceKrw":null,"koreaAvailabilityUrl":"","sourceLinks":[{"label":"가격/Ulta","url":"https://www.ulta.com/p/guacamole-whip-bond-repairing-leave-in-spray-mask-mkt77005605?sku=77008889"}],"pricePer100mlKrw":11497,"koreaMarkupPct":null},{"id":"sebastian","title":"Sebastian No.Breaker Bonding Spray","shortLabel":"Seb","brand":"Sebastian","segmentId":"silicone-bond-story","volumeMl":97.6,"form":"분사형 bonding spray","formFactor":"spray","primaryPriceText":"$29","primaryPriceKrw":43848,"primaryPriceMarket":"US","primaryPriceSourceLabel":"Ulta","primaryPriceSourceUrl":"https://www.ulta.com/p/professional-nobreaker-leave-in-bonding-spray-pimprod2027314?sku=2585987","koreaStatus":"unconfirmed","koreaStatusNote":"이번 턴 검색 기준 국내 주요 리테일 exact SKU 판매 페이지를 확인하지 못했습니다.","silicone":"O","alcohol":"O","uspClaim":"본딩 일반","actualMechanism":"특정 결합 direct claim 없음. Malic Acid + styling polymer + silicone 결과감","actualEffect":"bonding보다는 스타일링 하이브리드 + 즉각 코팅","mechanismConfidence":"공식 결합 타입 미공개","credibilityScore":2.5,"pricingRead":"weak","whyExpensive":["Sebastian 살롱 브랜드와 small-size styling spray 구조가 단가를 높입니다.","bonding + styling이라는 두 개 효익을 한 병에 묶어 프리미엄처럼 보이게 합니다."],"weakPoints":["실제 조성은 Amodimethicone과 styling system의 비중이 큽니다.","direct bond hero로 보기에는 과학 서사가 얕습니다."],"reviewSignal":"사용자 기대 효익도 pure repair보다 body/스타일 보조까지 포함됩니다.","compareNote":"비싸지만 pure bond 설득력은 약한 spray형 살롱 reference","koreaPriceText":"","koreaPriceKrw":null,"koreaAvailabilityUrl":"","sourceLinks":[{"label":"가격/Ulta","url":"https://www.ulta.com/p/professional-nobreaker-leave-in-bonding-spray-pimprod2027314?sku=2585987"},{"label":"공식 페이지","url":"https://www.sebastianprofessional.com/en-US/products/no-breaker/no-breaker-bond-building-and-styling-treatment-spray"}],"pricePer100mlKrw":44926,"koreaMarkupPct":null},{"id":"alterna","title":"Alterna Caviar Bond Repair Spray","shortLabel":"Alterna","brand":"Alterna","segmentId":"silicone-bond-story","volumeMl":124.2,"form":"분사형 heat protect spray","formFactor":"spray","primaryPriceText":"$30.40","primaryPriceKrw":45965,"primaryPriceMarket":"US","primaryPriceSourceLabel":"Ulta","primaryPriceSourceUrl":"https://www.ulta.com/p/caviar-restructuring-bond-repair-leave-in-heat-protection-spray-pimprod2000754?sku=2534327","koreaStatus":"unconfirmed","koreaStatusNote":"이번 턴 검색 기준 국내 주요 리테일 exact spray 판매 페이지를 확인하지 못했습니다.","silicone":"O","alcohol":"X","uspClaim":"본딩 일반","actualMechanism":"bond enforcing technology를 말하지만 실제 체감은 silicone + protein + heat protect","actualEffect":"열보호 + 매끈함 + prestige finishing","mechanismConfidence":"공식 결합 타입 미공개","credibilityScore":2.6,"pricingRead":"weak","whyExpensive":["Caviar prestige와 232도 열보호가 가격을 끌어올립니다.","spray 포맷의 imported salon prestige라는 분위기가 강합니다."],"weakPoints":["실제 조성은 Dimethicone/Amodimethicone과 단백질의 결과감 쪽이 더 큽니다.","bond 종류를 특정하지 못해 과학 서사 설득력은 중간 이하입니다."],"reviewSignal":"소비자도 pure bond보다 heat protect + 결과감을 함께 기대하는 쪽입니다.","compareNote":"비싸지만 실질적으로는 prestige heat-protect spray에 가까운 케이스","koreaPriceText":"","koreaPriceKrw":null,"koreaAvailabilityUrl":"","sourceLinks":[{"label":"가격/Ulta","url":"https://www.ulta.com/p/caviar-restructuring-bond-repair-leave-in-heat-protection-spray-pimprod2000754?sku=2534327"}],"pricePer100mlKrw":37009,"koreaMarkupPct":null},{"id":"headspa7","title":"HEADSPA7 V8 슬리키 헤어미스트","shortLabel":"HEADSPA7","brand":"HEADSPA7","segmentId":"nonbond-functional","volumeMl":140,"form":"분사형 투페이즈 미스트","formFactor":"spray","primaryPriceText":"17,000원","primaryPriceKrw":17000,"primaryPriceMarket":"KR","primaryPriceSourceLabel":"Olive Young","primaryPriceSourceUrl":"https://www.oliveyoung.co.kr/store/goods/getGoodsDetail.do?goodsNo=A000000226518","koreaStatus":"confirmed","koreaStatusNote":"올리브영 및 Gmarket 판매 확인.","silicone":"확인불가","alcohol":"확인불가","uspClaim":"열보호/슬릭 케어","actualMechanism":"2층상 크림+앰플 구조, 단백질/판테놀/해조 기반 즉각 컨디셔닝 추정","actualEffect":"열보호 + 매끈함 + 엉킴/정돈","mechanismConfidence":"full INCI 미확보","credibilityScore":2.3,"pricingRead":"value","whyExpensive":["국내 H&B에서 빠르게 설명되는 슬릭/열보호 니즈를 정확히 잡습니다."],"weakPoints":["본딩 directness는 약합니다.","전성분 원문이 아직 없어 실리콘/알코올 판정은 보수적으로 봐야 합니다."],"reviewSignal":"국내 mass-retail형 기능성 미스트 benchmark로 읽는 것이 가장 자연스럽습니다.","compareNote":"국내에서 가볍게 잘 팔리는 기능형 미스트 하단 benchmark","koreaPriceText":"올리브영 17,000원","koreaPriceKrw":17000,"koreaAvailabilityUrl":"https://www.oliveyoung.co.kr/store/goods/getGoodsDetail.do?goodsNo=A000000226518","sourceLinks":[{"label":"가격/올리브영","url":"https://www.oliveyoung.co.kr/store/goods/getGoodsDetail.do?goodsNo=A000000226518"}],"pricePer100mlKrw":12143,"koreaMarkupPct":null},{"id":"unite-7seconds","title":"UNITE Hair 7SECONDS Detangler","shortLabel":"UNITE","brand":"UNITE","segmentId":"nonbond-functional","volumeMl":236,"form":"분사형 detangler mist","formFactor":"spray","primaryPriceText":"$42.50","primaryPriceKrw":64260,"primaryPriceMarket":"US","primaryPriceSourceLabel":"UNITE Hair","primaryPriceSourceUrl":"https://unitehair.com/products/7seconds-detangler","koreaStatus":"unconfirmed","koreaStatusNote":"이번 턴 검색 기준 국내 주요 리테일 exact SKU 판매 페이지를 확인하지 못했습니다.","silicone":"O","alcohol":"O","uspClaim":"detangle/heat/UV","actualMechanism":"protein-based detangler + heat/UV protect + silicone conditioning","actualEffect":"빗질 편의 + 열보호 + 컷icle seal","mechanismConfidence":"본딩 direct claim 없음","credibilityScore":2.4,"pricingRead":"mixed","whyExpensive":["살롱 프로페셔널 detangler의 대표 SKU라 브랜드 신뢰가 가격을 만듭니다.","대용량 236ml라도 protein-based / heat / UV / color lock를 한 번에 묶습니다."],"weakPoints":["구조 복구보다 manageability가 메인입니다.","Amodimethicone과 Alcohol Denat.가 보여 포뮬러 해석은 기능형 쪽입니다."],"reviewSignal":"bond hero보다 daily detangler 프리미엄 benchmark로 보는 편이 정확합니다.","compareNote":"살롱 오리진이지만 사실상 detangler/heat protect 쪽 가격 구조를 보여줍니다.","koreaPriceText":"","koreaPriceKrw":null,"koreaAvailabilityUrl":"","sourceLinks":[{"label":"가격/공식 PDP","url":"https://unitehair.com/products/7seconds-detangler"}],"pricePer100mlKrw":27229,"koreaMarkupPct":null},{"id":"ouai-leave-in","title":"OUAI Leave In Conditioner","shortLabel":"OUAI","brand":"OUAI","segmentId":"nonbond-functional","volumeMl":139,"form":"분사형 leave-in mist","formFactor":"spray","primaryPriceText":"$32","primaryPriceKrw":48384,"primaryPriceMarket":"US","primaryPriceSourceLabel":"OUAI 공식몰","primaryPriceSourceUrl":"https://theouai.com/products/leave-in-conditioner","koreaStatus":"import","koreaStatusNote":"11번가/Gmarket 직구 판매 확인. 11번가 검색 결과 기준 81,100원 노출.","silicone":"O","alcohol":"O","uspClaim":"detangle/heat/split-end","actualMechanism":"Cyclopentasiloxane + silicone quat + panthenol 기반 detangle/smooth/heat protect","actualEffect":"즉각적인 부드러움 + 엉킴 방지 + 열보호","mechanismConfidence":"본딩 direct claim 없음","credibilityScore":2.2,"pricingRead":"weak","whyExpensive":["celebrity hairstylist origin과 라이프스타일 브랜드 프리미엄이 강합니다.","미국 본국가도 싸진 않지만, 한국 직구가는 훨씬 더 비싸게 형성됩니다."],"weakPoints":["실제 포뮬러는 본딩보다 detangle/smooth routine 쪽입니다.","이소프로필알코올과 다중 실리콘이 있어 과학형 본딩 미스트와는 결이 다릅니다."],"reviewSignal":"국내에서는 제품력보다도 브랜드/향/헤어드레서 무드 프리미엄이 더 크게 붙는 케이스입니다.","compareNote":"한국 직구가가 높게 붙는 imported salon-lifestyle mist 사례","koreaPriceText":"11번가 81,100원","koreaPriceKrw":81100,"koreaAvailabilityUrl":"https://search.11st.co.kr/Search.tmall?kwd=OUAI%20Leave%20In%20Conditioner","sourceLinks":[{"label":"가격/공식 PDP","url":"https://theouai.com/products/leave-in-conditioner"},{"label":"국내 판매 검색","url":"https://search.11st.co.kr/Search.tmall?kwd=OUAI%20Leave%20In%20Conditioner"}],"pricePer100mlKrw":34809,"koreaMarkupPct":68},{"id":"drybar-hot-toddy","title":"Drybar Hot Toddy Heat Protectant Mist","shortLabel":"Drybar","brand":"Drybar","segmentId":"nonbond-functional","volumeMl":136,"form":"에어로졸 heat protect mist","formFactor":"spray","primaryPriceText":"$31","primaryPriceKrw":46872,"primaryPriceMarket":"US","primaryPriceSourceLabel":"current US listing","primaryPriceSourceUrl":"https://www.target.com/p/drybar-hot-toddy-heat-protectant-mist-ulta-beauty/-/A-83458028","koreaStatus":"unconfirmed","koreaStatusNote":"이번 턴 검색 기준 국내 주요 리테일 exact SKU 판매 페이지를 확인하지 못했습니다.","silicone":"O","alcohol":"O","uspClaim":"heat protect","actualMechanism":"Alcohol Denat. + PPG-12 Dimethicone + rice protein 기반 dry heat shield","actualEffect":"드라이 상태 열보호 + frizz-free finish","mechanismConfidence":"본딩 direct claim 없음","credibilityScore":2,"pricingRead":"weak","whyExpensive":["Drybar blowout bar origin 신뢰와 에어로졸 사용성이 가격을 만듭니다.","450°F 열보호와 salon blowout prep 스토리가 강합니다."],"weakPoints":["본딩/구조 복구보다는 heat shield 보조재에 가깝습니다.","알코올과 실리콘 중심이라 과학형 repair와는 방향이 다릅니다."],"reviewSignal":"브랜드 오리진 프리미엄은 있지만 pure science price justification은 약한 편입니다.","compareNote":"기능은 명확하지만 오롯의 본딩 target과는 다른 direction의 프리미엄","koreaPriceText":"","koreaPriceKrw":null,"koreaAvailabilityUrl":"","sourceLinks":[{"label":"가격/미국 listing","url":"https://www.target.com/p/drybar-hot-toddy-heat-protectant-mist-ulta-beauty/-/A-83458028"}],"pricePer100mlKrw":34465,"koreaMarkupPct":null},{"id":"nuxe-hair-sun-oil","title":"NUXE Sun Moisturising Protective Milky Oil for Hair","shortLabel":"NUXE","brand":"NUXE","segmentId":"nonbond-functional","volumeMl":100,"form":"분사형 milky oil mist","formFactor":"spray","primaryPriceText":"£21","primaryPriceKrw":42378,"primaryPriceMarket":"UK","primaryPriceSourceLabel":"NUXE UK","primaryPriceSourceUrl":"https://uk.nuxe.com/products/moisturising-protective-milky-oil-for-hair","koreaStatus":"import","koreaStatusNote":"쿠팡 직구 판매 확인. 검색 결과 기준 상품가 27,900원 + 배송 12,900원 노출.","silicone":"X","alcohol":"O","uspClaim":"UV/salt/chlorine","actualMechanism":"UV filter + oil + panthenol 기반 seasonal protection","actualEffect":"햇빛/소금/염소 방어 + 윤기","mechanismConfidence":"본딩 claim 없음","credibilityScore":1.8,"pricingRead":"mixed","whyExpensive":["French pharmacy origin과 seasonal protect niche가 가격을 만듭니다.","헤어 sun care 자체가 category scarcity가 있습니다."],"weakPoints":["repair/bonding과는 기능 축이 다릅니다.","알코올 베이스라 데일리 구조복구 비교군으로 보긴 어렵습니다."],"reviewSignal":"약국/더마 신뢰형 채널 문법은 참고 가치가 있지만 본딩 가격 비교에는 보조 레퍼런스입니다.","compareNote":"더마/약국 신뢰형이 가격을 만드는 방식 참고용","koreaPriceText":"쿠팡 27,900원 (+배송 12,900원)","koreaPriceKrw":null,"koreaAvailabilityUrl":"https://www.coupang.com/np/search?component=&q=NUXE+Sun+Moisturising+Protective+Milky+Oil+for+Hair","sourceLinks":[{"label":"가격/NUXE UK","url":"https://uk.nuxe.com/products/moisturising-protective-milky-oil-for-hair"},{"label":"국내 판매 검색","url":"https://www.coupang.com/np/search?component=&q=NUXE+Sun+Moisturising+Protective+Milky+Oil+for+Hair"}],"pricePer100mlKrw":42378,"koreaMarkupPct":null},{"id":"sennok-babyblusher","title":"SENNOK 헤어 퍼퓸 미스트 베이비 블러셔","shortLabel":"SENNOK","brand":"SENNOK","segmentId":"hair-perfume","volumeMl":60,"form":"분사형 헤어 퍼퓸 미스트","formFactor":"spray","primaryPriceText":"24,000원","primaryPriceKrw":24000,"primaryPriceMarket":"KR","primaryPriceSourceLabel":"SENNOK 공식몰","primaryPriceSourceUrl":"https://sennok.co.kr/product/sennok-%EC%84%BC%EB%85%B9-%ED%97%A4%EC%96%B4-%ED%8D%BC%ED%93%B8-%EB%AF%B8%EC%8A%A4%ED%8A%B8-%EB%B2%A0%EC%9D%B4%EB%B9%84-%EB%B8%94%EB%9F%AC%EC%85%94-202-fl-oz-60ml/83/","koreaStatus":"confirmed","koreaStatusNote":"공식몰/Coupang 판매 확인. Coupang 검색 결과 기준 22,590원 노출.","silicone":"확인불가","alcohol":"확인불가","uspClaim":"헤어 퍼퓸","actualMechanism":"오일/수분 2중 레이어링과 향 지속감 중심","actualEffect":"향 + 즉각적인 윤기/보습","mechanismConfidence":"본딩 claim 없음","credibilityScore":1.3,"pricingRead":"mixed","whyExpensive":["헤어 퍼퓸 카테고리는 용량이 작아도 ml당 단가가 높습니다.","향과 패키지 경험이 과학 효익보다 가격을 더 만듭니다."],"weakPoints":["본딩/구조 복구 가격 비교군으로는 직접성이 거의 없습니다."],"reviewSignal":"퍼퓸 미스트가 가격을 만드는 문법을 보기엔 좋지만 target science mist와는 결이 다릅니다.","compareNote":"향 중심 포지셔닝이 4만원/100ml 수준을 만드는 방식 참고용","koreaPriceText":"공식 24,000원 / 쿠팡 22,590원","koreaPriceKrw":24000,"koreaAvailabilityUrl":"https://www.coupang.com/np/search?component=&q=SENNOK+%ED%97%A4%EC%96%B4+%ED%8D%BC%ED%93%B8+%EB%AF%B8%EC%8A%A4%ED%8A%B8+%EB%B2%A0%EC%9D%B4%EB%B9%84+%EB%B8%94%EB%9F%AC%EC%85%94","sourceLinks":[{"label":"가격/공식몰","url":"https://sennok.co.kr/product/sennok-%EC%84%BC%EB%85%B9-%ED%97%A4%EC%96%B4-%ED%8D%BC%ED%93%B8-%EB%AF%B8%EC%8A%A4%ED%8A%B8-%EB%B2%A0%EC%9D%B4%EB%B9%84-%EB%B8%94%EB%9F%AC%EC%85%94-202-fl-oz-60ml/83/"},{"label":"국내 판매 검색","url":"https://www.coupang.com/np/search?component=&q=SENNOK+%ED%97%A4%EC%96%B4+%ED%8D%BC%ED%93%B8+%EB%AF%B8%EC%8A%A4%ED%8A%B8+%EB%B2%A0%EC%9D%B4%EB%B9%84+%EB%B8%94%EB%9F%AC%EC%85%94"}],"pricePer100mlKrw":40000,"koreaMarkupPct":null},{"id":"pinkghost","title":"Pinkghost 헤어 씨위드 미스트","shortLabel":"Pinkghost","brand":"Pinkghost","segmentId":"hair-perfume","volumeMl":50,"form":"분사형 헤어 미스트","formFactor":"spray","primaryPriceText":"25,500원","primaryPriceKrw":25500,"primaryPriceMarket":"KR","primaryPriceSourceLabel":"Olive Young","primaryPriceSourceUrl":"https://www.oliveyoung.co.kr/store/display/getMCategoryList.do?dispCatNo=1000001001200020004","koreaStatus":"confirmed","koreaStatusNote":"올리브영/Coupang 판매 확인. Coupang 검색 결과 기준 38,500원 사례도 함께 노출됩니다.","silicone":"확인불가","alcohol":"확인불가","uspClaim":"헤어 퍼퓸","actualMechanism":"seaweed/organic story 기반 가벼운 컨디셔닝","actualEffect":"향 + 무드 + 소용량 프리미엄","mechanismConfidence":"본딩 claim 없음","credibilityScore":0.9,"pricingRead":"weak","whyExpensive":["소용량 니치/무드 포지셔닝이라 ml당 단가가 높습니다.","유기농/씨위드 감성과 niche packaging이 가격을 만듭니다."],"weakPoints":["구조 복구나 기능 과학으로는 가격 방어가 매우 약합니다.","현재는 향/브랜딩 premium으로 읽는 편이 더 정확합니다."],"reviewSignal":"science mist와 비교하면 브랜드/감성값이 가격을 만드는 대표 사례입니다.","compareNote":"타겟보다 별로인데 비싸 보이는 감성형 레퍼런스","koreaPriceText":"올리브영 25,500원 / 쿠팡 38,500원 사례","koreaPriceKrw":25500,"koreaAvailabilityUrl":"https://www.coupang.com/np/search?component=&q=Pinkghost+%ED%97%A4%EC%96%B4+%EC%94%A8%EC%9C%84%EB%93%9C+%EB%AF%B8%EC%8A%A4%ED%8A%B8","sourceLinks":[{"label":"국내 판매 검색","url":"https://www.coupang.com/np/search?component=&q=Pinkghost+%ED%97%A4%EC%96%B4+%EC%94%A8%EC%9C%84%EB%93%9C+%EB%AF%B8%EC%8A%A4%ED%8A%B8"},{"label":"올리브영 검색","url":"https://www.oliveyoung.co.kr/store/display/getMCategoryList.do?dispCatNo=1000001001200020004"}],"pricePer100mlKrw":51000,"koreaMarkupPct":null}];
+    const pricingReadMeta = {"strong":{"label":"정당화 강함","color":"#3d6b28"},"mixed":{"label":"부분 정당화","color":"#8b6a2a"},"weak":{"label":"가격 방어 약함","color":"#a54949"},"value":{"label":"가성비형","color":"#2f6d63"}};
+    const koreaStatusMeta = {"confirmed":{"label":"판매 확인","color":"#3d6b28"},"import":{"label":"직구/병행 확인","color":"#7a5b24"},"mixed":{"label":"판매 흔적 있음","color":"#7a5b24"},"unavailable":{"label":"품절/중지 확인","color":"#8d4a4a"},"unconfirmed":{"label":"미확인","color":"#6f6559"}};
+
+    const segmentById = Object.fromEntries(segments.map((segment) => [segment.id, segment]));
+    const state = {
+      activeSegmentId: null,
+      selectedProductId: products[0]?.id || null,
+      query: ""
+    };
+
+    const legend = document.getElementById("legend");
+    const tableBody = document.getElementById("table-body");
+    const drawer = document.getElementById("drawer");
+    const searchInput = document.getElementById("search");
+
+    function formatInt(value) {
+      return new Intl.NumberFormat("ko-KR").format(Math.round(value));
+    }
+
+    function formatKrw(value) {
+      if (!Number.isFinite(value)) return "미확인";
+      return formatInt(value) + "원";
+    }
+
+    function getVisibleProducts() {
+      const query = state.query.trim().toLowerCase();
+      return products.filter((product) => {
+        const segmentMatch = !state.activeSegmentId || product.segmentId === state.activeSegmentId;
+        if (!segmentMatch) return false;
+        if (!query) return true;
+        const haystack = [
+          product.title,
+          product.brand,
+          product.shortLabel,
+          product.uspClaim,
+          product.actualMechanism,
+          product.actualEffect,
+          product.compareNote
+        ].join(" ").toLowerCase();
+        return haystack.includes(query);
+      });
+    }
+
+    function renderLegend() {
+      legend.innerHTML = segments.map((segment) => {
+        const count = products.filter((product) => product.segmentId === segment.id).length;
+        return `
+          <button type="button" class="legend-chip" data-segment-id="${segment.id}">
+            <span class="legend-dot" style="background:${segment.color}"></span>
+            <span class="legend-copy">
+              <strong>${segment.title} · ${count}개</strong>
+              <span>${segment.description}</span>
+            </span>
+          </button>
+        `;
+      }).join("");
+
+      document.querySelectorAll(".legend-chip").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.activeSegmentId = state.activeSegmentId === button.dataset.segmentId ? null : button.dataset.segmentId;
+          renderAll();
+        });
+      });
+    }
+
+    function updateLegendState() {
+      document.querySelectorAll(".legend-chip").forEach((button) => {
+        const isActive = button.dataset.segmentId === state.activeSegmentId;
+        const isDimmed = !!state.activeSegmentId && !isActive;
+        button.classList.toggle("is-active", isActive);
+        button.classList.toggle("is-dimmed", isDimmed);
+      });
+    }
+
+    function getPriceReadPill(product) {
+      const meta = pricingReadMeta[product.pricingRead];
+      return `<span class="pill small" style="background:${meta.color}18;color:${meta.color}">${meta.label}</span>`;
+    }
+
+    function getKoreaStatusPill(product) {
+      const meta = koreaStatusMeta[product.koreaStatus];
+      return `<span class="pill small" style="background:${meta.color}18;color:${meta.color}">${meta.label}</span>`;
+    }
+
+    function getTableRows() {
+      const visibleSet = new Set(getVisibleProducts().map((product) => product.id));
+      return products
+        .slice()
+        .sort((a, b) => b.pricePer100mlKrw - a.pricePer100mlKrw)
+        .map((product) => {
+          const segment = segmentById[product.segmentId];
+          const visible = visibleSet.has(product.id);
+          const active = product.id === state.selectedProductId;
+          const koreaMeta = koreaStatusMeta[product.koreaStatus];
+          return `
+            <tr data-product-id="${product.id}" class="${active ? "is-active" : ""} ${visible ? "" : "dimmed"}">
+              <td class="cell-title">
+                <strong>${product.title}</strong>
+                <span>${product.brand}</span>
+              </td>
+              <td><span class="pill segment" style="background:${segment.color}">${segment.title}</span></td>
+              <td>${product.primaryPriceText}<br><span style="color:#6d6458;font-size:12px">${product.primaryPriceMarket} · ${product.primaryPriceSourceLabel}</span></td>
+              <td>${product.volumeMl}ml</td>
+              <td><strong>${formatKrw(product.pricePer100mlKrw)}</strong></td>
+              <td>${product.form}</td>
+              <td>${product.silicone}</td>
+              <td>${product.alcohol}</td>
+              <td>${product.uspClaim}</td>
+              <td>${product.actualEffect}</td>
+              <td><span class="pill small" style="background:${koreaMeta.color}18;color:${koreaMeta.color}">${koreaMeta.label}</span></td>
+              <td>${getPriceReadPill(product)}</td>
+            </tr>
+          `;
+        }).join("");
+    }
+
+    function renderTable() {
+      tableBody.innerHTML = getTableRows();
+      document.querySelectorAll("#table-body tr").forEach((row) => {
+        row.addEventListener("click", () => {
+          state.selectedProductId = row.dataset.productId;
+          renderAll();
+        });
+      });
+    }
+
+    function renderScatter() {
+      const svg = document.getElementById("scatter");
+      const width = 1220;
+      const height = 620;
+      const pad = { left: 94, right: 90, top: 42, bottom: 88 };
+      const plotWidth = width - pad.left - pad.right;
+      const plotHeight = height - pad.top - pad.bottom;
+      const xValues = products.map((product) => product.pricePer100mlKrw);
+      const minX = 0;
+      const maxX = Math.max(60000, ...xValues.map((value) => Math.ceil(value / 5000) * 5000));
+      const xTicks = [0, 10000, 20000, 30000, 40000, 50000, 60000];
+      const yTicks = [1, 2, 3, 4, 5];
+      const xThreshold = 36000;
+      const yThreshold = 3.2;
+      const visibleIds = new Set(getVisibleProducts().map((product) => product.id));
+
+      const xPos = (value) => pad.left + (value / Math.max(1, maxX)) * plotWidth;
+      const yPos = (value) => pad.top + (1 - ((value - 0.5) / 4.8)) * plotHeight;
+
+      const quadrantRects = [
+        { x: minX, y: yThreshold, w: xThreshold - minX, h: 5.3 - yThreshold, fill: "rgba(63,121,99,0.08)", label: "가성비 strong claim" },
+        { x: xThreshold, y: yThreshold, w: maxX - xThreshold, h: 5.3 - yThreshold, fill: "rgba(107,141,42,0.08)", label: "비싸도 설명됨" },
+        { x: xThreshold, y: 0.5, w: maxX - xThreshold, h: yThreshold - 0.5, fill: "rgba(191,108,140,0.07)", label: "비싼데 약함" },
+        { x: minX, y: 0.5, w: xThreshold - minX, h: yThreshold - 0.5, fill: "rgba(79,120,184,0.06)", label: "루틴형/퍼퓸" }
+      ];
+
+      const gridX = xTicks.map((tick) => `
+        <g>
+          <line x1="${xPos(tick)}" y1="${pad.top}" x2="${xPos(tick)}" y2="${pad.top + plotHeight}" stroke="rgba(43,36,29,0.08)" stroke-dasharray="5 7"></line>
+          <text class="grid-label" x="${xPos(tick)}" y="${pad.top + plotHeight + 28}" text-anchor="middle">${tick === 0 ? "0" : formatInt(tick)}</text>
+        </g>
+      `).join("");
+
+      const gridY = yTicks.map((tick) => `
+        <g>
+          <line x1="${pad.left}" y1="${yPos(tick)}" x2="${pad.left + plotWidth}" y2="${yPos(tick)}" stroke="rgba(43,36,29,0.08)" stroke-dasharray="5 7"></line>
+          <text class="grid-label" x="${pad.left - 16}" y="${yPos(tick) + 4}" text-anchor="end">${tick.toFixed(1)}</text>
+        </g>
+      `).join("");
+
+      const rectangles = quadrantRects.map((quad, index) => `
+        <g>
+          <rect x="${xPos(quad.x)}" y="${yPos(quad.y + quad.h)}" width="${(quad.w / maxX) * plotWidth}" height="${((quad.h) / 4.8) * plotHeight}" fill="${quad.fill}"></rect>
+          <text class="grid-label" x="${xPos(quad.x) + 12}" y="${yPos(quad.y + quad.h) + 18}">${quad.label}</text>
+        </g>
+      `).join("");
+
+      const pointMarkup = products.map((product, index) => {
+        const segment = segmentById[product.segmentId];
+        const cx = xPos(product.pricePer100mlKrw);
+        const cy = yPos(product.credibilityScore);
+        const isVisible = visibleIds.has(product.id);
+        const isActive = product.id === state.selectedProductId;
+        const labelDx = index % 2 === 0 ? 15 : -15;
+        const labelDy = index % 3 === 0 ? -18 : 18;
+        const labelAnchor = labelDx > 0 ? "start" : "end";
+        const fill = product.formFactor === "spray" ? segment.color : "white";
+        const stroke = product.formFactor === "spray" ? "white" : segment.color;
+        const textFill = product.formFactor === "spray" ? "white" : segment.color;
+        return `
+          <g class="plot-point ${isActive ? "is-active" : ""} ${isVisible ? "" : "dimmed"}" data-product-id="${product.id}">
+            <circle class="point-hit" cx="${cx}" cy="${cy}" r="18" fill="rgba(0,0,0,0.001)" stroke="transparent"></circle>
+            <circle class="main" cx="${cx}" cy="${cy}" r="11" fill="${fill}" fill-opacity="${product.formFactor === "spray" ? "0.94" : "1"}" stroke="${stroke}" stroke-width="${product.formFactor === "spray" ? "3" : "2.6"}" stroke-dasharray="${product.formFactor === "spray" ? "" : "3.6 3.6"}"></circle>
+            <text x="${cx}" y="${cy + 4}" text-anchor="middle" font-size="10" font-weight="800" fill="${textFill}">${index + 1}</text>
+            <text class="point-label ${isVisible ? "" : "dimmed"}" x="${cx + labelDx}" y="${cy + labelDy}" text-anchor="${labelAnchor}">${product.shortLabel}</text>
+          </g>
+        `;
+      }).join("");
+
+      svg.innerHTML = `
+        <rect x="0" y="0" width="${width}" height="${height}" fill="transparent"></rect>
+        ${rectangles}
+        ${gridX}
+        ${gridY}
+        <line x1="${xPos(xThreshold)}" y1="${pad.top}" x2="${xPos(xThreshold)}" y2="${pad.top + plotHeight}" stroke="rgba(43,36,29,0.18)" stroke-dasharray="8 8"></line>
+        <line x1="${pad.left}" y1="${yPos(yThreshold)}" x2="${pad.left + plotWidth}" y2="${yPos(yThreshold)}" stroke="rgba(43,36,29,0.18)" stroke-dasharray="8 8"></line>
+        <line x1="${pad.left}" y1="${pad.top + plotHeight}" x2="${pad.left + plotWidth}" y2="${pad.top + plotHeight}" stroke="#2b241d" stroke-width="1.5"></line>
+        <line x1="${pad.left}" y1="${pad.top}" x2="${pad.left}" y2="${pad.top + plotHeight}" stroke="#2b241d" stroke-width="1.5"></line>
+        <text class="axis-label" x="${pad.left + plotWidth / 2}" y="${height - 26}" text-anchor="middle">기준 시장 100ml 단가 (KRW)</text>
+        <text class="axis-label" x="28" y="${pad.top + plotHeight / 2}" text-anchor="middle" transform="rotate(-90 28 ${pad.top + plotHeight / 2})">claim / 포뮬러 설득력</text>
+        ${pointMarkup}
+      `;
+
+      document.querySelectorAll(".plot-point").forEach((point) => {
+        point.addEventListener("click", () => {
+          state.selectedProductId = point.dataset.productId;
+          renderAll();
+        });
+      });
+    }
+
+    function renderDrawer() {
+      const product = products.find((item) => item.id === state.selectedProductId) || products[0];
+      if (!product) {
+        drawer.innerHTML = "";
+        return;
+      }
+      const segment = segmentById[product.segmentId];
+      const readMeta = pricingReadMeta[product.pricingRead];
+      const koreaMeta = koreaStatusMeta[product.koreaStatus];
+      const sourceMarkup = product.sourceLinks.map((source) => `<a class="source-chip" href="${source.url}" target="_blank" rel="noreferrer">${source.label}</a>`).join("");
+      const koreaGap = product.koreaMarkupPct === null
+        ? ""
+        : product.koreaMarkupPct > 0
+          ? `<li>한국 current listing이 본국 기준가보다 약 ${product.koreaMarkupPct}% 높게 형성됩니다.</li>`
+          : `<li>한국 current listing이 본국 기준가보다 약 ${Math.abs(product.koreaMarkupPct)}% 낮게 잡힙니다.</li>`;
+
+      drawer.innerHTML = `
+        <div class="drawer-header">
+          <span class="pill segment" style="background:${segment.color}">${segment.title}</span>
+          <span class="pill small" style="background:${readMeta.color}18;color:${readMeta.color}">${readMeta.label}</span>
+          <span class="pill small" style="background:${koreaMeta.color}18;color:${koreaMeta.color}">${koreaMeta.label}</span>
+        </div>
+        <h3>${product.title}</h3>
+        <p class="drawer-sub">${product.compareNote}</p>
+
+        <div class="metric-grid">
+          <div class="metric">
+            <strong>기준가</strong>
+            <span>${product.primaryPriceText}</span>
+          </div>
+          <div class="metric">
+            <strong>100ml당</strong>
+            <span>${formatKrw(product.pricePer100mlKrw)}</span>
+          </div>
+          <div class="metric">
+            <strong>용량</strong>
+            <span>${product.volumeMl}ml</span>
+          </div>
+          <div class="metric">
+            <strong>설득력 점수</strong>
+            <span>${product.credibilityScore.toFixed(1)} / 5</span>
+          </div>
+        </div>
+
+        <section class="detail-block">
+          <h4>기준 가격과 한국 판매</h4>
+          <ul>
+            <li>기준 가격: ${product.primaryPriceMarket} · ${product.primaryPriceSourceLabel} · ${product.primaryPriceText}</li>
+            <li>한국 판매: ${koreaMeta.label} · ${product.koreaStatusNote}</li>
+            ${product.koreaPriceText ? `<li>한국 참고가: ${product.koreaPriceText}</li>` : ""}
+            ${koreaGap}
+          </ul>
+        </section>
+
+        <section class="detail-block">
+          <h4>USP claim vs 실제 포뮬러</h4>
+          <ul>
+            <li>USP claim: ${product.uspClaim}</li>
+            <li>실제 포뮬러 해석: ${product.actualMechanism}</li>
+            <li>실제 효익: ${product.actualEffect}</li>
+            <li>확신도: ${product.mechanismConfidence}</li>
+          </ul>
+        </section>
+
+        <section class="detail-block">
+          <h4>제형과 주요 플래그</h4>
+          <ul>
+            <li>제형: ${product.form}</li>
+            <li>실리콘: ${product.silicone}</li>
+            <li>알코올: ${product.alcohol}</li>
+          </ul>
+        </section>
+
+        <section class="detail-block">
+          <h4>왜 비싸게 읽히는가</h4>
+          <ul>${product.whyExpensive.map((item) => `<li>${item}</li>`).join("")}</ul>
+        </section>
+
+        <section class="detail-block">
+          <h4>가격 방어가 약한 요소</h4>
+          <ul>${product.weakPoints.map((item) => `<li>${item}</li>`).join("")}</ul>
+        </section>
+
+        <section class="detail-block">
+          <h4>읽어야 할 리뷰/시장 시그널</h4>
+          <p>${product.reviewSignal}</p>
+        </section>
+
+        <section class="detail-block">
+          <h4>링크</h4>
+          <div class="source-row">${sourceMarkup}</div>
+        </section>
+      `;
+    }
+
+    function renderAll() {
+      renderLegend();
+      updateLegendState();
+      renderScatter();
+      renderTable();
+      renderDrawer();
+    }
+
+    searchInput.addEventListener("input", (event) => {
+      state.query = event.target.value || "";
+      if (state.query.trim()) {
+        state.activeSegmentId = null;
+      }
+      renderAll();
+    });
+
+    renderAll();
+  </script>
+</body>
+</html>
