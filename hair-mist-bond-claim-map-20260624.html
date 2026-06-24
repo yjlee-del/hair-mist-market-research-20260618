@@ -1,0 +1,894 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>헤어미스트 본딩 서사 재분류 맵</title>
+  <style>
+    :root {
+      --bg: #f5efe3;
+      --panel: rgba(255, 252, 246, 0.92);
+      --panel-strong: rgba(255, 255, 255, 0.96);
+      --line: rgba(63, 54, 41, 0.12);
+      --text: #2b241d;
+      --muted: #6d6458;
+      --shadow: 0 22px 50px rgba(60, 44, 20, 0.10);
+      --radius: 24px;
+      --drawer-width: 380px;
+      font-family: "Pretendard", "SUIT", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.7), transparent 34%),
+        linear-gradient(180deg, #f6efe4 0%, #f2ebdf 100%);
+    }
+    .shell {
+      min-height: 100vh;
+      padding: 28px 24px 40px;
+    }
+    .topbar {
+      max-width: 1660px;
+      margin: 0 auto 18px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: start;
+    }
+    .headline {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      padding: 22px 24px;
+      box-shadow: var(--shadow);
+    }
+    .headline h1 {
+      margin: 0 0 10px;
+      font-size: 34px;
+      line-height: 1.12;
+      letter-spacing: -0.03em;
+    }
+    .headline p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+    .meta-cards {
+      display: grid;
+      gap: 12px;
+      align-self: stretch;
+    }
+    .meta-card {
+      min-width: 240px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 16px 18px;
+      box-shadow: var(--shadow);
+    }
+    .meta-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .meta-value {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+    .legend-panel, .map-card, .drawer {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .legend-panel {
+      max-width: 1660px;
+      margin: 0 auto 18px;
+      padding: 18px 20px 20px;
+    }
+    .legend-title {
+      margin: 0 0 12px;
+      font-size: 16px;
+      font-weight: 800;
+    }
+    .legend-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .legend-chip {
+      border: 1px solid rgba(63,54,41,0.09);
+      background: rgba(255,255,255,0.7);
+      border-radius: 999px;
+      padding: 10px 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text);
+      cursor: pointer;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, opacity 0.16s ease;
+    }
+    .legend-chip:hover { transform: translateY(-1px); }
+    .legend-chip.is-active {
+      box-shadow: inset 0 0 0 1px rgba(43,36,29,0.18), 0 12px 24px rgba(60,44,20,0.10);
+      background: rgba(255,255,255,0.96);
+    }
+    .legend-chip.is-dimmed { opacity: 0.35; }
+    .legend-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      display: inline-block;
+      flex: 0 0 auto;
+    }
+    .legend-copy strong {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 2px;
+    }
+    .legend-copy span {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.35;
+      max-width: 270px;
+    }
+    .content {
+      max-width: 1660px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) var(--drawer-width);
+      gap: 18px;
+      align-items: start;
+    }
+    .maps {
+      display: grid;
+      gap: 18px;
+    }
+    .dual {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .map-card {
+      padding: 18px 18px 16px;
+    }
+    .map-card h2 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .map-card p {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .map-svg-wrap {
+      border: 1px solid rgba(63,54,41,0.08);
+      border-radius: 20px;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(255,255,255,0.8), rgba(251,248,241,0.95));
+    }
+    .map-foot {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .map-foot span {
+      background: rgba(63,54,41,0.05);
+      border-radius: 16px;
+      padding: 10px 12px;
+      flex: 1 1 0;
+    }
+    .map-point {
+      cursor: pointer;
+      transition: opacity 0.16s ease;
+    }
+    .point-link {
+      pointer-events: none;
+    }
+    .point-hit {
+      cursor: pointer;
+    }
+    .map-point circle {
+      transition: filter 0.16s ease, stroke-width 0.16s ease, opacity 0.16s ease;
+      vector-effect: non-scaling-stroke;
+    }
+    .point-marker {
+      transform-box: fill-box;
+      transform-origin: center center;
+    }
+    .point-label {
+      pointer-events: none;
+    }
+    .map-point:hover .point-marker,
+    .map-point.is-active .point-marker {
+      filter: drop-shadow(0 10px 18px rgba(43,36,29,0.18));
+      stroke-width: 4;
+    }
+    .map-point.dimmed {
+      opacity: 0.16;
+    }
+    .map-point.dimmed text {
+      opacity: 0.55;
+    }
+    .drawer {
+      position: sticky;
+      top: 24px;
+      padding: 18px;
+      min-height: 420px;
+    }
+    .drawer-empty {
+      padding: 6px 2px 2px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .no-pill, .segment-pill, .flag-pill {
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .no-pill {
+      background: rgba(43,36,29,0.10);
+      color: var(--text);
+    }
+    .segment-pill {
+      color: white;
+    }
+    .flag-pill {
+      background: rgba(43,36,29,0.06);
+      color: var(--muted);
+    }
+    .drawer h3 {
+      margin: 0 0 6px;
+      font-size: 24px;
+      line-height: 1.26;
+      letter-spacing: -0.03em;
+    }
+    .drawer-subtitle {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .metric {
+      padding: 12px 13px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(63,54,41,0.08);
+    }
+    .metric strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .metric span {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .detail-block {
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(63,54,41,0.08);
+      margin-bottom: 12px;
+    }
+    .detail-block h4 {
+      margin: 0 0 8px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .detail-block p,
+    .detail-block li {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .detail-block ul {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 4px;
+    }
+    .source-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .source-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(43,36,29,0.06);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .helper {
+      max-width: 1660px;
+      margin: 0 auto 18px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .helper-card {
+      background: rgba(255,255,255,0.6);
+      border: 1px solid rgba(63,54,41,0.08);
+      border-radius: 18px;
+      padding: 14px 16px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .helper-card strong {
+      display: block;
+      color: var(--text);
+      margin-bottom: 4px;
+      font-size: 13px;
+    }
+    @media (max-width: 1220px) {
+      .content {
+        grid-template-columns: 1fr;
+      }
+      .drawer {
+        position: static;
+      }
+    }
+    @media (max-width: 980px) {
+      .topbar,
+      .dual,
+      .helper {
+        grid-template-columns: 1fr;
+      }
+      .meta-cards {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    @media (max-width: 720px) {
+      .shell {
+        padding: 18px 14px 28px;
+      }
+      .headline h1 {
+        font-size: 28px;
+      }
+      .map-foot {
+        flex-direction: column;
+      }
+      .metric-grid,
+      .meta-cards {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <section class="topbar">
+      <article class="headline">
+        <h1>헤어 본딩 서사 재분류 맵</h1>
+        <p>기존 리서치 보드를 그대로 둔 채, 이번 보드는 “무슨 세그에서 파는가”가 아니라 “실제로 어떤 본딩 이야기를 하는가” 기준으로 다시 나눴습니다. 점선 원은 헤어미스트가 아닌 세럼/크림/밤 같은 reference SKU입니다.</p>
+      </article>
+      <div class="meta-cards">
+        <article class="meta-card">
+          <div class="meta-label">현재 SKU 수</div>
+          <div class="meta-value">76개</div>
+        </article>
+        <article class="meta-card">
+          <div class="meta-label">분류 기준</div>
+          <div class="meta-value">5개 세그</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="helper">
+      <article class="helper-card">
+        <strong>분류 관점</strong>
+        제품명이 아니라, 본딩 claim과 전성분 인상을 같이 봤습니다.
+      </article>
+      <article class="helper-card">
+        <strong>점선 의미</strong>
+        미스트가 아닌 reference SKU도 함께 넣어 가격축과 claim 축 비교가 가능하게 했습니다.
+      </article>
+      <article class="helper-card">
+        <strong>맵 읽는 법</strong>
+        점을 누르면 오른쪽 상세 카드가 열리고, 세그 칩을 누르면 그 세그만 하이라이트됩니다.
+      </article>
+    </section>
+
+    <section class="legend-panel">
+      <h2 class="legend-title">5개 세그 정의</h2>
+      <div id="legend" class="legend-grid"></div>
+    </section>
+
+    <section class="content">
+      <div class="maps">
+        <article class="map-card">
+          <h2>Claim 강도 포지셔닝 맵</h2>
+          <p>x축은 ml당 단가, y축은 기존 보드의 본딩/리페어 claim 강도입니다. 즉 가격을 얼마나 받는지와 science claim을 얼마나 전면에 세우는지를 같이 봅니다.</p>
+          <div class="map-svg-wrap"><svg id="map-claim" viewBox="0 0 1380 620" width="100%" height="100%" aria-label="본딩 서사 재분류 메인 포지셔닝 맵"></svg></div>
+          <div class="map-foot">
+            <span>실선 점은 헤어미스트/스프레이, 점선 점은 세럼/크림/밤 같은 non-mist reference입니다.</span>
+            <span>특히 category 1~3이 가격 상단에서 어떻게 갈리는지 보려고 원래 보드의 claimDepth를 그대로 재사용했습니다.</span>
+          </div>
+        </article>
+        <div class="dual">
+          <article class="map-card">
+            <h2>용량 vs 100ml 단가</h2>
+            <p>같은 세그 안에서도 작게 비싸게 파는지, 크게 싸게 파는지를 직관적으로 보기 위한 분포도입니다.</p>
+            <div class="map-svg-wrap"><svg id="map-unit100" viewBox="0 0 680 420" width="100%" height="100%" aria-label="용량 대 100ml 단가 분포도"></svg></div>
+            <div class="map-foot">
+              <span>본딩 기술 only 세그가 정말 작은 용량을 쓰는지, 혹은 mass 기능형처럼 커지는지 확인하기 좋습니다.</span>
+            </div>
+          </article>
+          <article class="map-card">
+            <h2>용량 vs 전체 가격</h2>
+            <p>세로축을 절대 판매가로 바꿔, 소비자가 실제로 결제하는 가격대를 바로 비교할 수 있게 했습니다.</p>
+            <div class="map-svg-wrap"><svg id="map-total" viewBox="0 0 680 420" width="100%" height="100%" aria-label="용량 대 전체 가격 분포도"></svg></div>
+            <div class="map-foot">
+              <span>본딩히어로처럼 보이려면 100ml당 단가뿐 아니라 absolute price도 너무 mass 쪽으로 내려가지 않는지가 중요합니다.</span>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <aside id="drawer" class="drawer">
+        <div class="drawer-empty">
+          맵에서 점 하나를 눌러 주세요. 이 패널에서 세그 분류 이유와 가격/성분/링크를 바로 확인할 수 있습니다.
+        </div>
+      </aside>
+    </section>
+  </div>
+
+  <script>
+    const segments = [{"id":"disulfide-bond","title":"이황화 결합 본딩","short":"이황화결합","color":"#6b8d2a","description":"본딩 기술 only로 밀고, broken disulfide bond처럼 이황화 결합을 특히 말하는 제품"},{"id":"bond-tech-core","title":"본딩 기술 중심","short":"본딩기술","color":"#2e6f77","description":"실제로 본딩/내부 구조 강화 기술을 핵심으로 미는 제품"},{"id":"silicone-bond-story","title":"실리콘 코팅형 본딩","short":"본딩서사+실리콘","color":"#b7772f","description":"본딩을 말하지만 전성분상 실리콘 컨디셔닝 비중이 훨씬 커 보이는 제품"},{"id":"nonbond-functional","title":"비본딩 기능형 케어","short":"일반기능","color":"#4f78b8","description":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품"},{"id":"hair-perfume","title":"헤어 퍼퓸 포지셔닝","short":"헤어퍼퓸","color":"#bf6c8c","description":"케어보다 향과 무드가 먼저 읽히는 제품"}];
+    const products = [{"id":"unove","no":"01","title":"UNOVE 워터 에센스 헤어 미스트","brand":"UNOVE","brandKo":"어노브","form":"워터 미스트","productName":"워터 에센스 헤어 미스트","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":2.8,"unitPriceKrwMl":79.5,"unitPricePer100ml":7950,"totalPriceKrw":15900,"volumeMl":200,"concept":"극손상모 데일리 수분/윤기, 36종 단백·영양","keyIngredients":"단백질·아미노산·오일 컴플렉스","uspIngredients":"단백질/아미노산/오일 복합체","silicone":"O","alcohol":"O","ewg":"Enuri 34 low / 7 mid / 0 high / 11 unknown","performance":"화해·글로우픽 노출, Enuri 리뷰 8","evidence":["Olive Young 현재가 15,900원 확인","SSG 성분 스니펫상 실리콘·단백질·오일 베이스","Enuri 성분 요약 및 리뷰 수 확인"],"sources":[{"label":"상품 상세","url":"https://www.oliveyoung.co.kr/store/goods/getGoodsDetail.do?goodsNo=A000000188767"}],"isMist":true,"metaTags":[]},{"id":"healingbird","no":"02","title":"Healing Bird 히알루론 밀크 헤어미스트","brand":"Healing Bird","brandKo":"힐링버드","form":"밀크 미스트","productName":"히알루론 밀크 헤어미스트","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":2.7,"unitPriceKrwMl":76,"unitPricePer100ml":7600,"totalPriceKrw":15200,"volumeMl":200,"concept":"히알루론/수분/열보호/정전기","keyIngredients":"히알루론산, 우유단백질, 아모디메치콘","uspIngredients":"HA + 밀크단백질 + 아모디메치콘 피막","silicone":"O","alcohol":"?","ewg":"Enuri 29 low / 5 mid / 0 high / 14 unknown","performance":"화해 헤어미스트 랭킹 22위, 리뷰 23","evidence":["Olive Young 현재가 15,200원 확인","Kurly/성분 스니펫에서 아모디메치콘 확인","화해 랭킹/리뷰 수, Enuri 성분 분포 확인"],"sources":[{"label":"상품 상세","url":"https://www.oliveyoung.co.kr/store/goods/getGoodsDetail.do?goodsNo=A000000230114"}],"isMist":true,"metaTags":[]},{"id":"kundal","no":"03","title":"KUNDAL 프로틴 데미지 케어 헤어 미스트 세럼","brand":"KUNDAL","brandKo":"쿤달","form":"세럼 미스트","productName":"프로틴 데미지 케어 헤어 미스트 세럼","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":3.4,"unitPriceKrwMl":98,"unitPricePer100ml":9800,"totalPriceKrw":14700,"volumeMl":150,"concept":"프로틴/세럼/손상모 집중","keyIngredients":"단백질, 세라마이드, 판테놀, 오일","uspIngredients":"프로틴 + 세라마이드 + 판테놀","silicone":"O","alcohol":"O","ewg":"미확인","performance":"Kurly 리뷰 52, 자사몰 리뷰 101","evidence":["공식몰 17,900원 / Kurly 14,700원 확인","성분 스니펫상 Alcohol Denat. 및 실리콘 확인","Kurly/공식몰 리뷰 수 노출"],"sources":[{"label":"상품 상세","url":"https://kundal.co.kr/product/detail.html?product_no=2449"}],"isMist":true,"metaTags":[]},{"id":"miseen","no":"04","title":"mise en scene 살롱10 펩타이드 리페어 노워시","brand":"mise en scene","brandKo":"미쟝센","form":"노워시 트리트먼트 미스트","productName":"살롱10 펩타이드 리페어 노워시","segmentId":"bond-tech-core","segmentTitle":"본딩 기술 중심","segmentShort":"본딩기술","segmentColor":"#2e6f77","segmentDescription":"실제로 본딩/내부 구조 강화 기술을 핵심으로 미는 제품","classificationReason":"maleic acid와 peptide가 보이고 특허 본딩 기술 소구가 있어 완전 허상형으로 보긴 어렵습니다.","claimDepth":3.6,"unitPriceKrwMl":79.5,"unitPricePer100ml":7950,"totalPriceKrw":15900,"volumeMl":200,"concept":"펩타이드, 살롱 무드, 특허 본딩 기술","keyIngredients":"펩타이드, 에탄올, 실리콘","uspIngredients":"펩타이드 + 실리콘 피막 + 살롱 케어 스토리","silicone":"O","alcohol":"O","ewg":"미확인","performance":"Enuri 리뷰 222, 특허 본딩 기술 노출","evidence":["Olive Young 현재가 15,900원 확인","아모레몰/검색 결과에 특허 본딩 기술 노출","검색 스니펫상 에탄올·사이클로펜타실록산 언급"],"sources":[{"label":"상품 상세","url":"https://www.oliveyoung.co.kr/store/goods/getGoodsDetail.do?goodsNo=A000000254188"}],"isMist":true,"metaTags":[]},{"id":"hairplus","no":"05","title":"HAIRPLUS 단백질 본드 워터에센스","brand":"HAIRPLUS","brandKo":"헤어플러스","form":"워터 에센스 미스트","productName":"단백질 본드 워터에센스","segmentId":"silicone-bond-story","segmentTitle":"실리콘 코팅형 본딩","segmentShort":"본딩서사+실리콘","segmentColor":"#b7772f","segmentDescription":"본딩을 말하지만 전성분상 실리콘 컨디셔닝 비중이 훨씬 커 보이는 제품","classificationReason":"단백질 본드 네이밍은 강하지만 실제 전성분 인상은 실리콘/컨디셔닝 결과감 쪽이 더 큽니다.","claimDepth":4.2,"unitPriceKrwMl":79.5,"unitPricePer100ml":7950,"totalPriceKrw":15900,"volumeMl":200,"concept":"단백질 본드 네이밍, 노워시, 열보호","keyIngredients":"실리콘, 단백질, 트리실록산","uspIngredients":"Cyclopentasiloxane / Dimethiconol / 단백질","silicone":"O","alcohol":"?","ewg":"Enuri 57 low / 6 mid / 0 high / 9 unknown","performance":"Enuri 리뷰 10, 올영 반복 노출","evidence":["Olive Young 현재가 15,900원 확인","SSG 스니펫상 Cyclopentasiloxane, Dimethiconol, Trisiloxane 확인","Enuri 성분 분포 및 리뷰 수 확인"],"sources":[{"label":"상품 상세","url":"https://www.oliveyoung.co.kr/store/goods/getGoodsDetail.do?goodsNo=A000000227669"}],"isMist":true,"metaTags":[]},{"id":"quickbond","no":"06","title":"AMOS 살롱 마스터 퀵본드","brand":"AMOS","brandKo":"아모스프로페셔널","form":"살롱 시술 보조 본딩 케어","productName":"살롱 마스터 퀵 본드","segmentId":"bond-tech-core","segmentTitle":"본딩 기술 중심","segmentShort":"본딩기술","segmentColor":"#2e6f77","segmentDescription":"실제로 본딩/내부 구조 강화 기술을 핵심으로 미는 제품","classificationReason":"시술 손상용 본딩 라인으로 밀지만 결합 타입은 비공개라 본딩 기술 중심으로 묶었습니다.","claimDepth":4.5,"unitPriceKrwMl":150,"unitPricePer100ml":15000,"totalPriceKrw":45000,"volumeMl":300,"concept":"염색·탈색·펌 시술에 함께 쓰는 살롱 본딩 케어","keyIngredients":"케라틴, 콜라겐, 실크, PEG-12 디메치콘","uspIngredients":"Hydrolyzed Keratin/Collagen/Silk + PEG-12 Dimethicone","silicone":"O","alcohol":"O","ewg":"미확인","performance":"공식몰 300ml / 45,000원, 본딩케어·1-CUP케어 노출","evidence":["아모스프로페셔널 공식 페이지에 살롱 마스터 퀵본드 300ML / 45,000원 현재 노출이 확인됩니다.","공식 Description에 염색, 탈색, 펌으로 인한 모발 손상을 케어하는 퀵 본드라고 명시됩니다.","공식 Recommend/Feature에 본딩케어와 1-CUP케어가 직접 노출돼 소비자용 미스트보다 살롱 시술 보조재 성격이 더 강합니다."],"sources":[{"label":"상품 상세","url":"https://amospro.amoshair.co.kr/prd/dtl/list?anpPrdCd=PD2024000217IJZW"}],"isMist":false,"metaTags":["살롱 프로페셔널"]},{"id":"headspa7","no":"07","title":"HEADSPA7 V8 슬리키 헤어미스트","brand":"HEADSPA7","brandKo":"헤드스파7","form":"투페이즈 미스트","productName":"V8 슬리키 헤어미스트","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":4.1,"unitPriceKrwMl":121.4,"unitPricePer100ml":12140,"totalPriceKrw":17000,"volumeMl":140,"concept":"열보호 200도, 단백질/판테놀, 슬릭 케어","keyIngredients":"단백질, 판테놀, 해조추출물","uspIngredients":"단백질/판테놀/해조 + 열보호 메시지","silicone":"?","alcohol":"?","ewg":"Enuri 62 low / 9 mid / 0 high / 7 unknown","performance":"Enuri 리뷰 2, 올영 브랜드관 베스트 노출","evidence":["Olive Young 현재가 17,000원 확인","검색 결과상 2층상 단백질 크림 + 수분 앰플 구조 노출","Enuri 성분 분포 및 리뷰 수 확인"],"sources":[{"label":"상품 상세","url":"https://www.oliveyoung.co.kr/store/goods/getGoodsDetail.do?goodsNo=A000000226518"}],"isMist":true,"metaTags":[]},{"id":"vamood","no":"08","title":"VAMOOD 실크트리트먼트 헤어미스트","brand":"VAMOOD","brandKo":"바무드","form":"트리트먼트 미스트","productName":"실크트리트먼트 헤어미스트","segmentId":"bond-tech-core","segmentTitle":"본딩 기술 중심","segmentShort":"본딩기술","segmentColor":"#2e6f77","segmentDescription":"실제로 본딩/내부 구조 강화 기술을 핵심으로 미는 제품","classificationReason":"모플렉스/실크아미노산처럼 손상 구조 복구 서사가 메인이라 본딩 기술 중심으로 분류했습니다.","claimDepth":4,"unitPriceKrwMl":288.9,"unitPricePer100ml":28890,"totalPriceKrw":26000,"volumeMl":90,"concept":"논워시, 극손상모, 실크/모플렉스","keyIngredients":"실크아미노산 5%, 모플렉스 5%","uspIngredients":"실크 아미노산 + 모플렉스","silicone":"?","alcohol":"?","ewg":"화해 48 low / 11 mid / 2 high / 20주의 2 / 알레르기 6","performance":"화해 리뷰 5","evidence":["Smartstore/공식몰 기준 정가 28,000원 / 판매가 26,000원 확인","화해 성분/위험도/리뷰 수 스니펫 확인","실크아미노산 5%·모플렉스 5% 소구 노출"],"sources":[{"label":"상품 상세","url":"https://smartstore.naver.com/vananacompany/products/5958379625"}],"isMist":true,"metaTags":[]},{"id":"olaplex","no":"09","title":"OLAPLEX No.9 Bond Protector","brand":"OLAPLEX","brandKo":"올라플렉스","form":"본드 세럼/미스트 인접","productName":"No.9 Bond Protector Nourishing Hair Serum","segmentId":"disulfide-bond","segmentTitle":"이황화 결합 본딩","segmentShort":"이황화결합","segmentColor":"#6b8d2a","segmentDescription":"본딩 기술 only로 밀고, broken disulfide bond처럼 이황화 결합을 특히 말하는 제품","classificationReason":"공식적으로 broken disulfide bonds를 직접 언급하는 대표 케이스입니다.","claimDepth":4.8,"unitPriceKrwMl":503.6,"unitPricePer100ml":50360,"totalPriceKrw":45320,"volumeMl":90,"concept":"Bond protector, 실리콘 프리, 232도 열보호","keyIngredients":"bis-aminopropyl diglycol dimaleate, pvp","uspIngredients":"Bis-aminopropyl diglycol dimaleate","silicone":"X","alcohol":"?","ewg":"미확인","performance":"올영 리뷰(26) 확인 스니펫, 브랜드 상징 SKU","evidence":["올리브영 검색 결과 기준 정가 53,000원 / 할인가 45,320원 확인","올리브영 검색 스니펫에서 리뷰(26) 노출 확인","공식 페이지에 silicones-free 및 232도 heat protection claim 명시"],"sources":[{"label":"상품 상세","url":"https://www.oliveyoung.co.kr/store/goods/getGoodsDetail.do?goodsNo=A000000185357"},{"label":"OLAPLEX","url":"https://olaplex.com/products/olaplex-no-9-bond-protector-nourishing-hair-serum"}],"isMist":false,"metaTags":["프리미엄 살롱 비교군"]},{"id":"livingproof","no":"10","title":"Living Proof Triple Bond Complex","brand":"Living Proof","brandKo":"리빙프루프","form":"리브인 크림/세럼","productName":"Triple Bond Complex","segmentId":"bond-tech-core","segmentTitle":"본딩 기술 중심","segmentShort":"본딩기술","segmentColor":"#2e6f77","segmentDescription":"실제로 본딩/내부 구조 강화 기술을 핵심으로 미는 제품","classificationReason":"수소결합·이온결합·공유결합의 3-bond 서사가 제품의 주인공입니다.","claimDepth":5,"unitPriceKrwMl":1457.1235347159604,"unitPricePer100ml":145712.4,"totalPriceKrw":64638,"volumeMl":44.36,"concept":"all three bonds claim, creator-friendly science copy","keyIngredients":"repair matrix, jojoba esters","uspIngredients":"3-bond complex system","silicone":"X","alcohol":"X","ewg":"미확인","performance":"Ulta 4.6 / 리뷰 561","evidence":["현재 유효한 Ulta PDP 기준 정가 $45 / 세일가 $42.75 확인","Ulta PDP에 4.6점 / 561 Reviews 노출 확인","Ulta PDP에 hydrogen, ionic, covalent 3종 결합 소구 명시"],"sources":[{"label":"상품 상세","url":"https://www.ulta.com/p/triple-bond-complex-leave-in-hair-treatment-pimprod2034628/"},{"label":"Living Proof","url":"https://www.livingproof.com/triple-bond-complex/R1034.html"}],"isMist":false,"metaTags":["프리미엄 살롱 비교군"]},{"id":"redken","no":"11","title":"Redken Acidic Bonding Concentrate Leave-In","brand":"Redken","brandKo":"레드켄","form":"리브인 트리트먼트","productName":"Acidic Bonding Concentrate Leave-In Treatment","segmentId":"silicone-bond-story","segmentTitle":"실리콘 코팅형 본딩","segmentShort":"본딩서사+실리콘","segmentColor":"#b7772f","segmentDescription":"본딩을 말하지만 전성분상 실리콘 컨디셔닝 비중이 훨씬 커 보이는 제품","classificationReason":"bonding care를 말하지만 citric acid 위에 dimethicone/amodimethicone 스무딩 인상이 강합니다.","claimDepth":4.7,"unitPriceKrwMl":360.9549071618037,"unitPricePer100ml":36095.5,"totalPriceKrw":54432,"volumeMl":150.8,"concept":"Citric Acid + bond repair + leave-in","keyIngredients":"Citric Acid, Dimethicone, Amodimethicone","uspIngredients":"Citric Acid + silicone smoothing system","silicone":"O","alcohol":"?","ewg":"미확인","performance":"Ulta 리뷰 3,910","evidence":["Ulta 현재가 $36 확인","Citric Acid / Dimethicone / Amodimethicone 확인","Ulta 리뷰 3,910 노출"],"sources":[{"label":"상품 상세","url":"https://www.ulta.com/p/acidic-bonding-concentrate-leave-in-treatment-pimprod2028078"}],"isMist":false,"metaTags":["살롱 프로페셔널","프리미엄 살롱 비교군"]},{"id":"k18","no":"12","title":"K18 Professional Molecular Repair Mist","brand":"K18","brandKo":"K18","form":"리페어 미스트","productName":"Professional Molecular Repair Hair Mist","segmentId":"disulfide-bond","segmentTitle":"이황화 결합 본딩","segmentShort":"이황화결합","segmentColor":"#6b8d2a","segmentDescription":"본딩 기술 only로 밀고, broken disulfide bond처럼 이황화 결합을 특히 말하는 제품","classificationReason":"공식 설명에서 disulfide reconformation까지 직접 언급해 이황화 결합 축이 선명합니다.","claimDepth":4.9,"unitPriceKrwMl":564.48,"unitPricePer100ml":56448,"totalPriceKrw":84672,"volumeMl":150,"concept":"molecular repair, pre-service pro mist","keyIngredients":"K18Peptide, Alcohol Denat.","uspIngredients":"sh-Oligopeptide-78 / K18Peptide","silicone":"?","alcohol":"O","ewg":"미확인","performance":"프리미엄 살롱 본딩 레퍼런스","evidence":["공식/유통 채널에서 $56 수준 확인","K18Peptide / Alcohol Denat. 스니펫 확인","프로페셔널 molecular repair positioning 확인"],"sources":[{"label":"상품 상세","url":"https://www.k18hairpro.com/products/molecular-repair-hair-mist"}],"isMist":true,"metaTags":["프리미엄 살롱 비교군"]},{"id":"epres","no":"13","title":"epres Bond Repair Treatment","brand":"epres","brandKo":"이프레스","form":"스프레이 treatment","productName":"Bond Repair Treatment","segmentId":"disulfide-bond","segmentTitle":"이황화 결합 본딩","segmentShort":"이황화결합","segmentColor":"#6b8d2a","segmentDescription":"본딩 기술 only로 밀고, broken disulfide bond처럼 이황화 결합을 특히 말하는 제품","classificationReason":"spray가 broken disulfide bonds를 actively repair한다고 직접 설명합니다.","claimDepth":4.9,"unitPriceKrwMl":504,"unitPricePer100ml":50400,"totalPriceKrw":75600,"volumeMl":150,"concept":"broken disulfide bonds story, minimalist formula","keyIngredients":"Diethylhexyl Maleate, Oleyl Alcohol","uspIngredients":"Diethylhexyl Maleate 기반 disulfide story","silicone":"X","alcohol":"O","ewg":"미확인","performance":"글로벌 bond-builder 언급 빈도 높음","evidence":["공식 starter kit $50 확인","broken disulfide bonds claim 확인","4-ingredient minimalist formula 스토리 확인"],"sources":[{"label":"상품 상세","url":"https://epres.com/products/bond-repair-treatment"}],"isMist":true,"metaTags":[]},{"id":"aveda","no":"14","title":"Aveda Botanical Repair Styling Creme","brand":"Aveda","brandKo":"아베다","form":"스타일링 크림","productName":"Botanical Repair Bond-Building Styling Creme","segmentId":"bond-tech-core","segmentTitle":"본딩 기술 중심","segmentShort":"본딩기술","segmentColor":"#2e6f77","segmentDescription":"실제로 본딩/내부 구조 강화 기술을 핵심으로 미는 제품","classificationReason":"Hydroxypropylgluconamide 계열이 확인돼 내부 결합 강화 문법이 비교적 유의미합니다.","claimDepth":4.3,"unitPriceKrwMl":383.04,"unitPricePer100ml":38304,"totalPriceKrw":57456,"volumeMl":150,"concept":"식물 유래 bond-building, silicone-free","keyIngredients":"Hydroxypropylammonium Gluconate, Hydroxypropylgluconamide","uspIngredients":"Hydroxypropylammonium Gluconate / Hydroxypropylgluconamide","silicone":"X","alcohol":"?","ewg":"미확인","performance":"Aveda 대표 bond-building styling SKU","evidence":["Aveda 공식가 $38 / 150ml 확인","bond-building styling creme 포지셔닝 확인","실리콘 프리 메시지 및 식물 기술 문구 확인"],"sources":[{"label":"상품 상세","url":"https://www.aveda.com/product/17770/110747/styling/cream/botanical-repair-bond-building-styling-creme?size=5_fl_oz%2F150_ml"}],"isMist":false,"metaTags":["살롱 프로페셔널","프리미엄 살롱 비교군"]},{"id":"wella","no":"15","title":"Wella Ultimate Repair Miracle Hair Rescue","brand":"Wella","brandKo":"웰라","form":"리브인 rescue mist","productName":"Ultimate Repair Miracle Hair Rescue","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":4.4,"unitPriceKrwMl":1193.6842105263158,"unitPricePer100ml":119368.4,"totalPriceKrw":113400,"volumeMl":95,"concept":"leave-in rescue, anti-breakage, intensive repair","keyIngredients":"AHA/omega 계열 repair story","uspIngredients":"Ultimate repair tech / leave-in rescue framing","silicone":"?","alcohol":"?","ewg":"미확인","performance":"Ulta 평점 4.6/5 노출","evidence":["Ulta 현재가 $75 확인","검색 스니펫상 leave-in rescue 후기 및 4.6/5 노출","Ultimate Repair 전문 eBook 노출"],"sources":[{"label":"상품 상세","url":"https://www.ulta.com/p/ultimate-repair-miracle-hair-rescue-pimprod2038767"}],"isMist":true,"metaTags":["살롱 프로페셔널","프리미엄 살롱 비교군"]},{"id":"roundaround","no":"16","title":"Round A Round 센티드 헤어&바디 미스트","brand":"Round A Round","brandKo":"라운드어라운드","form":"헤어&바디 미스트","productName":"센티드 헤어&바디 미스트","segmentId":"hair-perfume","segmentTitle":"헤어 퍼퓸 포지셔닝","segmentShort":"헤어퍼퓸","segmentColor":"#bf6c8c","segmentDescription":"케어보다 향과 무드가 먼저 읽히는 제품","classificationReason":"이 제품은 케어 성분이 있어도 소비자에게는 향과 무드가 먼저 읽히는 편입니다.","claimDepth":1.4,"unitPriceKrwMl":79,"unitPricePer100ml":7900,"totalPriceKrw":7900,"volumeMl":100,"concept":"가벼운 향, 안개 분사, 가성비","keyIngredients":"향 중심","uspIngredients":"향/분사감","silicone":"?","alcohol":"?","ewg":"미확인","performance":"Unpa 리뷰 3, Glowpick 후기 노출","evidence":["Olive Young 상품 페이지 확인","검색/리뷰 스니펫상 100ml 가성비 포지셔닝 확인","Glowpick 후기 노출"],"sources":[{"label":"상품 상세","url":"https://www.oliveyoung.co.kr/store/goods/getGoodsDetail.do?goodsNo=A000000231433"}],"isMist":true,"metaTags":[]},{"id":"bodyholic-potion","no":"17","title":"Bodyholic 바디&헤어미스트 포션","brand":"Bodyholic","brandKo":"바디홀릭","form":"바디&헤어미스트","productName":"바디&헤어미스트 포션 50ml","segmentId":"hair-perfume","segmentTitle":"헤어 퍼퓸 포지셔닝","segmentShort":"헤어퍼퓸","segmentColor":"#bf6c8c","segmentDescription":"케어보다 향과 무드가 먼저 읽히는 제품","classificationReason":"이 제품은 케어 성분이 있어도 소비자에게는 향과 무드가 먼저 읽히는 편입니다.","claimDepth":1.3,"unitPriceKrwMl":198,"unitPricePer100ml":19800,"totalPriceKrw":9900,"volumeMl":50,"concept":"향 중심, 선물/포션 무드","keyIngredients":"향 중심","uspIngredients":"향 콘셉트","silicone":"?","alcohol":"?","ewg":"미확인","performance":"올영 리뷰 10,705","evidence":["Olive Young 브랜드관 현재가 9,900원 노출","리뷰 10,705 노출","향 중심 선물형 포지셔닝"],"sources":[{"label":"상품 상세","url":"https://m.oliveyoung.co.kr/m/mtn/brand/A001639"}],"isMist":true,"metaTags":[]},{"id":"bodyholic-staynudie","no":"18","title":"Bodyholic 스테이누디 헤어&바디 미스트","brand":"Bodyholic","brandKo":"바디홀릭","form":"헤어&바디 미스트","productName":"스테이누디 헤어&바디 미스트 100ml","segmentId":"hair-perfume","segmentTitle":"헤어 퍼퓸 포지셔닝","segmentShort":"헤어퍼퓸","segmentColor":"#bf6c8c","segmentDescription":"케어보다 향과 무드가 먼저 읽히는 제품","classificationReason":"이 제품은 케어 성분이 있어도 소비자에게는 향과 무드가 먼저 읽히는 편입니다.","claimDepth":1.5,"unitPriceKrwMl":129,"unitPricePer100ml":12900,"totalPriceKrw":12900,"volumeMl":100,"concept":"향 지속, 대중 선물형","keyIngredients":"향 중심","uspIngredients":"향/사용감","silicone":"?","alcohol":"?","ewg":"미확인","performance":"올영 리뷰 5,768","evidence":["Olive Young 브랜드관 현재가 12,900원, 정가 15,900원 노출","리뷰 5,768 노출","향 중심 daily scent 포지션"],"sources":[{"label":"상품 상세","url":"https://m.oliveyoung.co.kr/m/mtn/brand/A001639"}],"isMist":true,"metaTags":[]},{"id":"tone28","no":"19","title":"TOUN28 헤어 퍼퓸 미스트","brand":"TOUN28","brandKo":"톤28","form":"헤어 퍼퓸 미스트","productName":"회상 헤어 퍼퓸 미스트","segmentId":"hair-perfume","segmentTitle":"헤어 퍼퓸 포지셔닝","segmentShort":"헤어퍼퓸","segmentColor":"#bf6c8c","segmentDescription":"케어보다 향과 무드가 먼저 읽히는 제품","classificationReason":"이 제품은 케어 성분이 있어도 소비자에게는 향과 무드가 먼저 읽히는 편입니다.","claimDepth":1.7,"unitPriceKrwMl":220,"unitPricePer100ml":22000,"totalPriceKrw":22000,"volumeMl":100,"concept":"향 중심, 감성/클린 인상","keyIngredients":"향 중심","uspIngredients":"퍼퓸 인상","silicone":"?","alcohol":"?","ewg":"미확인","performance":"Unpa 리뷰 6, 4.7점","evidence":["Unpa 리뷰 페이지에서 22,000원 노출","헤어 퍼퓸 미스트 포지션 확인","리뷰 6 / 4.7점 노출"],"sources":[{"label":"상품 상세","url":"https://unpa.me/reviews/338950"}],"isMist":true,"metaTags":[]},{"id":"anillo","no":"20","title":"ANILLO 로지나잇 퍼퓸 헤어 미스트","brand":"ANILLO","brandKo":"아닐로","form":"퍼퓸 헤어 미스트","productName":"로지나잇 퍼퓸 헤어 미스트","segmentId":"hair-perfume","segmentTitle":"헤어 퍼퓸 포지셔닝","segmentShort":"헤어퍼퓸","segmentColor":"#bf6c8c","segmentDescription":"케어보다 향과 무드가 먼저 읽히는 제품","classificationReason":"이 제품은 케어 성분이 있어도 소비자에게는 향과 무드가 먼저 읽히는 편입니다.","claimDepth":1.8,"unitPriceKrwMl":315,"unitPricePer100ml":31500,"totalPriceKrw":31500,"volumeMl":100,"concept":"감성 향, 선물형, 백화점/팝업 친화","keyIngredients":"향 중심","uspIngredients":"퍼퓸 스토리","silicone":"?","alcohol":"?","ewg":"미확인","performance":"백화점/팝업/선물 언급 빈도 높음","evidence":["신세계V/에누리 등에서 상품 노출 확인","중고나라 스니펫상 정가 35,000원 언급, 이전 확인값 31,500원","향 중심 선물형 포지션"],"sources":[{"label":"상품 상세","url":"https://www.shinsegaev.com/goods/initDetailGoods.siv?goods_no=2406357720"}],"isMist":true,"metaTags":[]},{"id":"tricell","no":"21","title":"TRICELL 트리플 레이어드 헤어 미스트","brand":"TRICELL","brandKo":"트리셀","form":"기능성 헤어 미스트","productName":"트리플 레이어드 헤어 미스트","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":3.2,"unitPriceKrwMl":133.3,"unitPricePer100ml":13330,"totalPriceKrw":20000,"volumeMl":150,"concept":"UV보호/결광/레이어드 케어","keyIngredients":"변성알코올, 향, 보습성분","uspIngredients":"UV/결광/레이어드 스토리","silicone":"?","alcohol":"O","ewg":"Enuri 31 low / 2 mid / 0 high / 12 unknown","performance":"Glowpick 리뷰 5","evidence":["Olive Young 현재가 20,000원 확인","검색 스니펫상 변성알코올 언급","Glowpick 리뷰 및 Enuri 분포 확인"],"sources":[{"label":"상품 상세","url":"https://www.oliveyoung.co.kr/store/goods/getGoodsDetail.do?goodsNo=A000000246309"}],"isMist":true,"metaTags":[]},{"id":"moroccanoil","no":"22","title":"Moroccanoil Brumes du Maroc","brand":"Moroccanoil","brandKo":"모로칸오일","form":"헤어&바디 프래그런스 미스트","productName":"Brumes du Maroc","segmentId":"hair-perfume","segmentTitle":"헤어 퍼퓸 포지셔닝","segmentShort":"헤어퍼퓸","segmentColor":"#bf6c8c","segmentDescription":"케어보다 향과 무드가 먼저 읽히는 제품","classificationReason":"이 제품은 케어 성분이 있어도 소비자에게는 향과 무드가 먼저 읽히는 편입니다.","claimDepth":2.6,"unitPriceKrwMl":423,"unitPricePer100ml":42300,"totalPriceKrw":42300,"volumeMl":100,"concept":"살롱향/아르간오일/헤어&바디 겸용","keyIngredients":"Alcohol Denat., Argan Oil, Dimethicone PEG-8 Meadowfoamate","uspIngredients":"아르간오일 + 향 스토리","silicone":"O","alcohol":"O","ewg":"미확인","performance":"프리미엄 헤어 향미스트 대표 SKU","evidence":["Kurly/Chicor 노출가 42,300원 확인","성분 스니펫상 Alcohol Denat. / Argan Oil / silicone derivative 확인","헤어&바디 fragrance mist 포지션"],"sources":[{"label":"상품 상세","url":"https://www.moroccanoil.com/products/brumes-du-maroc-hair-body-fragrance-mist"}],"isMist":true,"metaTags":["프리미엄 살롱 비교군"]},{"id":"kerastase","no":"23","title":"Kérastase Gloss Absolu Hair Mist","brand":"Kérastase","brandKo":"케라스타즈","form":"헤어 퍼퓸/글로스 미스트","productName":"Gloss Absolu Le Parfum Hair Mist","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":2.5,"unitPriceKrwMl":1965.6,"unitPricePer100ml":196560,"totalPriceKrw":58968,"volumeMl":30,"concept":"향 + 글로시 + anti-frizz","keyIngredients":"Alcohol Denat., 향, 오일","uspIngredients":"향 + anti-frizz finish","silicone":"?","alcohol":"O","ewg":"미확인","performance":"2026년 3월 온라인 론칭 문구 확인","evidence":["Kérastase USA 공식가 $39 확인","공식 문구상 on-the-go hair perfume, gloss/anti-frizz story","검색 스니펫상 2026년 출시 문맥 확인"],"sources":[{"label":"상품 상세","url":"https://www.kerastase-usa.com/collections/gloss-absolu/3474637326692.html"}],"isMist":true,"metaTags":["살롱 프로페셔널","프리미엄 살롱 비교군"]},{"id":"byredo","no":"24","title":"BYREDO Bal d'Afrique Hair Perfume","brand":"BYREDO","brandKo":"바이레도","form":"헤어 퍼퓸","productName":"Bal d'Afrique Hair Perfume 75ml","segmentId":"hair-perfume","segmentTitle":"헤어 퍼퓸 포지셔닝","segmentShort":"헤어퍼퓸","segmentColor":"#bf6c8c","segmentDescription":"케어보다 향과 무드가 먼저 읽히는 제품","classificationReason":"이 제품은 케어 성분이 있어도 소비자에게는 향과 무드가 먼저 읽히는 편입니다.","claimDepth":1.9,"unitPriceKrwMl":1814.4,"unitPricePer100ml":181440,"totalPriceKrw":136080,"volumeMl":75,"concept":"니치 향, 럭셔리 헤어 퍼퓸","keyIngredients":"향 중심","uspIngredients":"니치 향 시그니처","silicone":"?","alcohol":"?","ewg":"미확인","performance":"니치 헤어 퍼퓸 상징 SKU","evidence":["Byredo 공식 페이지에서 Hair perfume $90 확인","Bal d'Afrique는 헤어 퍼퓸 best-seller 라인","니치 향 프리미엄 ceiling 참고"],"sources":[{"label":"상품 상세","url":"https://www.byredo.com/us_en/perfume/best-sellers/bal-d-afrique/"}],"isMist":false,"metaTags":[]},{"id":"dior","no":"25","title":"Dior Miss Dior Hair Mist","brand":"Dior","brandKo":"디올","form":"헤어 미스트","productName":"Miss Dior Eau de Parfum Hair Mist","segmentId":"hair-perfume","segmentTitle":"헤어 퍼퓸 포지셔닝","segmentShort":"헤어퍼퓸","segmentColor":"#bf6c8c","segmentDescription":"케어보다 향과 무드가 먼저 읽히는 제품","classificationReason":"이 제품은 케어 성분이 있어도 소비자에게는 향과 무드가 먼저 읽히는 편입니다.","claimDepth":1.8,"unitPriceKrwMl":1260,"unitPricePer100ml":126000,"totalPriceKrw":37800,"volumeMl":30,"concept":"디자이너 향 중심 hair mist","keyIngredients":"향 중심","uspIngredients":"미스 디올 향 정체성","silicone":"?","alcohol":"?","ewg":"미확인","performance":"KREAM/Harrods 동시 노출","evidence":["Harrods KR에 $25 노출","KREAM에도 30ml SKU 노출","향 중심 hair mist 포지션"],"sources":[{"label":"상품 상세","url":"https://www.harrods.com/en-kr/p/dior-miss-dior-eau-de-parfum-hair-mist-000000000007825186"}],"isMist":true,"metaTags":[]},{"id":"alterna","no":"26","title":"Alterna Caviar Bond Repair Spray","brand":"Alterna","brandKo":"알터나","form":"리브인 열보호 스프레이","productName":"Caviar Restructuring Bond Repair Leave-in Heat Protection Spray","segmentId":"silicone-bond-story","segmentTitle":"실리콘 코팅형 본딩","segmentShort":"본딩서사+실리콘","segmentColor":"#b7772f","segmentDescription":"본딩을 말하지만 전성분상 실리콘 컨디셔닝 비중이 훨씬 커 보이는 제품","classificationReason":"bond repair spray지만 실리콘·캐비어 컨디셔닝 무드가 더 강하게 읽힙니다.","claimDepth":4.4,"unitPriceKrwMl":370.08695652173907,"unitPricePer100ml":37008.7,"totalPriceKrw":45965,"volumeMl":124.2,"concept":"bond repair + 232도 열보호 + caviar prestige","keyIngredients":"Dimethicone, Amodimethicone, 단백질 4종, Caviar Extract","uspIngredients":"Caviar Bond Enforcing Technology + 실리콘 + 가수분해 단백질","silicone":"O","alcohol":"O","ewg":"미확인","performance":"Ulta 4.4점 / 리뷰 129","evidence":["Ulta 현재가 $32 / 세일가 $30.40 확인","Ulta 상세에 450F/232C heat protection 및 bond enforcing technology 명시","전성분에 Dimethicone, Amodimethicone, Hydrolyzed Rice/Wheat/Soy/Corn Protein 확인"],"sources":[{"label":"상품 상세","url":"https://www.ulta.com/p/caviar-restructuring-bond-repair-leave-in-heat-protection-spray-pimprod2000754?sku=2534327"}],"isMist":true,"metaTags":[]},{"id":"sebastian","no":"27","title":"Sebastian No.Breaker Bonding Spray","brand":"Sebastian","brandKo":"세바스찬","form":"리브인 본딩 스프레이","productName":"Professional No.Breaker Leave-In Bonding Spray","segmentId":"silicone-bond-story","segmentTitle":"실리콘 코팅형 본딩","segmentShort":"본딩서사+실리콘","segmentColor":"#b7772f","segmentDescription":"본딩을 말하지만 전성분상 실리콘 컨디셔닝 비중이 훨씬 커 보이는 제품","classificationReason":"bonding spray보다도 amodimethicone과 styling polymer로 만드는 즉각적 결과감이 더 앞섭니다.","claimDepth":4.5,"unitPriceKrwMl":449.26229508196724,"unitPricePer100ml":44926.2,"totalPriceKrw":43848,"volumeMl":97.6,"concept":"bonding + styling + up to 99% less breakage","keyIngredients":"Malic Acid, Amodimethicone, Isopropyl Alcohol, Panthenol","uspIngredients":"Apple Acid + styling polymers + Amodimethicone","silicone":"O","alcohol":"O","ewg":"미확인","performance":"Ulta 4.4점 / 리뷰 12","evidence":["Ulta 현재가 $29 / 3.3 oz 확인","Ulta 상세에 up to 99% less hair breakage, Apple Acid & styling polymers 명시","전성분에 Isopropyl Alcohol, Malic Acid, Amodimethicone 확인"],"sources":[{"label":"상품 상세","url":"https://www.ulta.com/p/professional-nobreaker-leave-in-bonding-spray-pimprod2027314?sku=2585987"}],"isMist":true,"metaTags":["살롱 프로페셔널"]},{"id":"bondiboost","no":"28","title":"Bondi Boost Bond Builder+ Leave-In","brand":"Bondi Boost","brandKo":"본디부스트","form":"리브인 마스크","productName":"Rapid Repair Bond Builder+ Leave-In Hair Mask","segmentId":"bond-tech-core","segmentTitle":"본딩 기술 중심","segmentShort":"본딩기술","segmentColor":"#2e6f77","segmentDescription":"실제로 본딩/내부 구조 강화 기술을 핵심으로 미는 제품","classificationReason":"Diethylhexyl Maleate가 보여 maleate 계열 본딩 문법으로 읽을 여지가 있습니다.","claimDepth":4.6,"unitPriceKrwMl":374.22,"unitPricePer100ml":37422,"totalPriceKrw":37422,"volumeMl":100,"concept":"plant-based bond tech, silicone-free, split-end repair","keyIngredients":"Diethylhexyl Maleate, Hydrolyzed Soy/Wheat Protein, Panthenol","uspIngredients":"Natural Bond Builder+ + Polycare Split Therapy + 단백질","silicone":"X","alcohol":"O","ewg":"미확인","performance":"Ulta 4.8점 / 리뷰 501","evidence":["Ulta 현재가 $24.75 / 정가 $33 확인","Ulta 상세에 rebuild broken bonds, silicone-free, split-end repair 명시","전성분에 Diethylhexyl Maleate와 가수분해 단백질 확인"],"sources":[{"label":"상품 상세","url":"https://www.ulta.com/p/rapid-repair-bond-builder-leave-in-hair-mask-damaged-hair-pimprod2047332?sku=2628975"}],"isMist":false,"metaTags":[]},{"id":"matrix","no":"29","title":"Matrix Build-A-Bond Leave-In Balm","brand":"Matrix","brandKo":"매트릭스","form":"리브인 밤","productName":"Instacure Build-A-Bond Super Sealing Leave-In Balm","segmentId":"bond-tech-core","segmentTitle":"본딩 기술 중심","segmentShort":"본딩기술","segmentColor":"#2e6f77","segmentDescription":"실제로 본딩/내부 구조 강화 기술을 핵심으로 미는 제품","classificationReason":"브랜드가 hydrogen bond matrix reform을 직접 말하는 드문 케이스입니다.","claimDepth":4.6,"unitPriceKrwMl":371.23658051689864,"unitPricePer100ml":37123.7,"totalPriceKrw":37346,"volumeMl":100.6,"concept":"1 billion bonds, citric acid, heat/frizz/breakage","keyIngredients":"Citric Acid, Squalane, Dimethicone, Amodimethicone","uspIngredients":"Citric Acid + Squalane + silicone smoothing system","silicone":"O","alcohol":"O","ewg":"미확인","performance":"Ulta 4.5점 / 리뷰 342","evidence":["Ulta 현재가 $26 / 세일가 $24.70 확인","Ulta 상세에 1 billion bonds in every bottle, 8x stronger, 94% smoother 명시","전성분에 Citric Acid, Squalane, Dimethicone, Amodimethicone 확인"],"sources":[{"label":"상품 상세","url":"https://www.ulta.com/p/instacure-build-a-bond-super-sealing-leave-in-balm-very-damaged-hair-pimprod2046595?sku=2626899"}],"isMist":false,"metaTags":["살롱 프로페셔널"]},{"id":"ogx-bond","no":"30","title":"OGX Bond Protein Repair Spray","brand":"OGX","brandKo":"오지엑스","form":"멀티태스커 스프레이","productName":"Bond Protein Repair Heat Protect Multi-Tasker Spray","segmentId":"bond-tech-core","segmentTitle":"본딩 기술 중심","segmentShort":"본딩기술","segmentColor":"#2e6f77","segmentDescription":"실제로 본딩/내부 구조 강화 기술을 핵심으로 미는 제품","classificationReason":"FiberHance 계열 성분이 보여 mass지만 본딩 기술 의미는 남아 있는 편입니다.","claimDepth":4,"unitPriceKrwMl":89.60291363163373,"unitPricePer100ml":8960.3,"totalPriceKrw":17222,"volumeMl":192.2,"concept":"heat protect + bond protein + 대중가 mass","keyIngredients":"Hydroxypropylgluconamide, Hydroxypropylammonium Gluconate, Wheat Protein, Amodimethicone","uspIngredients":"Hydroxypropylgluconamide / Hydroxypropylammonium Gluconate + Wheat Protein","silicone":"O","alcohol":"X","ewg":"미확인","performance":"Ulta 4.7점 / 리뷰 942","evidence":["Ulta 현재가 $11.99 / 세일가 $11.39 확인","Ulta 상세에 heat protection 450F, 80% less breakage claim 명시","전성분에 Hydroxypropylgluconamide/Hydroxypropylammonium Gluconate 및 Amodimethicone 확인"],"sources":[{"label":"상품 상세","url":"https://www.ulta.com/p/bond-protein-repair-heat-protect-multi-tasker-spray-pimprod2049064?sku=2634844"}],"isMist":true,"metaTags":[]},{"id":"nym-toughlove","no":"31","title":"Not Your Mother's Tough Love","brand":"Not Your Mother's","brandKo":"낫유어마더스","form":"리브인 프로텍터 스프레이","productName":"Tough Love Bonding Leave-In Protector","segmentId":"silicone-bond-story","segmentTitle":"실리콘 코팅형 본딩","segmentShort":"본딩서사+실리콘","segmentColor":"#b7772f","segmentDescription":"본딩을 말하지만 전성분상 실리콘 컨디셔닝 비중이 훨씬 커 보이는 제품","classificationReason":"active bonding technology보다 multi-silicone smoothing system과 할인 mass 포지션이 더 강합니다.","claimDepth":4.1,"unitPriceKrwMl":51.053438556933486,"unitPricePer100ml":5105.3,"totalPriceKrw":9057,"volumeMl":177.4,"concept":"active bonding tech, 450F heat protect, deep discount mass","keyIngredients":"Cyclopentasiloxane, Dimethicone, Dimethiconol, Isopropyl Alcohol","uspIngredients":"Active Bonding Technology + multi-silicone smoothing system","silicone":"O","alcohol":"O","ewg":"미확인","performance":"Ulta 4.5점 / 리뷰 132","evidence":["Ulta 현재가 $5.99 / 정가 $11.99 확인","Ulta 상세에 breakage 67% reduction, 450F heat protect claim 명시","전성분에 Cyclopentasiloxane, Dimethicone, Dimethiconol, Isopropyl Alcohol 확인"],"sources":[{"label":"상품 상세","url":"https://www.ulta.com/p/tough-love-bonding-leave-in-protector-pimprod2039911?sku=2610910"}],"isMist":true,"metaTags":[]},{"id":"sheamoisture-bond","no":"32","title":"SheaMoisture Amla Bond Leave-In","brand":"SheaMoisture","brandKo":"쉬어모이스처","form":"리브인 컨디셔너","productName":"Amla Oil Bond Repair Leave-In Conditioner","segmentId":"bond-tech-core","segmentTitle":"본딩 기술 중심","segmentShort":"본딩기술","segmentColor":"#2e6f77","segmentDescription":"실제로 본딩/내부 구조 강화 기술을 핵심으로 미는 제품","classificationReason":"FiberHance 계열과 아미노산 블렌드가 함께 보여 구조 강화 서사가 비교적 선명합니다.","claimDepth":4,"unitPriceKrwMl":70.60338149400553,"unitPricePer100ml":7060.3,"totalPriceKrw":22967,"volumeMl":325.3,"concept":"컬/코일 타깃 bond repair, moisture heavy, silicone-free","keyIngredients":"Hydroxypropylgluconamide, Hydroxypropylammonium Gluconate, Amla Oil, 아미노산 블렌드","uspIngredients":"HydroPlex Infusion + amla oil + amino blend","silicone":"X","alcohol":"X","ewg":"미확인","performance":"Ulta 4.6점 / 리뷰 810","evidence":["Ulta 현재가 $15.99 / 세일가 $15.19 확인","Ulta 상세에 84% less breakage, 6x stronger, 12x more moisture claim 명시","전성분에 Hydroxypropylgluconamide/Hydroxypropylammonium Gluconate 및 amino acids 확인"],"sources":[{"label":"상품 상세","url":"https://www.ulta.com/p/amla-oil-bond-repair-leave-in-conditioner-pimprod2044530?sku=2620670"}],"isMist":false,"metaTags":[]},{"id":"sauce-beauty","no":"33","title":"Sauce Beauty Bond-Repairing Spray Mask","brand":"Sauce Beauty","brandKo":"소스뷰티","form":"리브인 스프레이 마스크","productName":"Guacamole Whip Bond-Repairing Leave-In Spray Mask","segmentId":"bond-tech-core","segmentTitle":"본딩 기술 중심","segmentShort":"본딩기술","segmentColor":"#2e6f77","segmentDescription":"실제로 본딩/내부 구조 강화 기술을 핵심으로 미는 제품","classificationReason":"bond-repair narrative가 메인이고 keratin/protein 축이 보여 본딩 기술 중심 쪽에 더 가깝습니다.","claimDepth":4,"unitPriceKrwMl":114.96568047337277,"unitPricePer100ml":11496.6,"totalPriceKrw":27201,"volumeMl":236.6,"concept":"bond repair + deep moisturization + salon-foodie branding","keyIngredients":"Oxidized Keratin, Hydrolyzed Quinoa, Avocado Oil, Hydrolyzed Wheat Protein","uspIngredients":"Functional Keratin + Polypeptides + Quinoa Pro","silicone":"X","alcohol":"O","ewg":"미확인","performance":"Ulta 5.0점 / 리뷰 1","evidence":["Ulta 현재가 $17.99 / 8 oz 확인","Ulta 상세에 bond repairing, strengthening, avocado oil, functional keratin, quinoa pro 명시","전성분에 Oxidized Keratin, Hydrolyzed Wheat Protein, Hydrolyzed Quinoa 확인"],"sources":[{"label":"상품 상세","url":"https://www.ulta.com/p/guacamole-whip-bond-repairing-leave-in-spray-mask-mkt77005605?sku=77008889"}],"isMist":true,"metaTags":[]},{"id":"aromatica","no":"34","title":"AROMATICA 리플레니싱 헤어 미스트 자스민&베티버","brand":"AROMATICA","brandKo":"아로마티카","form":"헤어 퍼퓸 미스트","productName":"[내추럴 헤어 퍼퓸] 리플레니싱 헤어 미스트 자스민&베티버","segmentId":"hair-perfume","segmentTitle":"헤어 퍼퓸 포지셔닝","segmentShort":"헤어퍼퓸","segmentColor":"#bf6c8c","segmentDescription":"케어보다 향과 무드가 먼저 읽히는 제품","classificationReason":"이 제품은 케어 성분이 있어도 소비자에게는 향과 무드가 먼저 읽히는 편입니다.","claimDepth":3.2,"unitPriceKrwMl":250,"unitPricePer100ml":25000,"totalPriceKrw":25000,"volumeMl":100,"concept":"실리콘 프리, 내추럴 헤어 퍼퓸, 식물성 오일/콜라겐/단백질","keyIngredients":"스쿠알란, 식물성 오일 4종, 콜라겐, 귀리/콩/쌀/밀/완두 단백질","uspIngredients":"스쿠알란 + 식물성 오일 4종 + 식물성 콜라겐 + 하이드롤라이즈드 단백질","silicone":"X","alcohol":"X","ewg":"미확인","performance":"공식몰 4.9점 / 리뷰 230","evidence":["공식몰 상품명 기준 [내추럴 헤어 퍼퓸] 리플레니싱 헤어 미스트 100ml 확인","공식몰 현재가 25,000원 및 평점 4.9 / 리뷰 230 확인","전성분에 스쿠알란, 콜라겐, 하이드롤라이즈드 단백질군이 확인되고 상품요약에는 실리콘프리 문구가 노출됩니다."],"sources":[{"label":"상품 상세","url":"https://aromatica.co.kr/product/detail.html?cate_no=1030&display_group=1&product_no=2125"}],"isMist":true,"metaTags":[]},{"id":"ratedgreen","no":"35","title":"Rated Green 디탱글링 퍼퓸 헤어 미스트","brand":"Rated Green","brandKo":"레이티드그린","form":"퍼퓸 헤어 미스트","productName":"Detangling Perfume Hair Mist 3 (Peony-Coconut-Sandal)","segmentId":"hair-perfume","segmentTitle":"헤어 퍼퓸 포지셔닝","segmentShort":"헤어퍼퓸","segmentColor":"#bf6c8c","segmentDescription":"케어보다 향과 무드가 먼저 읽히는 제품","classificationReason":"퍼퓸 미스트라는 상품 인지가 먼저라서 이번 단순화에서는 헤어 퍼퓸 버킷으로 묶었습니다.","claimDepth":2.8,"unitPriceKrwMl":209.75,"unitPricePer100ml":20975,"totalPriceKrw":16780,"volumeMl":80,"concept":"실리콘 프리, 파라벤 프리, 약산성, 노워시, 디탱글링 퍼퓸","keyIngredients":"전성분 미확보 (실리콘 프리/약산성 USP 확인)","uspIngredients":"실리콘 프리 + 약산성 + 디탱글링 퍼퓸","silicone":"X","alcohol":"?","ewg":"미확인","performance":"국내 리테일 판매 중 / 글로벌 공식 SKU","evidence":["SSG 상품명 기준 레이티드그린 디탱글링 퍼퓸 헤어 미스트 확인","SSG 현재가 16,780원 / 판매가 24,000원 확인","SSG 특징 표에 실리콘 프리, 파라벤 프리, 약산성, 노워시 문구가 함께 노출됩니다."],"sources":[{"label":"상품 상세","url":"https://www.ssg.com/item/itemView.ssg?itemId=1000565624852"},{"label":"Rated Green","url":"https://www.ratedgreenglobal.com/all/?idx=96"}],"isMist":true,"metaTags":[]},{"id":"tocobo","no":"36","title":"TOCOBO 히트 프루프 헤어 미스트","brand":"TOCOBO","brandKo":"토코보","form":"열보호 헤어 미스트","productName":"히트 프루프 헤어 미스트","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":3.8,"unitPriceKrwMl":260,"unitPricePer100ml":26000,"totalPriceKrw":26000,"volumeMl":100,"concept":"열 차단, 무화과수/베타인/세라마이드/펩타이드, 워터 크림 텍스처","keyIngredients":"무화과수, 베타인, 세라마이드NP, 하이드로제네이티드레시틴, 펩타이드","uspIngredients":"베타인 + 세라마이드NP + 펩타이드 + 실리콘 heat-proof 코팅","silicone":"O","alcohol":"X","ewg":"미확인","performance":"공식몰 5.0점 / 리뷰 8, 카카오 선물하기 선론칭","evidence":["공식몰 상품명/용량 기준 히트 프루프 헤어 미스트 100ml 및 현재가 26,000원 확인","공식몰 리뷰 요약 기준 평점 5.0 / 리뷰 8 확인","전성분에 다이메티콘, 페닐트라이메티콘과 함께 무화과수, 베타인, 세라마이드엔피, 헥사펩타이드-11, 올리고펩타이드-2/3/6이 확인됩니다."],"sources":[{"label":"상품 상세","url":"https://tocobo.co.kr/product/detail.html?cate_no=43&display_group=1&product_no=124"},{"label":"Daum News","url":"https://v.daum.net/v/t66h436bwU?f=p"}],"isMist":true,"metaTags":[]},{"id":"leviemer","no":"37","title":"LEVIEMER Balancing Hair Serum Mist","brand":"LEVIEMER","brandKo":"레비에머","form":"헤어 세럼 미스트","productName":"Balancing Hair Serum Mist","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":3.5,"unitPriceKrwMl":180,"unitPricePer100ml":18000,"totalPriceKrw":18000,"volumeMl":100,"concept":"콜라겐/멀티 히알루론산/단백질을 담은 세럼형 헤어 미스트","keyIngredients":"하이드롤라이즈드콜라겐, 케라틴, 실크, 멀티 히알루론산, 베타인","uspIngredients":"콜라겐 + 멀티 HA + 케라틴/실크 + 실리콘 세럼 베이스","silicone":"O","alcohol":"O","ewg":"미확인","performance":"공식몰 5.0점 / 리뷰 1","evidence":["공식몰 상품명/용량 기준 Balancing Hair Serum Mist 100ml 및 현재가 18,000원 확인","공식몰 평점 5.0 / 리뷰 1 확인","전성분에 하이드롤라이즈드콜라겐, 멀티 히알루론산, 케라틴, 실크와 다이메티콘/아모다이메티콘 베이스가 함께 확인됩니다."],"sources":[{"label":"상품 상세","url":"https://leviemer.com/product/balancing-hair-serum-mist/14/category/1/display/2/"}],"isMist":true,"metaTags":[]},{"id":"ayunche","no":"38","title":"AYUNCHE 인핸싱 실키 레이어드 미스트","brand":"AYUNCHE","brandKo":"아윤채","form":"실키 레이어드 미스트","productName":"인핸싱 실키 레이어드 미스트","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":3.4,"unitPriceKrwMl":275,"unitPricePer100ml":27500,"totalPriceKrw":33000,"volumeMl":120,"concept":"엉킴·정전기·건조함 정돈, 비니거/귀리펩타이드/플라워워터","keyIngredients":"캐모마일꽃수, 비니거, 귀리펩타이드, 동백/라즈베리/크랜베리씨오일","uspIngredients":"캐모마일꽃수 + 비니거 + 귀리펩타이드 + 베리/플라워 오일","silicone":"X","alcohol":"O","ewg":"미확인","performance":"아모레몰 4.4점 / 리뷰 5","evidence":["아모레몰 상품명/용량 기준 인핸싱 실키 레이어드 미스트 120ml 및 현재가 33,000원 확인","아모레몰 평점 4.4 / 리뷰 5 확인","전성분에 변성알코올, 캐모마일꽃수, 비니거, 귀리펩타이드, 동백/라즈베리/크랜베리씨오일이 함께 확인됩니다."],"sources":[{"label":"상품 상세","url":"https://www.amoremall.com/kr/ko/product/detail?onlineProdCode=765001000140&onlineProdSn=69233"},{"label":"Newswire","url":"https://press.mtime.co.kr/newsRead.php?no=1029105"}],"isMist":true,"metaTags":["살롱 프로페셔널"]},{"id":"thesaem","no":"39","title":"THE SAEM 실크 헤어 리페어 앰플 미스트","brand":"THE SAEM","brandKo":"더샘","form":"2층상 앰플 미스트","productName":"실크 헤어 리페어 앰플 미스트","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":3.6,"unitPriceKrwMl":60,"unitPricePer100ml":6000,"totalPriceKrw":12000,"volumeMl":200,"concept":"멀티 히알루론산·단백질·오일, 2층상 앰플 미스트","keyIngredients":"멀티 히알루론산, 실크아미노산, 귀리/콩/옥수수 단백질, 병풀","uspIngredients":"멀티 HA + 단백질 복합 + 오일/실리콘 2층상","silicone":"O","alcohol":"X","ewg":"미확인","performance":"공식몰 5.0점 / 리뷰 1","evidence":["더샘 공식몰 현재가 12,000원 / 200ml 확인","공식몰 평점 5.0 / 리뷰 1 확인","전성분에 소듐하이알루로네이트, 하이알루로닉애씨드, 하이드롤라이즈드하이알루로닉애씨드, 실크아미노산, 다수 단백질이 함께 확인됩니다."],"sources":[{"label":"상품 상세","url":"https://thesaem.com/product/%EC%8B%A4%ED%81%AC-%ED%97%A4%EC%96%B4-%EB%A6%AC%ED%8E%98%EC%96%B4-%EC%95%B0%ED%94%8C-%EB%AF%B8%EC%8A%A4%ED%8A%B8/154/category/104/display/1/"}],"isMist":true,"metaTags":[]},{"id":"rikera","no":"40","title":"ReKera 헤어 미스트 200ml","brand":"ReKera","brandKo":"리케라","form":"열보호 헤어 미스트","productName":"리케라 헤어 미스트","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":3.7,"unitPriceKrwMl":210,"unitPricePer100ml":21000,"totalPriceKrw":42000,"volumeMl":200,"concept":"케라틴·세라마이드·단백질 클리닉, 살롱 열보호 미스트","keyIngredients":"케라틴, 세라마이드, 단백질 클리닉","uspIngredients":"케라틴 + 세라마이드 + 살롱 단백질 클리닉","silicone":"?","alcohol":"?","ewg":"미확인","performance":"헤어일번지 리뷰 2 / 사용후기 3","evidence":["헤어일번지 상품명에 케라틴세라마이드·살롱단백질클리닉 문구가 함께 노출됩니다.","현재가 42,000원 / 200ml 확인","리테일 페이지에 리뷰 2 / 사용후기 3 노출을 확인했습니다."],"sources":[{"label":"상품 상세","url":"https://www.hairst1.com/shop/item.php?it_id=1777533644"}],"isMist":true,"metaTags":[]},{"id":"kundal-collagen","no":"41","title":"KUNDAL 콜라겐 데미지 케어 헤어 미스트","brand":"KUNDAL","brandKo":"쿤달","form":"2in1 헤어 미스트","productName":"콜라겐 데미지 케어 헤어 미스트","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":3.9,"unitPriceKrwMl":37.5,"unitPricePer100ml":3750,"totalPriceKrw":3000,"volumeMl":80,"concept":"콜라겐·케라틴·세라마이드·멀티 히알루론산, 2in1 수분+오일","keyIngredients":"하이드롤라이즈드콜라겐, 케라틴, 세라마이드NP, 멀티 히알루론산, 판테놀","uspIngredients":"콜라겐 + 케라틴 + 세라마이드NP + 멀티 HA","silicone":"O","alcohol":"O","ewg":"미확인","performance":"다이소몰 4.7점 / 리뷰 793","evidence":["다이소몰 현재가 3,000원 / 80ml 확인","다이소몰 평점 4.7 / 리뷰 793 확인","전성분과 상품 설명에 하이드롤라이즈드콜라겐, 케라틴, 세라마이드NP, 멀티 히알루론산, 판테놀이 함께 확인됩니다."],"sources":[{"label":"상품 상세","url":"https://www.daisomall.co.kr/pd/pdr/SCR_PDR_0001?pdNo=1060209&infl_path=naver_ep"}],"isMist":true,"metaTags":[]},{"id":"bifidolab","no":"42","title":"BIFIDOLAB 프로클리닉 올인원 골든 레인 헤어 미스트","brand":"BIFIDOLAB","brandKo":"비피도랩","form":"올인원 헤어 미스트","productName":"프로클리닉 올인원 골든 레인 헤어 미스트","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":3.8,"unitPriceKrwMl":null,"unitPricePer100ml":null,"totalPriceKrw":0,"volumeMl":150,"concept":"비피다·판테놀·소듐하이알루로네이트·폴리펩타이드","keyIngredients":"비피다발효용해물, 판테놀, 소듐하이알루로네이트, 독자 폴리펩타이드","uspIngredients":"비피다 발효용해물 + 판테놀 + 히알루론산 + 폴리펩타이드","silicone":"?","alcohol":"?","ewg":"미확인","performance":"자사몰 리뷰 0 / 현재가 미표기","evidence":["공식몰 상품명/용량 기준 150ml 확인","공식 페이지에 비피다발효용해물, 판테놀, 소듐하이알루로네이트, 독자 폴리펩타이드 소구가 함께 노출됩니다.","현재 페이지에서는 판매가가 직접 노출되지 않아 추정으로 메우지 않았습니다."],"sources":[{"label":"상품 상세","url":"https://bifidolab.com/ko/shop/item.php?it_id=1631175606"}],"isMist":true,"metaTags":[]},{"id":"sw19-3pm","no":"43","title":"SW19 3pm 헤어 퍼퓸 미스트","brand":"SW19","brandKo":"에스더블유19","form":"헤어 퍼퓸 미스트","productName":"3pm 헤어 퍼퓸 미스트","segmentId":"hair-perfume","segmentTitle":"헤어 퍼퓸 포지셔닝","segmentShort":"헤어퍼퓸","segmentColor":"#bf6c8c","segmentDescription":"케어보다 향과 무드가 먼저 읽히는 제품","classificationReason":"이 제품은 케어 성분이 있어도 소비자에게는 향과 무드가 먼저 읽히는 편입니다.","claimDepth":2.6,"unitPriceKrwMl":546.7,"unitPricePer100ml":54670,"totalPriceKrw":41000,"volumeMl":75,"concept":"니치 향 중심, 귀리/대두 유래 성분, 소이 프로틴 포인트","keyIngredients":"Avena Sativa Meal Extract, Glycine Max Seed Extract, Hydrolyzed Soy Protein","uspIngredients":"니치 퍼퓸 + 귀리/대두 추출물 + Hydrolyzed Soy Protein","silicone":"?","alcohol":"?","ewg":"미확인","performance":"공식몰 5.0점 / 리뷰 6","evidence":["공식몰 현재가 41,000원 / 75ml 확인","공식몰 평점 5.0 / 리뷰 6 확인","공식 페이지 성분 스니펫에 귀리/대두 추출물과 Hydrolyzed Soy Protein이 함께 확인됩니다."],"sources":[{"label":"상품 상세","url":"https://sw19official.com/product/3pm-%ED%97%A4%EC%96%B4-%ED%8D%BC%ED%93%B8-%EB%AF%B8%EC%8A%A4%ED%8A%B8-75ml/157/"}],"isMist":true,"metaTags":[]},{"id":"sw19-midnight","no":"44","title":"SW19 Midnight 헤어 퍼퓸 미스트","brand":"SW19","brandKo":"에스더블유19","form":"헤어 퍼퓸 미스트","productName":"Midnight 헤어 퍼퓸 미스트","segmentId":"hair-perfume","segmentTitle":"헤어 퍼퓸 포지셔닝","segmentShort":"헤어퍼퓸","segmentColor":"#bf6c8c","segmentDescription":"케어보다 향과 무드가 먼저 읽히는 제품","classificationReason":"이 제품은 케어 성분이 있어도 소비자에게는 향과 무드가 먼저 읽히는 편입니다.","claimDepth":2.6,"unitPriceKrwMl":546.7,"unitPricePer100ml":54670,"totalPriceKrw":41000,"volumeMl":75,"concept":"니치 향 중심, 귀리/대두 유래 성분, 소이 프로틴 포인트","keyIngredients":"Avena Sativa Meal Extract, Glycine Max Seed Extract, Hydrolyzed Soy Protein","uspIngredients":"니치 퍼퓸 + 귀리/대두 추출물 + Hydrolyzed Soy Protein","silicone":"?","alcohol":"?","ewg":"미확인","performance":"공식몰 5.0점 / 리뷰 9","evidence":["공식몰 현재가 41,000원 / 75ml 확인","공식몰 평점 5.0 / 리뷰 9 확인","공식 페이지 성분 스니펫에 귀리/대두 추출물과 Hydrolyzed Soy Protein이 함께 확인됩니다."],"sources":[{"label":"상품 상세","url":"https://sw19official.com/product/midnight-hair-parfum-mist-75ml/158/"}],"isMist":true,"metaTags":[]},{"id":"white-sunday","no":"45","title":"White Sunday 노세범 퍼퓸 헤어미스트","brand":"White Sunday","brandKo":"화이트선데이","form":"퍼퓸 헤어 미스트","productName":"노세범 퍼퓸 헤어미스트","segmentId":"hair-perfume","segmentTitle":"헤어 퍼퓸 포지셔닝","segmentShort":"헤어퍼퓸","segmentColor":"#bf6c8c","segmentDescription":"케어보다 향과 무드가 먼저 읽히는 제품","classificationReason":"이 제품은 케어 성분이 있어도 소비자에게는 향과 무드가 먼저 읽히는 편입니다.","claimDepth":2.1,"unitPriceKrwMl":179,"unitPricePer100ml":17900,"totalPriceKrw":17900,"volumeMl":100,"concept":"정수리 유분 케어, 보송함, 퍼퓸 리프레시","keyIngredients":"전성분 미확보 (노세범/퍼퓸 포지션 확인)","uspIngredients":"유분 케어 + 퍼퓸 리프레시","silicone":"?","alcohol":"?","ewg":"미확인","performance":"자사몰 판매중 / 현재가 17,900원 확인","evidence":["바이썸몰 페이지에 현재가 17,900원 / 소비자가 25,000원 확인","상품명 기준 노세범 퍼퓸 헤어미스트 100ml 확인","정수리 유분·보송함·퍼퓸 리프레시 문구가 함께 노출됩니다."],"sources":[{"label":"상품 상세","url":"https://bysome.imweb.me/shop_view/1169"}],"isMist":true,"metaTags":[]},{"id":"bellista","no":"46","title":"Bellista 콜라겐 퍼퓸 헤어 미스트","brand":"Bellista","brandKo":"벨리스타","form":"퍼퓸 헤어 미스트","productName":"콜라겐 퍼퓸 헤어 미스트","segmentId":"hair-perfume","segmentTitle":"헤어 퍼퓸 포지셔닝","segmentShort":"헤어퍼퓸","segmentColor":"#bf6c8c","segmentDescription":"케어보다 향과 무드가 먼저 읽히는 제품","classificationReason":"이 제품은 케어 성분이 있어도 소비자에게는 향과 무드가 먼저 읽히는 편입니다.","claimDepth":3.1,"unitPriceKrwMl":110,"unitPricePer100ml":11000,"totalPriceKrw":22000,"volumeMl":200,"concept":"콜라겐·단백질·열보호·정전기방지, 퍼퓸형 케어 미스트","keyIngredients":"콜라겐, 단백질, 보습/열보호/정전기방지 키워드","uspIngredients":"콜라겐 + 단백질 + 열보호 퍼퓸","silicone":"?","alcohol":"?","ewg":"미확인","performance":"공식몰 4.3점 / 리뷰 6","evidence":["공식몰 현재가 22,000원 / 소비자가 30,000원 확인","공식몰 평점 4.3 / 리뷰 6 확인","공식 키워드에 콜라겐미스트, 단백질미스트, 열보호미스트, 정전기방지가 함께 노출됩니다."],"sources":[{"label":"상품 상세","url":"https://bellista.co.kr/product/%EB%B2%A8%EB%A6%AC%EC%8A%A4%ED%83%80-%EC%BD%9C%EB%9D%BC%EA%B2%90-%ED%8D%BC%ED%93%B8-%ED%97%A4%EC%96%B4-%EB%AF%B8%EC%8A%A4%ED%8A%B8-200ml/43/"}],"isMist":true,"metaTags":[]},{"id":"doterra","no":"47","title":"doTERRA 딥 루트 헤어 미스트 세럼","brand":"doTERRA","brandKo":"도테라","form":"헤어 미스트 세럼","productName":"딥 루트 헤어 미스트 세럼","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":3.4,"unitPriceKrwMl":375,"unitPricePer100ml":37500,"totalPriceKrw":45000,"volumeMl":120,"concept":"탈모 증상 완화 기능성, 카페인, 99% 자연유래, 두피 세럼","keyIngredients":"카페인, 페퍼민트/티트리/로즈마리/라벤더 에센셜오일","uspIngredients":"카페인 + 에센셜오일 + 99% 자연유래 두피 세럼","silicone":"?","alcohol":"?","ewg":"미확인","performance":"공식 KR 페이지 운영 / 기능성 두피 세럼 포지션","evidence":["도테라 KR 페이지에서 120ml 및 45,000원 확인","카페인이 탈모 증상 완화 기능성 성분으로 소개됩니다.","페퍼민트, 티트리, 로즈마리 등 에센셜오일과 99% 자연유래 문구가 함께 노출됩니다."],"sources":[{"label":"상품 상세","url":"https://www.doterra.com/KR/ko_KR/p/deep-root-hair-mist-serum"}],"isMist":false,"metaTags":[]},{"id":"silktherapy-bond","no":"48","title":"Silk Therapy 본드 앤 리페어 본딩 앰플","brand":"Silk Therapy","brandKo":"실크테라피","form":"본딩 앰플 스프레이","productName":"본드 앤 리페어 본딩 앰플","segmentId":"bond-tech-core","segmentTitle":"본딩 기술 중심","segmentShort":"본딩기술","segmentColor":"#2e6f77","segmentDescription":"실제로 본딩/내부 구조 강화 기술을 핵심으로 미는 제품","classificationReason":"전문 살롱 본딩 기술과 단백질 침투 서사가 메인이라 본딩 기술 중심으로 두었습니다.","claimDepth":4.4,"unitPriceKrwMl":300,"unitPricePer100ml":30000,"totalPriceKrw":30000,"volumeMl":100,"concept":"헤어 본딩 기술, 단백질 침투, 전문 살롱 케어","keyIngredients":"실크단백질/영양 성분 81%, 본딩 기술","uspIngredients":"단백질 침투 + 손상 큐티클 결합 서사","silicone":"?","alcohol":"?","ewg":"미확인","performance":"LG 보도자료 기준 국내 본딩 인접 레퍼런스","evidence":["LG 보도자료에 본딩 앰플 100ml / 권장소비자가격 3만원 명시","헤어 본딩 기술 적용과 단백질 성분이 모발 속까지 침투한다는 설명이 확인됩니다.","젖은 모발에 분사해 쓰는 스프레이형 살롱 케어 포맷입니다."],"sources":[{"label":"상품 상세","url":"https://www.lg.co.kr/media/release/25929"}],"isMist":true,"metaTags":[]},{"id":"pinkghost","no":"50","title":"Pinkghost 헤어 씨위드 미스트","brand":"Pinkghost","brandKo":"핑크고스트","form":"헤어 미스트","productName":"헤어 씨위드 미스트","segmentId":"hair-perfume","segmentTitle":"헤어 퍼퓸 포지셔닝","segmentShort":"헤어퍼퓸","segmentColor":"#bf6c8c","segmentDescription":"케어보다 향과 무드가 먼저 읽히는 제품","classificationReason":"이 제품은 케어 성분이 있어도 소비자에게는 향과 무드가 먼저 읽히는 편입니다.","claimDepth":2.4,"unitPriceKrwMl":770,"unitPricePer100ml":77000,"totalPriceKrw":38500,"volumeMl":50,"concept":"씨위드·오가닉 감성, 소용량 프리미엄 미스트","keyIngredients":"씨위드/오가닉 콘셉트","uspIngredients":"seaweed + organic story","silicone":"?","alcohol":"?","ewg":"미확인","performance":"다나와 리뷰 3","evidence":["다나와 기준 50ml / 38,500원 비교가 확인","상품명에 Hair Seaweed Mist가 직접 노출됩니다.","씨위드/오가닉 감성으로 소용량 고가 포지션을 형성하는 사례입니다."],"sources":[{"label":"상품 상세","url":"https://prod.danawa.com/info/?pcode=66108257"}],"isMist":true,"metaTags":[]},{"id":"narca","no":"51","title":"NARCA 크리미 베일 헤어 미스트","brand":"NARCA","brandKo":"나르카","form":"헤어 미스트","productName":"크리미 베일 헤어 미스트","segmentId":"hair-perfume","segmentTitle":"헤어 퍼퓸 포지셔닝","segmentShort":"헤어퍼퓸","segmentColor":"#bf6c8c","segmentDescription":"케어보다 향과 무드가 먼저 읽히는 제품","classificationReason":"이 제품은 케어 성분이 있어도 소비자에게는 향과 무드가 먼저 읽히는 편입니다.","claimDepth":2.4,"unitPriceKrwMl":216,"unitPricePer100ml":21600,"totalPriceKrw":17280,"volumeMl":80,"concept":"허니&페어 향, 크리미 밀크케어 감성, 퍼퓸형 미스트","keyIngredients":"허니&페어 향, 밀크케어/퍼퓸 미스트 포지션","uspIngredients":"달콤한 향 레이어링 + 부드러운 밀크케어 감성","silicone":"?","alcohol":"?","ewg":"미확인","performance":"시코르 평점 5.0 / 리뷰 17","evidence":["시코르 상품 페이지에 80ml / 19,200원 / 17,280원 노출","시코르 모바일 헤어미스트 카테고리에도 동일 SKU가 반복 노출됩니다.","허니&페어 향과 크리미 밀크케어 무드가 전면에 드러납니다."],"sources":[{"label":"상품 상세","url":"https://chicor.com/goods/0000000116339"},{"label":"CHICOR mobile","url":"https://m.chicor.com/goods?dscatNo=147"}],"isMist":true,"metaTags":[]},{"id":"dalba-hair-serum","no":"52","title":"d'Alba 프로페셔널 리페어링 헤어 퍼퓸 세럼","brand":"d'Alba","brandKo":"달바","form":"헤어 퍼퓸 세럼","productName":"프로페셔널 리페어링 헤어 퍼퓸 세럼","segmentId":"hair-perfume","segmentTitle":"헤어 퍼퓸 포지셔닝","segmentShort":"헤어퍼퓸","segmentColor":"#bf6c8c","segmentDescription":"케어보다 향과 무드가 먼저 읽히는 제품","classificationReason":"제품명이 hair perfume serum이고 향 인지가 강해 헤어 퍼퓸 포지셔닝으로 분류했습니다.","claimDepth":3.2,"unitPriceKrwMl":420,"unitPricePer100ml":42000,"totalPriceKrw":21000,"volumeMl":50,"concept":"건조모발 케어, 로제프리지아향, 비건 헤어세럼","keyIngredients":"비건 헤어세럼, 로제프리지아향, 건조모발 케어","uspIngredients":"향 중심 세럼 + 부드러움/윤기 스타일링","silicone":"?","alcohol":"?","ewg":"미확인","performance":"공식몰 운영, 올영/컬리 동시 노출","evidence":["공식몰 상품 페이지에 KRW21,000 현재가 확인","제품 페이지에 50ml, 100ml 구성이 함께 노출됩니다.","공식 설명에 건조모발 케어, 로제프리지아향, 비건 헤어세럼 포지션이 확인됩니다."],"sources":[{"label":"상품 상세","url":"https://dalba.co.kr/goods/goods_view.php?goodsNo=1000000080"},{"label":"Olive Young","url":"https://ma.oliveyoung.co.kr/m/G.do?goodsNo=A000000190275"}],"isMist":false,"metaTags":[]},{"id":"growus-nowash","no":"53","title":"Growus 데미지 테라피 노워시 트리트먼트 EX","brand":"Growus","brandKo":"그로우어스","form":"노워시 트리트먼트","productName":"데미지 테라피 노워시 트리트먼트 EX","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":3.4,"unitPriceKrwMl":83.2,"unitPricePer100ml":8320,"totalPriceKrw":20800,"volumeMl":250,"concept":"열손상 보호, 극손상모 데일리 리페어, 노워시","keyIngredients":"열보호 리페어, 윤기 케어, 노워시 포맷","uspIngredients":"Thermal Protectant + 노워시 데미지 케어","silicone":"?","alcohol":"?","ewg":"미확인","performance":"공식몰 reviewRate 4.4 / 옵션 판매수 1,369 노출","evidence":["공식 페이지 옵션 JSON에 250ml 단품 buyPrice 20,800 확인","공식 상품 설명 스니펫에 열 손상 보호와 윤기 케어가 명시됩니다.","공식몰 메타/카테고리에서 대표 damage therapy 노워시 SKU로 반복 노출됩니다."],"sources":[{"label":"상품 상세","url":"https://m.growus.kr/products/108131871"},{"label":"Growus categories","url":"https://m.growus.kr/categories/465315"}],"isMist":false,"metaTags":[]},{"id":"jennyhouse-quickdry","no":"54","title":"Jennyhouse 히팅케어 퀵 드라이 헤어 미스트","brand":"Jennyhouse","brandKo":"제니하우스","form":"헤어 미스트","productName":"히팅케어 퀵 드라이 헤어 미스트","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":3.5,"unitPriceKrwMl":79.5,"unitPricePer100ml":7950,"totalPriceKrw":15900,"volumeMl":200,"concept":"69% 건조 시간 단축과 열 손상 보호를 파는 기능형 미스트","keyIngredients":"퀵 드라이, 열 손상 보호","uspIngredients":"quick-dry + heat care + 데일리 사용 편의","silicone":"?","alcohol":"?","ewg":"미확인","performance":"공식몰/올영 동시 노출","evidence":["공식몰에 소비자가 19,000원 / 판매가 15,900원 확인","공식 메타 설명에 69% 건조 시간 단축과 열 손상 보호가 명시됩니다.","올리브영에서도 동일 200ml SKU가 별도 판매돼, 실제 소비자에게는 살롱 전용품보다 열보호·엉킴·스타일링 기능 세그로 읽힐 가능성이 큽니다."],"sources":[{"label":"상품 상세","url":"https://jennyhouse.com/product/%EC%A0%9C%EB%8B%88%ED%95%98%EC%9A%B0%EC%8A%A4-%ED%9E%88%ED%8C%85%EC%BC%80%EC%96%B4-%ED%80%B5-%EB%93%9C%EB%9D%BC%EC%9D%B4-%ED%97%A4%EC%96%B4-%EB%AF%B8%EC%8A%A4%ED%8A%B8-200ml/16/"},{"label":"Olive Young","url":"https://m.oliveyoung.co.kr/m/G.do?goodsNo=A000000164957"}],"isMist":true,"metaTags":["살롱/헤어드레서"]},{"id":"sennok-babyblusher","no":"55","title":"SENNOK 헤어 퍼퓸 미스트 베이비 블러셔","brand":"SENNOK","brandKo":"센녹","form":"헤어 퍼퓸 미스트","productName":"헤어 퍼퓸 미스트 베이비 블러셔","segmentId":"hair-perfume","segmentTitle":"헤어 퍼퓸 포지셔닝","segmentShort":"헤어퍼퓸","segmentColor":"#bf6c8c","segmentDescription":"케어보다 향과 무드가 먼저 읽히는 제품","classificationReason":"이 제품은 케어 성분이 있어도 소비자에게는 향과 무드가 먼저 읽히는 편입니다.","claimDepth":2.9,"unitPriceKrwMl":400,"unitPricePer100ml":40000,"totalPriceKrw":24000,"volumeMl":60,"concept":"2중 레이어링 보습, 파우더리 플로럴 머스크, 오일 미스트","keyIngredients":"아줄렌, 식물성 단백질, 7가지 히알루론산","uspIngredients":"2중 오일/수분층 + 퍼퓸 레이어링","silicone":"?","alcohol":"?","ewg":"미확인","performance":"공식몰 24,000원 확인","evidence":["공식몰 상품 페이지에 60ml / 24,000원 확인","상세 설명에 2중 레이어링 케어, 오일 코팅, 미세 분사 제형이 명시됩니다.","아줄렌, 식물성 단백질, 7가지 히알루론산 성분 설명이 확인됩니다."],"sources":[{"label":"상품 상세","url":"https://sennok.co.kr/product/sennok-%EC%84%BC%EB%85%B9-%ED%97%A4%EC%96%B4-%ED%8D%BC%ED%93%B8-%EB%AF%B8%EC%8A%A4%ED%8A%B8-%EB%B2%A0%EC%9D%B4%EB%B9%84-%EB%B8%94%EB%9F%AC%EC%85%94-202-fl-oz-60ml/83/"}],"isMist":true,"metaTags":[]},{"id":"daleaf-hairpack-mist","no":"56","title":"Dalief 글램 헤어팩 인 미스트","brand":"Dalief","brandKo":"달리프","form":"헤어팩 인 미스트","productName":"글램 노워시 헤어팩 인 미스트","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":3.3,"unitPriceKrwMl":63,"unitPricePer100ml":6300,"totalPriceKrw":12600,"volumeMl":200,"concept":"노워시 크림미스트, 열보호, 손상모 케어","keyIngredients":"노워시 크림미스트, 손상모/열보호 포지션","uspIngredients":"헤어팩 + 미스트 결합 포맷","silicone":"?","alcohol":"?","ewg":"미확인","performance":"다나와 최저가 12,600원, 쿠팡 리뷰 6,789 노출","evidence":["공식 모바일 PDP 검색 스니펫에 200ml / 정가 25,000원 / 판매가 12,600원 확인","다나와 1개 상품 페이지에서도 최저가 12,600원이 현재 노출됩니다.","쿠팡 검색 결과 기준 리뷰 6,789건으로 대중 노출이 큰 SKU입니다."],"sources":[{"label":"상품 상세","url":"https://prod.danawa.com/info/?pcode=21684242"},{"label":"Dalief mobile PDP","url":"https://skin-mobile1.daleaf.cafe24.com/product/%EB%8B%AC%EB%A6%AC%ED%94%84-%EA%B8%80%EB%9E%A8-%ED%97%A4%EC%96%B4%ED%8C%A9-%EC%9D%B8-%EB%AF%B8%EC%8A%A4%ED%8A%B8-200ml/149/display/1/?page_4=2"}],"isMist":true,"metaTags":[]},{"id":"kerasys-caviar","no":"57","title":"Kerasys 오드리 헵번 캐비어 2in1 오일 미스트","brand":"Kerasys","brandKo":"케라시스","form":"오일 미스트","productName":"오드리 헵번 캐비어 2in1 오일 미스트","segmentId":"hair-perfume","segmentTitle":"헤어 퍼퓸 포지셔닝","segmentShort":"헤어퍼퓸","segmentColor":"#bf6c8c","segmentDescription":"케어보다 향과 무드가 먼저 읽히는 제품","classificationReason":"이 제품은 케어 성분이 있어도 소비자에게는 향과 무드가 먼저 읽히는 편입니다.","claimDepth":2.5,"unitPriceKrwMl":135,"unitPricePer100ml":13500,"totalPriceKrw":13500,"volumeMl":100,"concept":"캐비어 영양 오일층 + 수분층, 매스 퍼퓸형 미스트","keyIngredients":"캐비어 추출물, 2in1 오일/워터층","uspIngredients":"캐비어 오일층 + 수분층 + 헤어 프래그런스","silicone":"?","alcohol":"?","ewg":"미확인","performance":"글로우픽 리뷰 1, 다나와 스펙 페이지 확인","evidence":["글로우픽 제품 페이지에 100ml / 13,500원 노출","다나와 요약정보에 캐비어 영양 오일층과 수분층의 2층 구조가 명시됩니다.","매끄러움 개선과 헤어 프래그런스 효과를 함께 파는 레거시 매스 미스트 사례입니다."],"sources":[{"label":"상품 상세","url":"https://www.glowpick.com/products/85262"},{"label":"다나와","url":"https://prod.danawa.com/info/?pcode=4026742"}],"isMist":true,"metaTags":[]},{"id":"silktherapy-silkmist","no":"58","title":"Silk Therapy 실크 미스트","brand":"Silk Therapy","brandKo":"실크테라피","form":"헤어 미스트","productName":"실크 미스트 200ml","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":3,"unitPriceKrwMl":97.5,"unitPricePer100ml":9750,"totalPriceKrw":19500,"volumeMl":200,"concept":"실크 단백질 기반 데일리 노워시 스무딩 미스트","keyIngredients":"실크 단백질, 데일리 리브인 스무딩","uspIngredients":"silk leave-in + 분사형 데일리 케어","silicone":"?","alcohol":"?","ewg":"미확인","performance":"LG생활건강 가족몰 4.8점 / 159건 리뷰","evidence":["LG생활건강 가족몰에 실크 미스트 200ml / 19,500원 확인","동일 페이지에 평점 4.8, 리뷰 159건이 노출됩니다.","현재 보드의 본딩 앰플과 달리, 요청하신 실사용 미스트 SKU를 직접 반영한 항목입니다."],"sources":[{"label":"상품 상세","url":"https://www.lgcaremall.com/product/detail/S10019108"}],"isMist":true,"metaTags":[]},{"id":"chahong-keratin-mist","no":"59","title":"ChaHong 컨센트레이트 케라틴 미스트","brand":"ChaHong","brandKo":"차홍","form":"헤어 미스트","productName":"컨센트레이트 케라틴 미스트","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":3.6,"unitPriceKrwMl":260,"unitPricePer100ml":26000,"totalPriceKrw":39000,"volumeMl":150,"concept":"손상모 케어 중심의 국내 살롱 오리진 케라틴 미스트","keyIngredients":"연꽃꽃추출물, 하이드롤라이즈드케라틴, 5가지 식물성 단백질, 5가지 식물성 오일","uspIngredients":"keratin mist + 식물성 단백질/오일 + 손상모 컨디셔닝","silicone":"?","alcohol":"?","ewg":"미확인","performance":"공식 PDP 평점 5.0 / 리뷰 2건 노출","evidence":["차홍 공식 PDP에 컨센트레이트 케라틴 미스트 150ml / 39,000원 노출","공식 설명에 연꽃꽃추출물, 하이드롤라이즈드 케라틴, 5가지 식물성 단백질·오일이 명시됩니다.","국내 유명 헤어살롱 차홍 브랜드가 직접 운영하는 공식몰 기준 reference입니다."],"sources":[{"label":"상품 상세","url":"https://www.chahong.com/product/%EC%BB%A8%EC%84%BC%ED%8A%B8%EB%A0%88%EC%9D%B4%ED%8A%B8-%EC%BC%80%EB%9D%BC%ED%8B%B4-%EB%AF%B8%EC%8A%A4%ED%8A%B8/337/"},{"label":"ChaHong mist category","url":"https://www.chahong.com/category/%EB%AF%B8%EC%8A%A4%ED%8A%B8/173/"}],"isMist":true,"metaTags":["살롱/헤어드레서"]},{"id":"oribe-runthrough","no":"60","title":"Oribe Run-Through Detangling Primer","brand":"Oribe","brandKo":"오리베","form":"헤어 프라이머","productName":"Run-Through Detangling Primer","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":3.4,"unitPriceKrwMl":337,"unitPricePer100ml":33700,"totalPriceKrw":58968,"volumeMl":175,"concept":"detangling, heat protect, styling prep를 한 번에 파는 살롱 프라이머","keyIngredients":"공식 PDP는 성분보다 detangling / cuticle seal / heat protect 효익 중심","uspIngredients":"detangle + cuticle seal + heat protect + styling prep","silicone":"?","alcohol":"?","ewg":"미확인","performance":"공식 PDP 현재가/효익 확인","evidence":["Oribe 공식 PDP에 Run-Through Detangling Primer $39, size 5.9 oz가 노출됩니다.","공식 설명에 detangling, heat protection, styling prep, cuticle sealing 효익이 함께 명시됩니다.","hairstylist Oribe Canales의 살롱 헤리티지를 가진 미국 프리미엄 브랜드 reference입니다."],"sources":[{"label":"상품 상세","url":"https://www.oribe.com/products/run-through-detangling-primer"},{"label":"Who What Wear","url":"https://www.whowhatwear.com/best-hair-styling-products"}],"isMist":false,"metaTags":["살롱/헤어드레서","프리미엄 살롱 비교군"]},{"id":"bumble-hio-primer","no":"61","title":"Bumble and bumble Hairdresser's Invisible Oil Primer","brand":"Bumble and bumble","brandKo":"범블 앤 범블","form":"헤어 프라이머","productName":"Hairdresser's Invisible Oil Heat/UV Protective Primer","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":3.7,"unitPriceKrwMl":204.8,"unitPricePer100ml":20480,"totalPriceKrw":51408,"volumeMl":251,"concept":"leave-in conditioner + primer + heat/UV protect를 묶은 미국 살롱 프라이머","keyIngredients":"6-oil blend, hydrolyzed vegetable/wheat protein, sodium hyaluronate, UV filters","uspIngredients":"6-oil blend + 단백질 + hyaluronate + UV filters","silicone":"O","alcohol":"X","ewg":"미확인","performance":"공식 설명상 86% hydration / frizz 50% reduction consumer test","evidence":["Bumble and bumble 공식 site data에 8.5 fl oz / $34와 current product image가 노출됩니다.","공식 설명에 heat tools up to 450F / UV filters / leave-in conditioner / frizz reduction이 함께 명시됩니다.","뉴욕 salon origin 브랜드가 오랫동안 밀어온 prep primer 문법 reference입니다."],"sources":[{"label":"상품 상세","url":"https://www.bumbleandbumble.com/product/19055/31247/style/pre-stylers/hairdressers-invisible-oil-heatuv-protective-primer-for-dry-frizzy-hair"},{"label":"Allure review","url":"https://www.allure.com/review/bumble-bumble-hairdressers-invisible-oil-primer-review"}],"isMist":false,"metaTags":["살롱/헤어드레서","프리미엄 살롱 비교군"]},{"id":"ouai-leave-in","no":"62","title":"OUAI Leave In Conditioner","brand":"OUAI","brandKo":"오아이","form":"리브인 컨디셔너 미스트","productName":"Leave In Conditioner","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":3.5,"unitPriceKrwMl":348.1,"unitPricePer100ml":34810,"totalPriceKrw":48384,"volumeMl":139,"concept":"anti-frizz, detangle, breakage protect를 묶은 hairstylist-founded leave-in mist","keyIngredients":"panthenol, vitamin E, amino acids, tamarind seed extract","uspIngredients":"anti-frizz + detangle + heat protect + breakage care","silicone":"?","alcohol":"?","ewg":"미확인","performance":"공식 PDP 현재가 확인 / 다수 2차 source에서 hero leave-in으로 반복 노출","evidence":["OUAI 공식 product page data에 Full Size 4.7 fl oz / $32가 노출됩니다.","공식 meta description에 anti-frizz, heat protection, breakage protect, seamless detangling이 함께 명시됩니다.","celebrity hairstylist Jen Atkin이 만든 브랜드의 대표 leave-in spray reference입니다."],"sources":[{"label":"상품 상세","url":"https://theouai.com/products/leave-in-conditioner"},{"label":"Allure review","url":"https://www.allure.com/review/ouai-leave-in-conditioner"}],"isMist":true,"metaTags":["살롱/헤어드레서","프리미엄 살롱 비교군"]},{"id":"phyto-heat-protection","no":"63","title":"PHYTO 230°C Heat Protection Spray Anti-Breakage","brand":"PHYTO","brandKo":"피토","form":"히트 프로텍션 스프레이","productName":"230°C Heat Protection Spray Anti-Breakage","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":4,"unitPriceKrwMl":302.4,"unitPricePer100ml":30240,"totalPriceKrw":45360,"volumeMl":150,"concept":"230C heat protect, anti-breakage, keratin repair를 묶은 약국/더마 인접 레퍼런스","keyIngredients":"Keratin A18+, black oat, lupin, white mallow","uspIngredients":"biomimetic keratin + amino acids + botanical shine complex","silicone":"X","alcohol":"?","ewg":"미확인","performance":"공식 230C/446F heat protect, 8.6% hair temperature reduction, 87% beauty survey","evidence":["PHYTO 공식 PDP에 $30 현재가와 230C/446F heat protection, anti-breakage 효익이 함께 노출됩니다.","공식 설명에 Keratin A18+, black oat/lupin 유래 botanical keratin, white mallow 소구가 직접 명시됩니다.","미국 공식 PDP에는 용량 텍스트가 전면 노출되지 않아, 보드의 ml당 단가 계산은 통용 pack spec 150ml 기준 환산값입니다."],"sources":[{"label":"상품 상세","url":"https://us.phyto.com/products/heat-protection-spray-anti-breakage"}],"isMist":true,"metaTags":["약국/더마 포지션"]},{"id":"itsa10-miracle-leave-in","no":"64","title":"It's a 10 Miracle Leave-In Product","brand":"It's a 10 Haircare","brandKo":"잇츠어텐","form":"리브인 컨디셔너 미스트","productName":"Miracle Leave-In Product","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":3.4,"unitPriceKrwMl":269.1,"unitPricePer100ml":26910,"totalPriceKrw":31752,"volumeMl":118,"concept":"detangle, thermal protect, UV/color protect를 한 번에 파는 멀티베네핏 leave-in","keyIngredients":"sunflower seed extract, green tea leaf extract, silk amino acids, aloe vera, panthenol","uspIngredients":"식물 추출물 + silk amino acids + 보습 성분 기반 멀티베네핏","silicone":"?","alcohol":"?","ewg":"미확인","performance":"공식 10 benefits / thermal protector / award-winning leave-in copy 확인","evidence":["It's a 10 공식 PDP의 4 oz variant에 $21 현재가와 대표 이미지가 노출됩니다.","공식 '10 Benefits' 아코디언에 thermal protector, detangle, UV protection, protein replacement, split-end prevention이 직접 정리돼 있습니다.","공식 ingredient summary에 sunflower seed extract, green tea leaf extract, silk amino acids, aloe vera, panthenol이 소개됩니다."],"sources":[{"label":"상품 상세","url":"https://itsa10haircare.com/products/miracle-leave-in-product"}],"isMist":true,"metaTags":[]},{"id":"unite-7seconds","no":"65","title":"UNITE Hair 7SECONDS Detangler","brand":"UNITE","brandKo":"유나이트","form":"리브인 디탱글러 미스트","productName":"7SECONDS Detangler","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":3.8,"unitPriceKrwMl":272.3,"unitPricePer100ml":27230,"totalPriceKrw":64260,"volumeMl":236,"concept":"protein-based detangle, heat/UV protect, color-lock를 묶은 salon detangler","keyIngredients":"official copy: protein-based formula","uspIngredients":"protein-based detangler + cuticle seal + thermal/UV protect","silicone":"?","alcohol":"?","ewg":"미확인","performance":"공식 benefits와 Q&A 기준 450F heat protection 확인","evidence":["UNITE 공식 PDP의 8oz/236ml variant에 $42.5 현재가와 full-size product image가 노출됩니다.","공식 설명에 protein-based formula, cuticle sealing, heat and UV protection, color lock, extension-safe 포인트가 함께 적혀 있습니다.","공식 Q&A에는 heat tools up to 450 degrees 보호 문구가 직접 노출됩니다."],"sources":[{"label":"상품 상세","url":"https://unitehair.com/products/7seconds-detangler"}],"isMist":true,"metaTags":["살롱 프로페셔널"]},{"id":"randco-sun-catcher","no":"66","title":"R+Co SUN CATCHER Power C Boosting Leave-In Conditioner","brand":"R+Co","brandKo":"알플러스코","form":"리브인 컨디셔너","productName":"SUN CATCHER Power C Boosting Leave-In Conditioner","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":3.5,"unitPriceKrwMl":390.2,"unitPricePer100ml":39020,"totalPriceKrw":48384,"volumeMl":124,"concept":"soften, seal, detangle, anti-frizz를 묶은 vitamin C leave-in","keyIngredients":"official naming/copy: vitamin C leave-in","uspIngredients":"soften + seal + detangle + anti-frizz + styling base","silicone":"?","alcohol":"?","ewg":"미확인","performance":"공식 current price, damp/dry use, layered styling copy 확인","evidence":["R+Co 공식 PDP의 4.2 OZ variant에 $32 현재가와 canonical URL이 확인됩니다.","공식 설명에 soften, seal, detangle, fight frizz, damp or dry use, styling products beneath layering 포인트가 직접 명시됩니다.","공식 sitemap과 PDP 이미지 title이 SUN CATCHER Power C Boosting Leave-In Conditioner로 일치합니다."],"sources":[{"label":"상품 상세","url":"https://www.randco.com/products/sun-catcher-vitamin-c-leave-in-conditioner"}],"isMist":false,"metaTags":["살롱 프로페셔널"]},{"id":"davines-oi-milk","no":"67","title":"Davines OI All In One Milk","brand":"Davines","brandKo":"다비네스","form":"헤어 밀크/리브인","productName":"OI All In One Milk","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":3.6,"unitPriceKrwMl":515.2,"unitPricePer100ml":51520,"totalPriceKrw":69552,"volumeMl":135,"concept":"frizz control, detangle, heat protect, shine를 묶은 multi-functional hair milk","keyIngredients":"Roucou oil, provitamin B5, functional amino complex","uspIngredients":"oil + provitamin B5 + amino complex 기반 컨디셔닝/열보호","silicone":"?","alcohol":"?","ewg":"미확인","performance":"공식 bestseller copy / 446F heat protection / 135ml $46 확인","evidence":["Davines 공식 PDP의 135 ml variant에 $46 현재가와 대표 이미지가 노출됩니다.","공식 설명에 frizz control, detangling, heat protection up to 446F, shine/softness, fine-to-medium hair 적합성이 명시됩니다.","공식 copy에 Roucou oil, provitamin B5, functional amino complex가 직접 소개됩니다."],"sources":[{"label":"상품 상세","url":"https://us.davines.com/products/oi-all-in-one-milk"}],"isMist":false,"metaTags":["살롱 프로페셔널","프리미엄 살롱 비교군"]},{"id":"briogeo-rosarco-milk","no":"68","title":"Briogeo Farewell Frizz Rosarco Milk Leave-In Conditioning Spray","brand":"Briogeo","brandKo":"브리오지오","form":"리브인 컨디셔닝 스프레이","productName":"Farewell Frizz Rosarco Milk Leave-In Conditioning Spray","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":3.2,"unitPriceKrwMl":257.1,"unitPricePer100ml":25710,"totalPriceKrw":37800,"volumeMl":147,"concept":"ultra-light leave-in, frizz tame, detangle, soft conditioning","keyIngredients":"rosehip oil, argan oil, coconut oil","uspIngredients":"rosehip + argan + coconut oil 기반 lightweight leave-in","silicone":"?","alcohol":"?","ewg":"미확인","performance":"공식 Yotpo 4.49/5 · 리뷰 1,040 노출","evidence":["Briogeo 공식 PDP에 현재 one-time price $25와 대표 이미지가 노출됩니다.","공식 size selector에서 full size 5 oz와 travel 1.75 oz 구성이 함께 확인됩니다.","공식 설명에 rosehip, argan, coconut oils 기반 ultra lightweight leave-in conditioner와 frizz taming 포인트가 직접 명시됩니다."],"sources":[{"label":"상품 상세","url":"https://www.briogeohair.com/products/farewell-frizz-rosarco-milk-leave-in-conditioning-spray"}],"isMist":true,"metaTags":[]},{"id":"moroccanoil-perfect-defense","no":"69","title":"Moroccanoil Perfect Defense Heat Protectant","brand":"Moroccanoil","brandKo":"모로칸오일","form":"히트 프로텍트 스프레이","productName":"Perfect Defense Heat Protectant","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":3.9,"unitPriceKrwMl":273.4,"unitPricePer100ml":27340,"totalPriceKrw":48384,"volumeMl":177,"concept":"weightless dry aerosol, heat protection up to 450F/230C, argan-oil care","keyIngredients":"argan oil, vitamins, dry aerosol heat protect system","uspIngredients":"dry aerosol + argan oil + heat shield + salon finishing","silicone":"?","alcohol":"?","ewg":"미확인","performance":"공식 current price/variant와 450F/230C 보호 문구 확인","evidence":["Moroccanoil 공식 PDP의 full variant에 Full - 6 fl oz / $32와 대표 이미지가 노출됩니다.","공식 설명에 weightless dry aerosol, argan oil and vitamin-fueled formula, heat styling up to 450°F/230°C 보호가 직접 명시됩니다.","travel size $15 variant도 함께 보여, full-size와 mini를 병행 판매하는 salon benchmark임을 확인할 수 있습니다."],"sources":[{"label":"상품 상세","url":"https://www.moroccanoil.com/products/perfect-defense"}],"isMist":true,"metaTags":["살롱 프로페셔널","프리미엄 살롱 비교군"]},{"id":"rahua-hydration-detangler","no":"70","title":"Rahua Hydration Detangler + UV Barrier","brand":"Rahua","brandKo":"라후아","form":"디탱글러/UV 배리어 미스트","productName":"Hydration Detangler + UV Barrier","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":3.4,"unitPriceKrwMl":283.5,"unitPricePer100ml":28350,"totalPriceKrw":54432,"volumeMl":192,"concept":"detangle, hydrate, UV barrier, lightweight daily protect mist","keyIngredients":"hydration detangler, UV barrier, lightweight conditioning","uspIngredients":"detangling + hydration + sun protection + lightweight leave-in","silicone":"?","alcohol":"?","ewg":"미확인","performance":"공식 variant/price 확인, 리뷰 요약 100개 기반 detangling·softness·UV topics 노출","evidence":["Rahua 공식 PDP의 full variant에 6.5 oz / $36가 직접 노출됩니다.","공식 meta description에 detangle, hydrate, protect와 essential sun protection 포인트가 명시됩니다.","공식 리뷰 요약에서 detangling, softness, hydration, UV protection 토픽이 반복적으로 집계됩니다."],"sources":[{"label":"상품 상세","url":"https://rahua.com/products/hydration-detangler-uv-barrier"}],"isMist":true,"metaTags":[]},{"id":"drunkelephant-wild-marula","no":"71","title":"Drunk Elephant Wild Marula Tangle Spray","brand":"Drunk Elephant","brandKo":"드렁크엘리펀트","form":"탱글 스프레이 / 리브인 미스트","productName":"Wild Marula Tangle Spray","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":3.6,"unitPriceKrwMl":306.2,"unitPricePer100ml":30620,"totalPriceKrw":36742,"volumeMl":120,"concept":"silicone-free leave-in, detangle, smooth, heat protect, strengthen","keyIngredients":"marula-based nourishing leave-in, silicone-free heat protect","uspIngredients":"silicone-free leave-in + detangle + heat protect + smoothing","silicone":"X","alcohol":"?","ewg":"미확인","performance":"공식 PDP 4.5/5 · 리뷰 242 노출","evidence":["Drunk Elephant 공식 PDP data에 120 ml / 4 fl oz, standard price $27, current sale price $24.30이 함께 노출됩니다.","공식 meta description에 silicone-free leave-in mist, detangle, smooth, strengthen, heat protect 포인트가 직접 정리됩니다.","공식 review block에 4.5/5 평점과 리뷰 242건이 노출돼 초기 검증력도 확인됩니다."],"sources":[{"label":"상품 상세","url":"https://www.drunkelephant.com/collections/stylings/wild-marula-tangle-spray-812343031319.html"}],"isMist":true,"metaTags":[]},{"id":"drybar-hot-toddy","no":"72","title":"Drybar Hot Toddy Heat Protectant Mist","brand":"Drybar","brandKo":"드라이바","form":"히트 프로텍트 미스트","productName":"Hot Toddy Heat Protectant Mist","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":3.8,"unitPriceKrwMl":344.6,"unitPricePer100ml":34460,"totalPriceKrw":46872,"volumeMl":136,"concept":"dry-hair heat protect, blowout prep, frizz-free finish를 파는 blowout-origin mist","keyIngredients":"marula oil, fire tulip extract, heat-activated rice protein, UV protectors","uspIngredients":"marula oil + fire tulip extract + rice protein + UV shield","silicone":"O","alcohol":"O","ewg":"미확인","performance":"Target listing 4.1/5 · 리뷰 581, full-size related listing $31 노출","evidence":["Drybar About page는 founder Alli Webb를 longtime professional stylist로 소개하고, 브랜드 핵심을 blowouts에 둔다고 설명합니다.","Target product page에는 lightweight spray, dry-hair use, up to 450°F/232°C heat protection 문구가 직접 노출됩니다.","같은 Target/Drybar current listing 흐름에서 full-size Hot Toddy는 4.6 oz / $31로 함께 노출돼 ml당 단가 비교를 위해 136ml 환산값을 사용했습니다."],"sources":[{"label":"상품 상세","url":"https://www.target.com/p/drybar-hot-toddy-heat-protectant-mist-ulta-beauty/-/A-83458028"},{"label":"Drybar About","url":"https://www.drybar.com/about-us"}],"isMist":true,"metaTags":["살롱/헤어드레서","프리미엄 살롱 비교군"]},{"id":"klorane-chamomile-spray","no":"73","title":"Klorane Spray with Chamomile","brand":"Klorane","brandKo":"클로란","form":"브라이트닝 리브인 스프레이","productName":"Spray with Chamomile","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":2.4,"unitPriceKrwMl":317.5,"unitPricePer100ml":31750,"totalPriceKrw":31752,"volumeMl":100,"concept":"블론드 브라이트닝, detangling, shine를 약국 헤어케어 문법으로 푸는 leave-in spray","keyIngredients":"Chamomile, natural brightening complex","uspIngredients":"chamomile brightening + detangle + shine","silicone":"?","alcohol":"?","ewg":"미확인","performance":"공식 제품 효익 중심 확인 · 현재가 스니펫 $21 확인","evidence":["Klorane Canada 공식 PDP에 Chamomile leave-in spray 100ml와 brighten + detangle + shine 효익이 직접 노출됩니다.","공식 설명은 natural lightener/high tolerance/family use 톤을 유지해 더마·약국 신뢰형에 가깝습니다.","Klarna US 가격 비교 스니펫 기준 현재 최저가가 $21.00로 노출됩니다."],"sources":[{"label":"상품 상세","url":"https://www.klorane.com/ca-en/p/spray-with-chamomile-3282770149333-69716462"},{"label":"Klarna","url":"https://www.klarna.com/us/shopping/pl/cl507/3205649878/Hair-Products/Klorane-Brightening-Spray-with-Chamomile/"}],"isMist":true,"metaTags":["약국/더마 포지션"]},{"id":"rene-furterer-naturia","no":"74","title":"René Furterer Naturia Organic Express Detangling Spray","brand":"René Furterer","brandKo":"르네 휘테르","form":"리브인 디탱글링 스프레이","productName":"Naturia Organic Express Detangling Spray","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":2.5,"unitPriceKrwMl":122.1,"unitPricePer100ml":12210,"totalPriceKrw":24422,"volumeMl":200,"concept":"whole-family detangling, shine, silicone-free를 약국 헤어케어 문법으로 푸는 organic spray","keyIngredients":"organic lavender floral water, organic castor oil","uspIngredients":"organic detangle + shine + whole-family gentle care","silicone":"X","alcohol":"?","ewg":"미확인","performance":"공식 silicone-free / dermatologically tested 포인트 확인","evidence":["René Furterer 공식 PDP에 organic express detangling spray, shine, all hair types, silicone-free 포인트가 직접 노출됩니다.","공식 설명은 daily use / whole family / dermatologically and pediatrically tested 톤을 유지합니다.","Easypara 스니펫 기준 현재 판매가가 €13.90로 노출됩니다."],"sources":[{"label":"상품 상세","url":"https://www.renefurterer.com/en-ca/p/naturia-express-detangling-spray-organic-detangling-spray-3282770152784-69716462"},{"label":"Easypara","url":"https://www.easypara.com/organic-express-detangling-spray-200ml-naturia-rene-furterer.html"}],"isMist":true,"metaTags":["약국/더마 포지션"]},{"id":"rene-furterer-thermal","no":"75","title":"René Furterer Thermal Protecting Spray","brand":"René Furterer","brandKo":"르네 휘테르","form":"열보호 스프레이","productName":"Thermal Protecting Spray","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":3.3,"unitPriceKrwMl":198.9,"unitPricePer100ml":19890,"totalPriceKrw":29834,"volumeMl":150,"concept":"220°C heat protection, anti-frizz, silicone-free를 더마/파머시 무드로 푸는 style spray","keyIngredients":"jojoba extract, panthenol, niacinamide","uspIngredients":"220°C heat shield + anti-frizz + jojoba hydration","silicone":"X","alcohol":"?","ewg":"미확인","performance":"공식 heat up to 220°C / 430°F 및 silicone-free 확인","evidence":["René Furterer 공식 PDP에 Thermal Protecting Spray, heat damage up to 430°F/220°C, silicone-free 포인트가 직접 노출됩니다.","공식 설명에 jojoba extract와 invisible finish, humidity/frizz control 효익이 함께 보입니다.","Easypara 스니펫 기준 현재 판매가가 €16.98로 노출됩니다."],"sources":[{"label":"상품 상세","url":"https://www.renefurterer.com/en-ca/p/thermal-protecting-spray-3282770203578-69716462"},{"label":"Easypara","url":"https://www.easypara.com/thermal-protecting-spray-150ml-style-rene-furterer.html"}],"isMist":true,"metaTags":["약국/더마 포지션"]},{"id":"nuxe-hair-sun-oil","no":"76","title":"NUXE Sun Moisturising Protective Milky Oil for Hair","brand":"NUXE","brandKo":"눅스","form":"UV 헤어 프로텍트 오일 미스트","productName":"Sun Moisturising Protective Milky Oil for Hair","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":2.7,"unitPriceKrwMl":423.8,"unitPricePer100ml":42380,"totalPriceKrw":42378,"volumeMl":100,"concept":"UV, salt, chlorine protection을 프렌치 파머시 감성으로 푸는 bi-phase hair oil mist","keyIngredients":"panthenol, organic coconut oil, jojoba oil, UV filters","uspIngredients":"UV/salt/chlorine protection + moisture + shine","silicone":"?","alcohol":"?","ewg":"미확인","performance":"공식 self-eval 100% nourished, 95% shinier 노출","evidence":["NUXE UK 공식 PDP에 100ml / £21 현재가와 UV rays, salt, chlorine protection 포인트가 직접 노출됩니다.","공식 설명은 two-phase milky oil, moisture, shine, colour protection 문법을 함께 씁니다.","NUXE 자체가 French pharmacy expertise를 전면에 두는 브랜드라 더마/약국 신뢰형으로 읽기 좋습니다."],"sources":[{"label":"상품 상세","url":"https://uk.nuxe.com/products/moisturising-protective-milky-oil-for-hair"},{"label":"Boots","url":"https://www.boots.com/nuxe-sun-moisturising-protective-milky-hair-oil-100ml-10331967"}],"isMist":true,"metaTags":["약국/더마 포지션"]},{"id":"korres-red-vine-hair-sun","no":"77","title":"KORRES Red Vine Hair Sun Protection","brand":"KORRES","brandKo":"코레스","form":"헤어 선 프로텍션 스프레이","productName":"Red Vine Hair Sun Protection","segmentId":"nonbond-functional","segmentTitle":"비본딩 기능형 케어","segmentShort":"일반기능","segmentColor":"#4f78b8","segmentDescription":"본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품","classificationReason":"이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.","claimDepth":2.8,"unitPriceKrwMl":221.4,"unitPricePer100ml":22140,"totalPriceKrw":33207,"volumeMl":150,"concept":"UV light, colour 유지, panthenol/aloe를 apothecary origin 헤어 선케어로 푸는 spray","keyIngredients":"Aloe, provitamin B5, red grape, helianthus extract, UV filters","uspIngredients":"UV protect + aloe/panthenol hydration + colour care","silicone":"?","alcohol":"?","ewg":"미확인","performance":"공식 150ml / €18.90 및 natural-origin content 노출","evidence":["KORRES 공식 PDP에 Red Vine Hair Sun Protection 150ml / €18.90 현재가가 직접 노출됩니다.","공식 설명에 Aloe, provitamin B5, Red Grape, Helianthus extract와 UV light protection이 함께 명시됩니다.","KORRES는 oldest Greek homeopathic pharmacy/apothecary origin 서사를 갖고 있어 오리진 신뢰형 세그 해석에 적합합니다."],"sources":[{"label":"상품 상세","url":"https://global.korres.com/products/red-vine-hair-sun-protection"},{"label":"KORRES About","url":"https://www.korres.com/pages/the-pharmacy"}],"isMist":true,"metaTags":["약국/더마 포지션","아포테커리 오리진"]}];
+
+    const state = {
+      activeSegmentId: null,
+      selectedProductId: null
+    };
+
+    const legend = document.getElementById("legend");
+    const drawer = document.getElementById("drawer");
+    const segmentById = Object.fromEntries(segments.map((segment) => [segment.id, segment]));
+
+    function formatInt(value) {
+      return new Intl.NumberFormat("ko-KR").format(Math.round(value));
+    }
+
+    function formatKrw(value) {
+      if (!Number.isFinite(value)) return "미확인";
+      return formatInt(value) + "원";
+    }
+
+    function formatUnit(value) {
+      if (!Number.isFinite(value)) return "미확인";
+      return formatInt(value) + "원";
+    }
+
+    function renderLegend() {
+      legend.innerHTML = segments.map((segment) => {
+        const count = products.filter((product) => product.segmentId === segment.id).length;
+        return `
+          <button type="button" class="legend-chip" data-segment-id="${segment.id}">
+            <span class="legend-dot" style="background:${segment.color}"></span>
+            <span class="legend-copy">
+              <strong>${segment.title} · ${count}개</strong>
+              <span>${segment.description}</span>
+            </span>
+          </button>
+        `;
+      }).join("");
+    }
+
+    function updateLegendState() {
+      document.querySelectorAll(".legend-chip").forEach((button) => {
+        const isActive = button.dataset.segmentId === state.activeSegmentId;
+        const isDimmed = !!state.activeSegmentId && !isActive;
+        button.classList.toggle("is-active", isActive);
+        button.classList.toggle("is-dimmed", isDimmed);
+      });
+    }
+
+    function getPointPriority(product) {
+      if (product.id === state.selectedProductId) return 3;
+      if (state.activeSegmentId && product.segmentId === state.activeSegmentId) return 2;
+      if (state.activeSegmentId && product.segmentId !== state.activeSegmentId) return 0;
+      return 1;
+    }
+
+    function spreadPointLayouts(layouts, bounds, minDistance) {
+      const points = layouts.map((layout, index) => ({
+        ...layout,
+        x: layout.originX,
+        y: layout.originY,
+        seed: index + 1
+      }));
+
+      for (let iteration = 0; iteration < 80; iteration += 1) {
+        let moved = false;
+
+        for (const point of points) {
+          point.x += (point.originX - point.x) * 0.04;
+          point.y += (point.originY - point.y) * 0.04;
+        }
+
+        for (let i = 0; i < points.length; i += 1) {
+          for (let j = i + 1; j < points.length; j += 1) {
+            const a = points[i];
+            const b = points[j];
+            let dx = b.x - a.x;
+            let dy = b.y - a.y;
+            let distance = Math.hypot(dx, dy);
+
+            if (distance < 0.001) {
+              const angle = ((a.seed * 37 + b.seed * 19) % 360) * Math.PI / 180;
+              dx = Math.cos(angle) * 0.01;
+              dy = Math.sin(angle) * 0.01;
+              distance = 0.01;
+            }
+
+            if (distance >= minDistance) continue;
+
+            const overlap = (minDistance - distance) * 0.5;
+            const ux = dx / distance;
+            const uy = dy / distance;
+            a.x -= ux * overlap;
+            a.y -= uy * overlap;
+            b.x += ux * overlap;
+            b.y += uy * overlap;
+            moved = true;
+          }
+        }
+
+        for (const point of points) {
+          point.x = Math.min(bounds.maxX, Math.max(bounds.minX, point.x));
+          point.y = Math.min(bounds.maxY, Math.max(bounds.minY, point.y));
+        }
+
+        if (!moved) break;
+      }
+
+      return points;
+    }
+
+    function buildPointMarkup(pointLayout) {
+      const { product, x, y, originX, originY } = pointLayout;
+      const segment = segmentById[product.segmentId];
+      const isActive = product.id === state.selectedProductId || (!!state.activeSegmentId && product.segmentId === state.activeSegmentId);
+      const isDimmed = !!state.activeSegmentId && product.segmentId !== state.activeSegmentId;
+      const fill = product.isMist ? segment.color : "white";
+      const stroke = product.isMist ? "white" : segment.color;
+      const textColor = product.isMist ? "white" : segment.color;
+      const isShifted = Math.hypot(x - originX, y - originY) > 4;
+      return `
+        <g
+          class="map-point ${isActive ? "is-active" : ""} ${isDimmed ? "dimmed" : ""}"
+          data-product-id="${product.id}"
+          data-segment-id="${product.segmentId}"
+          role="button"
+          tabindex="0"
+          aria-label="${product.no}번 ${product.title}"
+        >
+          ${isShifted ? `<line class="point-link" x1="${originX}" y1="${originY}" x2="${x}" y2="${y}" stroke="${segment.color}" stroke-opacity="0.22" stroke-width="1.2"></line>` : ""}
+          <circle
+            class="point-hit"
+            cx="${x}"
+            cy="${y}"
+            r="18"
+            fill="rgba(0,0,0,0.001)"
+            stroke="transparent"
+            stroke-width="0"
+          ></circle>
+          <circle
+            class="point-marker"
+            cx="${x}"
+            cy="${y}"
+            r="11"
+            fill="${fill}"
+            fill-opacity="${product.isMist ? "0.94" : "1"}"
+            stroke="${stroke}"
+            stroke-width="${product.isMist ? "3" : "2.6"}"
+            stroke-dasharray="${product.isMist ? "" : "3.6 3.6"}"
+          ></circle>
+          <text class="point-label" x="${x}" y="${y + 4}" text-anchor="middle" font-size="10" font-weight="800" fill="${textColor}">${product.no}</text>
+        </g>
+      `;
+    }
+
+    function buildPointsMarkup(layouts) {
+      return layouts
+        .slice()
+        .sort((a, b) => getPointPriority(a.product) - getPointPriority(b.product))
+        .map((layout) => buildPointMarkup(layout))
+        .join("");
+    }
+
+    function renderClaimMap() {
+      const svg = document.getElementById("map-claim");
+      const width = 1380;
+      const height = 620;
+      const pad = { left: 110, right: 70, top: 48, bottom: 88 };
+      const plotWidth = width - pad.left - pad.right;
+      const plotHeight = height - pad.top - pad.bottom;
+      const minX = 0;
+      const maxX = 2100;
+      const minY = 1;
+      const maxY = 5;
+      const xTicks = [0, 80, 150, 300, 600, 1000, 1500, 2000];
+      const yTicks = [
+        { value: 1, label: "향 중심" },
+        { value: 2, label: "수분/엉킴" },
+        { value: 3, label: "리페어/열보호" },
+        { value: 4, label: "bond adjacent" },
+        { value: 5, label: "direct bond" }
+      ];
+      const xPos = (value) => pad.left + ((value - minX) / (maxX - minX)) * plotWidth;
+      const yPos = (value) => pad.top + (1 - (value - minY) / (maxY - minY)) * plotHeight;
+      const xGrid = xTicks.map((tick) => `
+        <g>
+          <line x1="${xPos(tick)}" y1="${pad.top}" x2="${xPos(tick)}" y2="${pad.top + plotHeight}" stroke="rgba(43,36,29,0.08)" stroke-dasharray="5 7"></line>
+          <text x="${xPos(tick)}" y="${pad.top + plotHeight + 28}" text-anchor="middle" font-size="11" fill="#7c7267">${tick}</text>
+        </g>
+      `).join("");
+      const yGrid = yTicks.map((tick) => `
+        <g>
+          <line x1="${pad.left}" y1="${yPos(tick.value)}" x2="${pad.left + plotWidth}" y2="${yPos(tick.value)}" stroke="rgba(43,36,29,0.08)" stroke-dasharray="5 7"></line>
+          <text x="${pad.left - 16}" y="${yPos(tick.value) + 4}" text-anchor="end" font-size="11" fill="#7c7267">${tick.label}</text>
+        </g>
+      `).join("");
+      const layouts = spreadPointLayouts(
+        products.map((product) => ({
+          product,
+          originX: xPos(product.unitPriceKrwMl),
+          originY: yPos(product.claimDepth)
+        })),
+        {
+          minX: pad.left + 12,
+          maxX: pad.left + plotWidth - 12,
+          minY: pad.top + 12,
+          maxY: pad.top + plotHeight - 12
+        },
+        24
+      );
+      const dots = buildPointsMarkup(layouts);
+
+      svg.innerHTML = `
+        <rect x="0" y="0" width="${width}" height="${height}" fill="transparent"></rect>
+        ${xGrid}
+        ${yGrid}
+        <line x1="${pad.left}" y1="${pad.top + plotHeight}" x2="${pad.left + plotWidth}" y2="${pad.top + plotHeight}" stroke="#2b241d" stroke-width="1.5"></line>
+        <line x1="${pad.left}" y1="${pad.top}" x2="${pad.left}" y2="${pad.top + plotHeight}" stroke="#2b241d" stroke-width="1.5"></line>
+        <text x="${pad.left + plotWidth / 2}" y="${height - 26}" text-anchor="middle" font-size="13" font-weight="800" fill="#2b241d">ml당 단가 (KRW/ml)</text>
+        <text x="28" y="${pad.top + plotHeight / 2}" text-anchor="middle" transform="rotate(-90 28 ${pad.top + plotHeight / 2})" font-size="13" font-weight="800" fill="#2b241d">본딩/리페어 claim 강도</text>
+        ${dots}
+      `;
+    }
+
+    function renderDistributionMap({ svgId, xLabel, yLabel, yAccessor, yMinFloor, yStepResolver }) {
+      const svg = document.getElementById(svgId);
+      const width = 680;
+      const height = 420;
+      const pad = { left: 84, right: 36, top: 30, bottom: 72 };
+      const plotWidth = width - pad.left - pad.right;
+      const plotHeight = height - pad.top - pad.bottom;
+      const maxVolume = Math.max(200, ...products.map((product) => product.volumeMl));
+      const xStep = maxVolume <= 160 ? 25 : maxVolume <= 260 ? 50 : maxVolume <= 520 ? 100 : 200;
+      const xMax = Math.ceil(maxVolume / xStep) * xStep;
+      const yValues = products.map((product) => yAccessor(product)).filter((value) => Number.isFinite(value));
+      const maxY = Math.max(yMinFloor, ...yValues);
+      const yStep = yStepResolver(maxY);
+      const yMax = Math.ceil(maxY / yStep) * yStep;
+      const xTicks = Array.from({ length: Math.floor(xMax / xStep) + 1 }, (_, index) => index * xStep);
+      const yTicks = Array.from({ length: Math.floor(yMax / yStep) + 1 }, (_, index) => index * yStep);
+      const xPos = (value) => pad.left + (value / Math.max(1, xMax)) * plotWidth;
+      const yPos = (value) => pad.top + (1 - (value / Math.max(1, yMax))) * plotHeight;
+      const xGrid = xTicks.map((tick) => `
+        <g>
+          <line x1="${xPos(tick)}" y1="${pad.top}" x2="${xPos(tick)}" y2="${pad.top + plotHeight}" stroke="rgba(43,36,29,0.08)" stroke-dasharray="5 7"></line>
+          <text x="${xPos(tick)}" y="${pad.top + plotHeight + 24}" text-anchor="middle" font-size="10.5" fill="#7c7267">${tick}</text>
+        </g>
+      `).join("");
+      const yGrid = yTicks.map((tick) => `
+        <g>
+          <line x1="${pad.left}" y1="${yPos(tick)}" x2="${pad.left + plotWidth}" y2="${yPos(tick)}" stroke="rgba(43,36,29,0.08)" stroke-dasharray="5 7"></line>
+          <text x="${pad.left - 12}" y="${yPos(tick) + 4}" text-anchor="end" font-size="10.5" fill="#7c7267">${tick === 0 ? "0" : formatInt(tick)}</text>
+        </g>
+      `).join("");
+      const layouts = spreadPointLayouts(
+        products.map((product) => ({
+          product,
+          originX: xPos(product.volumeMl),
+          originY: yPos(yAccessor(product))
+        })),
+        {
+          minX: pad.left + 12,
+          maxX: pad.left + plotWidth - 12,
+          minY: pad.top + 12,
+          maxY: pad.top + plotHeight - 12
+        },
+        22
+      );
+      const dots = buildPointsMarkup(layouts);
+
+      svg.innerHTML = `
+        <rect x="0" y="0" width="${width}" height="${height}" fill="transparent"></rect>
+        ${xGrid}
+        ${yGrid}
+        <line x1="${pad.left}" y1="${pad.top + plotHeight}" x2="${pad.left + plotWidth}" y2="${pad.top + plotHeight}" stroke="#2b241d" stroke-width="1.5"></line>
+        <line x1="${pad.left}" y1="${pad.top}" x2="${pad.left}" y2="${pad.top + plotHeight}" stroke="#2b241d" stroke-width="1.5"></line>
+        <text x="${pad.left + plotWidth / 2}" y="${height - 24}" text-anchor="middle" font-size="12.5" font-weight="800" fill="#2b241d">${xLabel}</text>
+        <text x="24" y="${pad.top + plotHeight / 2}" text-anchor="middle" transform="rotate(-90 24 ${pad.top + plotHeight / 2})" font-size="12.5" font-weight="800" fill="#2b241d">${yLabel}</text>
+        ${dots}
+      `;
+    }
+
+    function renderDrawer() {
+      const product = products.find((item) => item.id === state.selectedProductId);
+      if (!product) {
+        drawer.innerHTML = '<div class="drawer-empty">맵에서 점 하나를 눌러 주세요. 이 패널에서 세그 분류 이유와 가격/성분/링크를 바로 확인할 수 있습니다.</div>';
+        return;
+      }
+      const segment = segmentById[product.segmentId];
+      const sourceChips = product.sources.map((source) => `<a class="source-chip" href="${source.url}" target="_blank" rel="noreferrer">${source.label}</a>`).join("");
+      const evidenceItems = product.evidence.slice(0, 5).map((line) => `<li>${line}</li>`).join("");
+      const tagMarkup = (product.metaTags || []).slice(0, 4).map((tag) => `<span class="flag-pill">${tag}</span>`).join("");
+
+      drawer.innerHTML = `
+        <div class="drawer-header">
+          <span class="no-pill">${product.no}</span>
+          <span class="segment-pill" style="background:${segment.color}">${segment.title}</span>
+          <span class="flag-pill">${product.isMist ? "mist/spray" : "non-mist reference"}</span>
+          ${tagMarkup}
+        </div>
+        <h3>${product.title}</h3>
+        <p class="drawer-subtitle">${product.brandKo} / ${product.brand} · ${product.form}</p>
+
+        <div class="metric-grid">
+          <div class="metric">
+            <strong>전체 가격</strong>
+            <span>${formatKrw(product.totalPriceKrw)}</span>
+          </div>
+          <div class="metric">
+            <strong>용량</strong>
+            <span>${product.volumeMl}ml</span>
+          </div>
+          <div class="metric">
+            <strong>100ml당 단가</strong>
+            <span>${formatUnit(product.unitPricePer100ml)}원</span>
+          </div>
+          <div class="metric">
+            <strong>claim 강도</strong>
+            <span>${product.claimDepth.toFixed(1)} / 5</span>
+          </div>
+        </div>
+
+        <section class="detail-block">
+          <h4>왜 이 세그인가</h4>
+          <p>${product.classificationReason}</p>
+        </section>
+
+        <section class="detail-block">
+          <h4>핵심 claim</h4>
+          <ul>
+            <li>${product.concept}</li>
+            <li>주요 성분: ${product.keyIngredients}</li>
+            <li>USP 구현 추정: ${product.uspIngredients}</li>
+          </ul>
+        </section>
+
+        <section class="detail-block">
+          <h4>플래그</h4>
+          <ul>
+            <li>실리콘: ${product.silicone}</li>
+            <li>알코올: ${product.alcohol}</li>
+            <li>성과/반응: ${product.performance}</li>
+          </ul>
+        </section>
+
+        <section class="detail-block">
+          <h4>근거 메모</h4>
+          <ul>${evidenceItems || "<li>별도 메모 없음</li>"}</ul>
+        </section>
+
+        <section class="detail-block">
+          <h4>링크</h4>
+          <div class="source-row">${sourceChips}</div>
+        </section>
+      `;
+    }
+
+    function bindMapClicks() {
+      document.querySelectorAll(".map-point").forEach((point) => {
+        point.addEventListener("click", () => {
+          state.selectedProductId = point.dataset.productId;
+          renderAll();
+        });
+      });
+    }
+
+    function renderAll() {
+      renderLegend();
+      renderClaimMap();
+      renderDistributionMap({
+        svgId: "map-unit100",
+        xLabel: "전체 제품 용량 (ml)",
+        yLabel: "100ml당 단가 (KRW)",
+        yAccessor: (product) => product.unitPricePer100ml,
+        yMinFloor: 5000,
+        yStepResolver: (maxY) => {
+          if (maxY <= 20000) return 5000;
+          if (maxY <= 60000) return 10000;
+          if (maxY <= 140000) return 20000;
+          return 40000;
+        }
+      });
+      renderDistributionMap({
+        svgId: "map-total",
+        xLabel: "전체 제품 용량 (ml)",
+        yLabel: "전체 가격 (KRW)",
+        yAccessor: (product) => product.totalPriceKrw,
+        yMinFloor: 20000,
+        yStepResolver: (maxY) => {
+          if (maxY <= 40000) return 10000;
+          if (maxY <= 80000) return 20000;
+          return 40000;
+        }
+      });
+      updateLegendState();
+      renderDrawer();
+      bindMapClicks();
+      bindLegendClicks();
+    }
+
+    function bindLegendClicks() {
+      document.querySelectorAll(".legend-chip").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.activeSegmentId = state.activeSegmentId === button.dataset.segmentId ? null : button.dataset.segmentId;
+          renderAll();
+        });
+      });
+    }
+
+    renderAll();
+  </script>
+</body>
+</html>
