@@ -1137,6 +1137,21 @@
       letter-spacing: -0.02em;
     }
 
+    .drawer-hero-grid {
+      display: grid;
+      grid-template-columns: 168px minmax(0, 1fr);
+      gap: 14px;
+      align-items: start;
+      margin-bottom: 12px;
+    }
+
+    .drawer-hero-media .product-media {
+      margin: 0;
+      height: 168px;
+      padding: 12px;
+      border-radius: 18px;
+    }
+
     .drawer-driver-note {
       margin-top: 10px;
       font-size: 13px;
@@ -1148,6 +1163,10 @@
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 10px;
+    }
+
+    .drawer-grid.tight {
+      margin-top: 0;
     }
 
     .drawer-metric {
@@ -1343,7 +1362,7 @@
       {
         id: "note-how",
         title: "먼저 볼 것",
-        body: "1) 기본 보드 세그는 여전히 `왜 사는가` 기준입니다.\\n2) 다만 포지셔닝맵에서는 `전반적 세그 분류`와 `본딩여부 중심 세그 분류`를 토글해서 볼 수 있습니다.\\n3) 전반적 세그는 구매 이유와 오리진을 함께 본 기본 뷰이고, 본딩여부 중심 세그는 `본딩 카피 vs 실제 포뮬러`를 다시 보는 보조 뷰입니다.\\n4) 그래서 같은 살롱 브랜드라도 전반 세그는 `살롱 오리진`일 수 있고, 본딩여부 세그는 `실리콘 코팅형 본딩`이나 `비본딩 기능형 케어`로 다시 읽힐 수 있습니다.",
+        body: "1) 기본 보드 세그는 여전히 왜 사는가 기준입니다.\\n2) 다만 포지셔닝맵에서는 전반적 세그 분류와 본딩여부 중심 세그 분류를 토글해서 볼 수 있습니다.\\n3) 전반적 세그는 구매 이유와 오리진을 함께 본 기본 뷰이고, 본딩여부 중심 세그는 본딩 카피와 실제 포뮬러의 관계를 다시 보는 보조 뷰입니다.\\n4) 그래서 같은 살롱 브랜드라도 전반 세그는 살롱 오리진일 수 있고, 본딩여부 세그는 실리콘 코팅 본딩이나 비본딩 컨디셔닝으로 다시 읽힐 수 있습니다.",
         footer: "즉 브랜드 출신은 참고하되, 본딩 카피가 실제 포뮬러와 맞는지는 맵의 두 번째 보기에서 별도로 검증합니다.",
         x: 70, y: 120, w: 310, h: 280
       },
@@ -1364,7 +1383,7 @@
       {
         id: "note-thesis",
         title: "현재 가설",
-        body: "쭈드레님이 3-bond 스토리를 제대로 세우면, 메인 경쟁은 여전히 `본딩·구조복구 히어로형`과 `본딩+리브인 확장형`에서 잡는 게 맞습니다.\\n\\n다만 실제 비교구매군은 여기서 끝나지 않고, Olaplex를 보는 소비자가 Moroccanoil · Kérastase · Oribe · AMOS 같은 `살롱 오리진` SKU를 같이 보고, 반대로 PHYTO처럼 `더마/약국 신뢰형`을 별도로 신뢰하는 흐름도 존재합니다.",
+        body: "쭈드레님이 3-bond 스토리를 제대로 세우면, 본딩여부 기준 메인 경쟁은 기술적 본딩과 컨셉적 본딩 사이에서 잡는 게 맞습니다.\\n\\n다만 실제 비교구매군은 여기서 끝나지 않고, Olaplex를 보는 소비자가 Moroccanoil · Kérastase · Oribe · AMOS 같은 살롱 오리진 SKU를 같이 보고, 반대로 PHYTO처럼 더마/약국 신뢰형을 별도로 신뢰하는 흐름도 존재합니다.",
         footer: "즉 살롱 신뢰와 더마 신뢰는 비슷해 보여도 소비자 머릿속에서는 다른 종류의 믿음으로 작동합니다.",
         x: 70, y: 1030, w: 310, h: 250
       },
@@ -1529,26 +1548,26 @@
         productName: "살롱10 펩타이드 리페어 노워시",
         volumeMl: 200,
         priceListDisplay: "24,000원",
-        priceSaleDisplay: "15,900원",
-        priceSaleKrw: 15900,
-        unitPriceKrwMl: 79.5,
+        priceSaleDisplay: "18,900원",
+        priceSaleKrw: 18900,
+        unitPriceKrwMl: 94.5,
         claimDepth: 3.6,
         concept: "펩타이드, 살롱 무드, 특허 본딩 기술",
         manufacturer: "아모레퍼시픽",
-        note: "올영 200ml+70ml 기획가 기준",
+        note: "올영 200ml+70ml 기획 현재가 기준",
         url: "https://www.oliveyoung.co.kr/store/goods/getGoodsDetail.do?goodsNo=A000000254188",
-        keyIngredients: "펩타이드, 에탄올, 실리콘",
-        alcohol: "O",
-        silicone: "O",
-        uspIngredients: "펩타이드 + 실리콘 피막 + 살롱 케어 스토리",
+        keyIngredients: "Maleic Acid, Arginine/Lysine Polypeptide, 소이프로틴, 펩타이드",
+        alcohol: "X",
+        silicone: "X",
+        uspIngredients: "말레익애씨드 + 펩타이드/폴리펩타이드 + 컨디셔닝 베이스",
         ewg: "미확인",
         performance: "Enuri 리뷰 222, 특허 본딩 기술 노출",
         tier: "A",
         memoPlaceholder: "대중가인데 bond wording이 들어오는 교두보",
         evidence: [
-          "Olive Young 현재가 15,900원 확인",
-          "아모레몰/검색 결과에 특허 본딩 기술 노출",
-          "검색 스니펫상 에탄올·사이클로펜타실록산 언급"
+          "Olive Young 브랜드관/검색 결과 기준 현재가 18,900원 확인",
+          "아모레/올영 상품 설명에서 본딩 기술 및 펩타이드 리페어 서사 노출",
+          "확보한 full INCI 기준 Maleic Acid, Arginine/Lysine Polypeptide가 확인되고 실리콘은 확인되지 않습니다."
         ],
         sources: [
           { label: "Olive Young", url: "https://www.oliveyoung.co.kr/store/goods/getGoodsDetail.do?goodsNo=A000000254188" }
@@ -1578,17 +1597,17 @@
         manufacturer: "미확인",
         note: "올영 200ml+50ml 기획가 기준",
         url: "https://www.oliveyoung.co.kr/store/goods/getGoodsDetail.do?goodsNo=A000000227669",
-        keyIngredients: "실리콘, 단백질, 트리실록산",
-        alcohol: "?",
+        keyIngredients: "아모다이메티콘, 하이드롤라이즈드밀단백질, 펩타이드, 세라마이드NP",
+        alcohol: "O",
         silicone: "O",
-        uspIngredients: "Cyclopentasiloxane / Dimethiconol / 단백질",
+        uspIngredients: "아모다이메티콘 + 밀단백질/펩타이드 + 세라마이드NP",
         ewg: "Enuri 57 low / 6 mid / 0 high / 9 unknown",
         performance: "Enuri 리뷰 10, 올영 반복 노출",
         tier: "A",
         memoPlaceholder: "쭈드레님과 메시지 가장 가까운 한국 direct benchmark",
         evidence: [
           "Olive Young 현재가 15,900원 확인",
-          "SSG 스니펫상 Cyclopentasiloxane, Dimethiconol, Trisiloxane 확인",
+          "헤어플러스 공식 전성분 기준 아모다이메티콘, 하이드롤라이즈드밀단백질, 다수 펩타이드, 세라마이드NP와 아이소프로필알코올 확인",
           "Enuri 성분 분포 및 리뷰 수 확인"
         ],
         sources: [
@@ -1660,18 +1679,18 @@
         manufacturer: "미확인",
         note: "올영 브랜드관 현재가 기준",
         url: "https://www.oliveyoung.co.kr/store/goods/getGoodsDetail.do?goodsNo=A000000226518",
-        keyIngredients: "단백질, 판테놀, 해조추출물",
-        alcohol: "?",
-        silicone: "?",
-        uspIngredients: "단백질/판테놀/해조 + 열보호 메시지",
+        keyIngredients: "Dimethicone, Phenyl Trimethicone, 판테놀, 단백질, 세라마이드NP",
+        alcohol: "O",
+        silicone: "O",
+        uspIngredients: "멀티 실리콘 코팅 + 단백질/판테놀 + 200도 열보호",
         ewg: "Enuri 62 low / 9 mid / 0 high / 7 unknown",
         performance: "Enuri 리뷰 2, 올영 브랜드관 베스트 노출",
         tier: "A",
         memoPlaceholder: "본딩보단 결과감 + 열보호에 강점",
         evidence: [
           "Olive Young 현재가 17,000원 확인",
-          "검색 결과상 2층상 단백질 크림 + 수분 앰플 구조 노출",
-          "Enuri 성분 분포 및 리뷰 수 확인"
+          "DODOSKIN 노출 전성분 기준 Dimethicone, Phenyl Trimethicone, Denatured Alcohol, Hydrolyzed Vegetable/Soy/Wheat Protein, Ceramide NP 확인",
+          "검색 결과상 2층상 단백질 크림 + 수분 앰플 구조 노출"
         ],
         sources: [
           { label: "Olive Young", url: "https://www.oliveyoung.co.kr/store/goods/getGoodsDetail.do?goodsNo=A000000226518" }
@@ -1699,22 +1718,23 @@
         claimDepth: 4.0,
         concept: "논워시, 극손상모, 실크/모플렉스",
         manufacturer: "미확인",
-        note: "기존 브랜드 가격 앵커",
-        url: "https://smartstore.naver.com/vananacompany/products/5958379625",
-        keyIngredients: "실크아미노산 5%, 모플렉스 5%",
-        alcohol: "?",
-        silicone: "?",
-        uspIngredients: "실크 아미노산 + 모플렉스",
+        note: "브랜드 제품 페이지 + 스마트스토어 가격 기준",
+        url: "http://515m.co.kr/product/",
+        keyIngredients: "MOplex, 실크아미노산, 다이메티콘, 피이지-12다이메티콘, 세라마이드NP",
+        alcohol: "X",
+        silicone: "O",
+        uspIngredients: "MOplex + 실크아미노산 + 실리콘/오일 손상 케어 베이스",
         ewg: "화해 48 low / 11 mid / 2 high / 20주의 2 / 알레르기 6",
         performance: "화해 리뷰 5",
         tier: "B",
         memoPlaceholder: "신제품 90ml premium science형 가격의 가장 직접적인 내부 앵커",
         evidence: [
           "Smartstore/공식몰 기준 정가 28,000원 / 판매가 26,000원 확인",
-          "화해 성분/위험도/리뷰 수 스니펫 확인",
-          "실크아미노산 5%·모플렉스 5% 소구 노출"
+          "Glowpick 성분 탭 기준 다이메티콘, 피이지-12다이메티콘, 오일류, 세라마이드NP, 하이드롤라이즈드식물성단백질 확인",
+          "공식 PDP 기준 실크아미노산 5%·모플렉스 5% 소구와 화해 성분/위험도/리뷰 수 스니펫 확인"
         ],
         sources: [
+          { label: "515M", url: "http://515m.co.kr/product/" },
           { label: "Smartstore", url: "https://smartstore.naver.com/vananacompany/products/5958379625" }
         ],
         image: "",
@@ -1871,7 +1891,7 @@
         url: "https://www.k18hairpro.com/products/molecular-repair-hair-mist",
         keyIngredients: "K18Peptide, Alcohol Denat.",
         alcohol: "O",
-        silicone: "?",
+        silicone: "X",
         uspIngredients: "sh-Oligopeptide-78 / K18Peptide",
         ewg: "미확인",
         performance: "프리미엄 살롱 본딩 레퍼런스",
@@ -2279,7 +2299,7 @@
         concept: "살롱향/아르간오일/헤어&바디 겸용",
         manufacturer: "Moroccanoil",
         note: "Kurly/Chicor 노출가 기준",
-        url: "https://www.moroccanoil.com/products/brumes-du-maroc-hair-body-fragrance-mist",
+        url: "https://www.moroccanoil.com/products/hair-body-fragrance-mist",
         keyIngredients: "Alcohol Denat., Argan Oil, Dimethicone PEG-8 Meadowfoamate",
         alcohol: "O",
         silicone: "O",
@@ -2294,7 +2314,7 @@
           "헤어&바디 fragrance mist 포지션"
         ],
         sources: [
-          { label: "Moroccanoil", url: "https://www.moroccanoil.com/products/brumes-du-maroc-hair-body-fragrance-mist" }
+          { label: "Moroccanoil", url: "https://www.moroccanoil.com/products/hair-body-fragrance-mist" }
         ],
         image: "assets/hair-mist-board/moroccanoil.png",
         defaultPos: { x: 2175, y: 2420 }
@@ -2401,8 +2421,8 @@
         claimDepth: 1.8,
         concept: "디자이너 향 중심 hair mist",
         manufacturer: "Dior",
-        note: "Harrods KR 노출가 기준",
-        url: "https://www.harrods.com/en-kr/p/dior-miss-dior-eau-de-parfum-hair-mist-000000000007825186",
+        note: "Harrods KR 노출가 + Dior 공식 PDP 기준",
+        url: "https://www.dior.com/en_us/beauty/products/miss-dior-parfum-hair-mist-Y0000154.html",
         keyIngredients: "향 중심",
         alcohol: "?",
         silicone: "?",
@@ -2413,10 +2433,11 @@
         memoPlaceholder: "디자이너향 미스트 ceiling 참고용",
         evidence: [
           "Harrods KR에 $25 노출",
-          "KREAM에도 30ml SKU 노출",
-          "향 중심 hair mist 포지션"
+          "Dior 공식 PDP에서 Miss Dior Hair Mist SKU와 설명 확인",
+          "KREAM에도 30ml SKU 노출"
         ],
         sources: [
+          { label: "Dior", url: "https://www.dior.com/en_us/beauty/products/miss-dior-parfum-hair-mist-Y0000154.html" },
           { label: "Harrods", url: "https://www.harrods.com/en-kr/p/dior-miss-dior-eau-de-parfum-hair-mist-000000000007825186" }
         ],
         image: "",
@@ -2518,16 +2539,16 @@
         productName: "Rapid Repair Bond Builder+ Leave-In Hair Mask",
         volumeMl: 100,
         priceListDisplay: "$33",
-        priceSaleDisplay: "$24.75",
-        priceSaleKrw: Math.round(24.75 * FX_USD_KRW),
-        unitPriceKrwMl: (24.75 * FX_USD_KRW) / 100,
+        priceSaleDisplay: "$33",
+        priceSaleKrw: Math.round(33 * FX_USD_KRW),
+        unitPriceKrwMl: (33 * FX_USD_KRW) / 100,
         claimDepth: 4.6,
         concept: "plant-based bond tech, silicone-free, split-end repair",
         manufacturer: "Bondi Boost",
-        note: "Ulta 현재 세일가 기준",
+        note: "Ulta/Sephora 현재 일반가 기준",
         url: "https://www.ulta.com/p/rapid-repair-bond-builder-leave-in-hair-mask-damaged-hair-pimprod2047332?sku=2628975",
         keyIngredients: "Diethylhexyl Maleate, Hydrolyzed Soy/Wheat Protein, Panthenol",
-        alcohol: "O",
+        alcohol: "X",
         silicone: "X",
         uspIngredients: "Natural Bond Builder+ + Polycare Split Therapy + 단백질",
         ewg: "미확인",
@@ -2535,7 +2556,7 @@
         tier: "A",
         memoPlaceholder: "실리콘 프리 본딩 서사의 강한 글로벌 mass benchmark",
         evidence: [
-          "Ulta 현재가 $24.75 / 정가 $33 확인",
+          "Ulta current PDP 및 Sephora listing 기준 일반가 $33 확인",
           "Ulta 상세에 rebuild broken bonds, silicone-free, split-end repair 명시",
           "전성분에 Diethylhexyl Maleate와 가수분해 단백질 확인"
         ],
@@ -2681,29 +2702,31 @@
         form: "리브인 컨디셔너",
         productName: "Amla Oil Bond Repair Leave-In Conditioner",
         volumeMl: 325.3,
-        priceListDisplay: "$15.99",
-        priceSaleDisplay: "$15.19",
-        priceSaleKrw: Math.round(15.19 * FX_USD_KRW),
-        unitPriceKrwMl: (15.19 * FX_USD_KRW) / 325.3,
+        priceListDisplay: "$12.99",
+        priceSaleDisplay: "$12.99",
+        priceListKrw: Math.round(12.99 * FX_USD_KRW),
+        priceSaleKrw: Math.round(12.99 * FX_USD_KRW),
+        unitPriceKrwMl: (12.99 * FX_USD_KRW) / 325.3,
         claimDepth: 4.0,
         concept: "컬/코일 타깃 bond repair, moisture heavy, silicone-free",
         manufacturer: "SheaMoisture",
-        note: "Ulta 현재 세일가 기준",
-        url: "https://www.ulta.com/p/amla-oil-bond-repair-leave-in-conditioner-pimprod2044530?sku=2620670",
+        note: "Target 현재가 기준",
+        url: "https://www.target.com/p/sheamoisture-bond-repair-leave-in-conditioner-11oz/-/A-89291662",
         keyIngredients: "Hydroxypropylgluconamide, Hydroxypropylammonium Gluconate, Amla Oil, 아미노산 블렌드",
         alcohol: "X",
         silicone: "X",
         uspIngredients: "HydroPlex Infusion + amla oil + amino blend",
         ewg: "미확인",
-        performance: "Ulta 4.6점 / 리뷰 810",
+        performance: "Target 4.6점 / 리뷰 842, CVS 4.6점 / 리뷰 798 노출",
         tier: "A",
         memoPlaceholder: "실리콘 없이 bond repair를 푸는 넓은 용량 레퍼런스",
         evidence: [
-          "Ulta 현재가 $15.99 / 세일가 $15.19 확인",
+          "Target 현재가 $12.99 확인",
           "Ulta 상세에 84% less breakage, 6x stronger, 12x more moisture claim 명시",
           "전성분에 Hydroxypropylgluconamide/Hydroxypropylammonium Gluconate 및 amino acids 확인"
         ],
         sources: [
+          { label: "Target", url: "https://www.target.com/p/sheamoisture-bond-repair-leave-in-conditioner-11oz/-/A-89291662" },
           { label: "Ulta", url: "https://www.ulta.com/p/amla-oil-bond-repair-leave-in-conditioner-pimprod2044530?sku=2620670" }
         ],
         image: "",
@@ -4582,7 +4605,7 @@
         image: "https://media.ulta.com/i/ulta/2578817?w=500&h=500"
       },
       k18: {
-        url: "https://www.k18hair.com/blogs/consumer/why-you-should-ask-your-stylist-for-the-k18-pro-service",
+        url: "https://www.target.com/p/k18-professional-molecular-repair-mist-5-oz/-/A-85972103",
         sources: [
           { label: "K18 salon locator", url: "https://www.k18hair.com/pages/salon-locator" }
         ],
@@ -4624,6 +4647,7 @@
         image: "https://api.melodylaniella.com/melodylaniella/v1/assets/k01985?context=bWFzdGVyfG1lbG9keWxhbmllbGxhfGltYWdlL3BuZ3xoNDEvaDcxLzE3MjM5MjA5OTQ0NjAucG5nfGIwYjdiZjNjNmQxNzllNTExYWYxYzBjMWY4NDY0MGRjMTE5OWZhNzM3ZjM1YjM2MWFkNTRlNjZmYTBiNDk2ZjY&locale=en_US"
       },
       dior: {
+        url: "https://www.dior.com/en_us/beauty/products/miss-dior-parfum-hair-mist-Y0000154.html",
         image: "https://www.dior.com/dw/image/v2/BGXS_PRD/on/demandware.static/-/Library-Sites-DiorSharedLibrary/default/dw61af764e/images/beauty/01-FRAGRANCES/2025/PDP-REVAMP/MISSDIOR/Y0000155/MD_HairRitual_Mood_Duo-EDP_2400x3000.jpg?sw=800"
       },
       alterna: {
@@ -4833,41 +4857,41 @@
 
     const bondSegments = [
       {
-        id: "disulfide-bond",
-        title: "이황화 결합 본딩",
-        short: "이황화결합",
+        id: "technical-bond",
+        title: "기술적 본딩",
+        short: "기술본딩",
         tone: "olive",
         color: "#6b8d2a",
-        description: "broken disulfide bonds, disulfide reconformation처럼 이황화결합 복구를 직접 말하고 그 축의 성분/기술 근거가 확인되는 제품"
+        description: "실제 본딩 기능이 제품의 주역이고, 공식 USP와 전성분/기술 근거가 함께 받쳐주는 제품"
       },
       {
-        id: "bond-tech-core",
-        title: "본딩 기술 중심",
-        short: "본딩기술",
+        id: "concept-bond",
+        title: "컨셉적 본딩",
+        short: "컨셉본딩",
         tone: "teal",
         color: "#2e6f77",
-        description: "본딩·내부 구조 강화를 핵심 USP로 밀고, 성분상에도 maleic acid·peptide·FiberHance류·protein repair actives 같은 구조 강화 근거가 보이는 제품"
+        description: "본딩 근거는 분명히 있지만, 소비자가 사는 주된 이유는 열보호·리브인·정돈 같은 다른 기능인 제품"
       },
       {
-        id: "silicone-bond-story",
-        title: "실리콘 코팅형 본딩",
-        short: "본딩서사+실리콘",
+        id: "silicone-bond",
+        title: "실리콘 코팅 본딩",
+        short: "실리콘본딩",
         tone: "amber",
         color: "#b7772f",
-        description: "PDP에서는 본딩을 말하지만, 전성분상 실리콘·컨디셔닝제가 더 전면에 있고 실제 본딩 actives는 제한적으로 보이는 제품"
+        description: "본딩을 말하지만 실제 체감 엔진은 실리콘·컨디셔닝 코팅 쪽이 더 강한 제품"
       },
       {
-        id: "nonbond-functional",
-        title: "비본딩 기능형 케어",
-        short: "일반기능",
+        id: "nonbond-conditioning",
+        title: "비본딩 컨디셔닝",
+        short: "비본딩",
         tone: "sky",
         color: "#4f78b8",
-        description: "본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품"
+        description: "애초에 본딩이 핵심이 아니고, 컨디셔닝·열보호·엉킴 완화·윤기 같은 일반 헤어케어 효익이 메인인 제품"
       },
       {
         id: "hair-perfume",
-        title: "헤어 퍼퓸 포지셔닝",
-        short: "헤어퍼퓸",
+        title: "향 중심",
+        short: "향중심",
         tone: "rose",
         color: "#bf6c8c",
         description: "케어보다 향과 무드가 먼저 읽히는 제품"
@@ -4875,17 +4899,16 @@
     ];
 
     const bondSegmentAssignments = {
-      "disulfide-bond": [
-        "olaplex", "k18", "epres"
+      "technical-bond": [
+        "quickbond", "vamood", "olaplex", "livingproof", "k18", "epres", "aveda", "silktherapy-bond"
       ],
-      "bond-tech-core": [
-        "miseen", "quickbond", "vamood", "livingproof", "aveda", "bondiboost",
-        "matrix", "ogx-bond", "sheamoisture-bond", "sauce-beauty", "silktherapy-bond"
+      "concept-bond": [
+        "miseen", "bondiboost", "matrix", "ogx-bond", "sheamoisture-bond", "sauce-beauty"
       ],
-      "silicone-bond-story": [
+      "silicone-bond": [
         "hairplus", "redken", "alterna", "sebastian", "nym-toughlove"
       ],
-      "nonbond-functional": [
+      "nonbond-conditioning": [
         "unove", "healingbird", "kundal", "headspa7", "wella", "tricell", "kerastase",
         "tocobo", "leviemer", "ayunche", "thesaem", "rikera", "kundal-collagen",
         "bifidolab", "doterra", "growus-nowash", "jennyhouse-quickdry", "daleaf-hairpack-mist",
@@ -4905,33 +4928,33 @@
     };
 
     const bondSegmentDefaultReasons = {
-      "disulfide-bond": "공식적으로 broken disulfide bonds나 disulfide reconformation처럼 이황화결합 축을 직접 말하는 제품입니다.",
-      "bond-tech-core": "본딩·내부 구조 강화 서사가 제품의 주인공이고, 성분상으로도 구조 강화 근거가 비교적 분명한 편입니다.",
-      "silicone-bond-story": "본딩 카피는 분명하지만, 실제 포뮬러 인상은 실리콘/컨디셔닝 결과감이 더 앞서는 편입니다.",
-      "nonbond-functional": "이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.",
+      "technical-bond": "본딩 기능이 제품의 주역이고, 실제 성분/기술 근거까지 함께 확인되는 제품입니다.",
+      "concept-bond": "본딩 근거는 있지만, 소비자가 먼저 체감하는 주역은 리브인·열보호·정돈 같은 다른 기능입니다.",
+      "silicone-bond": "본딩 카피는 분명하지만, 실제 포뮬러 인상은 실리콘/컨디셔닝 코팅 결과감이 더 앞서는 편입니다.",
+      "nonbond-conditioning": "이 제품은 본딩보다 컨디셔닝, 열보호, 엉킴 완화, 윤기 같은 일반 헤어케어 효익이 메인입니다.",
       "hair-perfume": "이 제품은 본딩·리페어보다 향과 무드, 리프레시 경험이 먼저 읽힙니다."
     };
 
     const bondSegmentReasonOverrides = {
-      miseen: "Maleic Acid와 Arginine/Lysine Polypeptide가 확인되고, 확보한 full INCI에서는 실리콘 피막보다 구조 강화 성분 서사가 앞서 보여 본딩 기술 중심으로 유지했습니다.",
-      hairplus: "단백질 본드 네이밍은 강하지만 실제 전성분 인상은 실리콘/컨디셔닝 결과감 쪽이 더 커서 실리콘 코팅형 본딩으로 두었습니다.",
-      quickbond: "PEG-12 Dimethicone은 있지만, 살롱 본딩 라인 USP와 가수분해 케라틴/콜라겐/실크/아미노산 구성이 함께 확인돼 구조 강화형 본딩으로 보았습니다.",
-      vamood: "Moplex/실크아미노산처럼 손상 구조 복구 서사가 제품 중심에 있고, 실리콘 코팅형 결과감만을 파는 구성으로 보이지 않아 본딩 기술 중심으로 두었습니다.",
+      miseen: "Maleic Acid와 Arginine/Lysine Polypeptide가 확인되지만, 제품이 실제로 팔리는 이유는 노워시 리페어/정돈 쪽이 더 커 보여 컨셉적 본딩으로 두었습니다.",
+      hairplus: "단백질 본드 네이밍은 강하지만 실제 전성분 인상은 아모다이메티콘 기반 컨디셔닝 결과감 쪽이 더 커서 실리콘 코팅 본딩으로 두었습니다.",
+      quickbond: "PEG-12 Dimethicone은 있지만, 살롱 본딩 라인 USP와 가수분해 케라틴/콜라겐/실크/아미노산 구성이 함께 확인돼 기술적 본딩으로 보았습니다.",
+      vamood: "MOplex/실크아미노산 서사가 제품의 주인공이고, 글로우픽 성분 탭 기준 실리콘이 있어도 단순 코팅형보다 손상 복구 서사 쪽 무게가 더 커 보여 기술적 본딩으로 두었습니다.",
       olaplex: "공식적으로 broken disulfide bonds를 직접 언급하는 대표 케이스입니다.",
-      livingproof: "수소결합·이온결합·공유결합의 3-bond 서사가 제품의 주인공입니다.",
-      redken: "Bonding care를 말하지만 Citric Acid 위에 Dimethicone/Amodimethicone 스무딩 인상이 강해 실리콘 코팅형 본딩으로 분류했습니다.",
+      livingproof: "수소결합·이온결합·공유결합의 3-bond 서사가 제품의 주인공이라 기술적 본딩의 대표 사례입니다.",
+      redken: "Bonding care를 말하지만 Citric Acid 위에 Dimethicone/Amodimethicone 스무딩 인상이 강해 실리콘 코팅 본딩으로 분류했습니다.",
       k18: "공식 설명에서 disulfide reconformation까지 직접 언급해 이황화 결합 축이 선명합니다.",
       epres: "spray가 broken disulfide bonds를 actively repair한다고 직접 설명합니다.",
-      aveda: "Hydroxypropylgluconamide 계열이 확인돼 내부 결합 강화 문법이 비교적 유의미합니다.",
-      alterna: "Bond repair spray지만 실리콘·캐비어 컨디셔닝 무드가 더 강하게 읽혀 실리콘 코팅형 본딩으로 보았습니다.",
-      sebastian: "Bonding spray를 표방하지만 Amodimethicone과 styling polymer로 만드는 즉각적 결과감이 더 앞서 보여 실리콘 코팅형 본딩에 가깝습니다.",
-      bondiboost: "Diethylhexyl Maleate가 보여 maleate 계열 본딩 문법으로 읽을 여지가 있고, 실리콘 프리라 구조 강화 서사 쪽 무게가 더 실립니다.",
-      matrix: "브랜드가 hydrogen bond matrix reform을 FAQ에서 직접 말하고, Citric Acid 기반 내부 강화 서사도 있어 실리콘이 있어도 본딩 기술 중심으로 유지했습니다.",
+      aveda: "Hydroxypropylgluconamide 계열이 확인되고, 브랜드도 new bonds build를 직접 말해 기술적 본딩으로 유지했습니다.",
+      alterna: "Bond repair spray지만 실리콘·캐비어 컨디셔닝 무드가 더 강하게 읽혀 실리콘 코팅 본딩으로 보았습니다.",
+      sebastian: "Bonding spray를 표방하지만 Amodimethicone과 styling polymer로 만드는 즉각적 결과감이 더 앞서 보여 실리콘 코팅 본딩에 가깝습니다.",
+      bondiboost: "Diethylhexyl Maleate가 보여 본딩 근거는 있지만, 소비자 체감 주역은 leave-in repair 기능 쪽이라 컨셉적 본딩으로 두었습니다.",
+      matrix: "브랜드가 hydrogen bond matrix reform을 직접 말하지만, 실제 SKU 사용 장면은 leave-in balm의 sealing/repair 기능이 더 전면이라 컨셉적 본딩으로 보았습니다.",
       "ogx-bond": "Hydroxypropylgluconamide / Hydroxypropylammonium Gluconate가 확인돼 mass 가격대지만 구조 강화 성분 근거가 분명합니다.",
-      "nym-toughlove": "Active Bonding Technology보다 multi-silicone smoothing system과 할인 mass 포지션이 더 강하게 읽혀 실리콘 코팅형 본딩으로 보았습니다.",
-      "sheamoisture-bond": "FiberHance 계열과 아미노산 블렌드가 함께 보여 구조 강화 서사가 비교적 선명합니다.",
-      "sauce-beauty": "Bond-repair narrative가 메인이고 oxidized keratin / quinoa / protein 축이 보여 본딩 기술 중심 쪽에 더 가깝습니다.",
-      "silktherapy-bond": "전성분은 아직 미확보지만, 공식 보도자료 기준으로 본딩 기술·단백질 침투·큐티클 결합을 제품 핵심으로 말해 본딩 기술 중심 후보로 두었습니다."
+      "nym-toughlove": "Active Bonding Technology보다 multi-silicone smoothing system과 할인 mass 포지션이 더 강하게 읽혀 실리콘 코팅 본딩으로 보았습니다.",
+      "sheamoisture-bond": "FiberHance 계열과 아미노산 블렌드가 보이지만, 실제 사용 장면은 leave-in conditioner 쪽이 더 전면이라 컨셉적 본딩으로 두었습니다.",
+      "sauce-beauty": "Bond-repair narrative와 단백질 축은 분명하지만, spray mask라는 포맷상 기능형 리브인으로 읽혀 컨셉적 본딩으로 두었습니다.",
+      "silktherapy-bond": "전성분은 아직 미확보지만, 공식 보도자료 기준으로 본딩 기술·단백질 침투·큐티클 결합을 제품 핵심으로 말해 기술적 본딩 후보로 두었습니다."
     };
 
     const generalSegments = sections.map((section) => ({
@@ -4954,7 +4977,7 @@
         title: "본딩여부 중심 세그 분류",
         helper: "본딩 USP와 실제 포뮬러 관계를 다시 보는 보조 뷰",
         chipTone: "teal",
-        intro: "이 뷰는 본딩 카피와 실제 포뮬러의 관계를 다시 보는 재분류입니다. 같은 제품도 전반적 세그는 살롱 오리진일 수 있지만, 본딩여부 기준에서는 본딩 기술 중심 또는 실리콘 코팅형 본딩으로 다시 읽힐 수 있습니다."
+        intro: "이 뷰는 본딩 카피와 실제 포뮬러의 관계를 다시 보는 재분류입니다. 같은 제품도 전반적 세그는 살롱 오리진일 수 있지만, 본딩여부 기준에서는 기술적 본딩, 컨셉적 본딩, 실리콘 코팅 본딩처럼 전혀 다르게 읽힐 수 있습니다."
       }
     };
 
@@ -5097,7 +5120,7 @@
       });
 
       products.forEach((product, index) => {
-        const assignedSegment = assignmentById[product.id] || "nonbond-functional";
+        const assignedSegment = assignmentById[product.id] || "nonbond-conditioning";
         const meta = bondSegmentById[assignedSegment] || bondSegments[0];
         product.bondSegmentId = assignedSegment;
         product.bondSegmentLabel = meta.title;
@@ -5359,22 +5382,22 @@
         ]
       },
       headspa7: {
-        ingredientsStatus: "missing",
-        fullIngredientsSource: "Headspa7 공식몰 / Enuri / Skinsli",
-        fullIngredients: "",
-        fullIngredientsNote: "이번 턴에서는 V8 슬리키 헤어미스트의 full INCI 원문을 직접 확보하지 못했습니다. 확인 가능한 근거는 Enuri 성분 탭의 EWG 개수(저위험 62 / 중간위험 9 / 등급미정 7)와 good ingredients 노출(캐모마일꽃오일, 부틸렌글라이콜, 디메치콘), 그리고 해외 판매 채널의 main ingredient 설명(해조추출물, 판테놀)입니다.",
+        ingredientsStatus: "partial",
+        fullIngredientsSource: "DODOSKIN product page / Olive Young",
+        fullIngredients: "Purified Water, Dimethicone, Ethylhexyl Palmitate, Dipropylene Glycol, PPG-26-Buteth-26, Caprylic/Capric Triglyceride, Sodium Chloride, Fragrance, PEG-40 Hydrogenated Castor Oil, Glycerin, Hydroxyacetophenone, Sorbitol, Butylene Glycol, Phenyl Trimethicone, Cetrimonium Chloride, 1,2-Hexanediol, Panthenol, Hydrolyzed Vegetable Protein, Hydrolyzed Soy Protein, Hydrolyzed Wheat Protein, Ascorbic Acid, Denatured Alcohol, Hydrolyzed Collagen, Ceramide NP, Phytosphingosine 등",
+        fullIngredientsNote: "해외 판매 채널 DODOSKIN에 노출된 INCI를 기준으로 앞단 성분과 실리콘/알코올 포함 여부를 재확인했습니다. 올리브영 현재가 17,000원도 함께 확인했습니다.",
         insightBullets: [
           "출시 기사와 리뷰에서 '크림층+수분앰플층' 이층상 구조는 일관되게 확인됩니다.",
-          "전성분 원문이 확보되면 실리콘/알코올 플래그 재판정이 필요합니다.",
+          "Dimethicone, Phenyl Trimethicone, Denatured Alcohol이 확인돼 코팅형 열보호/정돈 설계가 분명합니다.",
           "현재 보드에서는 direct 성분 비교보다 가격/메시지 포지션 기준으로 읽는 편이 안전합니다."
         ]
       },
       vamood: {
         ...detailCatalog.vamood,
         ingredientsStatus: "partial",
-        fullIngredientsSource: "Hwahae Global ingredients snippet",
-        fullIngredients: "Aqua, Butylene Glycol, C13-14 Alkane, Angelica Gigas Root Extract ...",
-        fullIngredientsNote: "Hwahae Global ingredients 페이지 스니펫 기준으로 앞단 성분과 총 61개 성분 수만 확인됐고, full INCI 원문 전체는 이번 턴에서 페이지 제한 때문에 끝까지 추출하지 못했습니다. 기존에 반영한 실크아미노산 5%, 모플렉스 5% 소구와 함께 참고해 주세요."
+        fullIngredientsSource: "Glowpick ingredients tab / Vamood official PDP",
+        fullIngredients: "정제수, 사이클로펜타실록세인, 프로필렌글라이콜, 트라이실록세인, 다이메티콘, 피이지-12다이메티콘, C12-15알킬벤조에이트, 호호바씨오일, 아르간커넬오일, 아보카도오일, 세라마이드엔피, 하이드로제네이티드레시틴, 글리세린, 하이드롤라이즈드식물성단백질, 말토덱스트린, 드럼스틱씨추출물, 귀리커넬추출물 등",
+        fullIngredientsNote: "Glowpick 성분 탭 기준으로 다이메티콘과 피이지-12다이메티콘이 직접 확인됩니다. 공식 PDP에서는 MOplex와 실크아미노산 5% 서사를 확인했고, 전체 61개 성분 원문까지는 이번 턴에 끝까지 확보하지 못했습니다."
       },
       olaplex: {
         ...detailCatalog.olaplex,
@@ -6203,8 +6226,9 @@
       },
       "moroccanoil-perfect-defense": {
         ingredientsStatus: "partial",
-        fullIngredientsSource: "Moroccanoil 공식 PDP",
-        fullIngredientsNote: "공식 페이지에서 argan oil and vitamin-fueled formula, weightless dry aerosol, 450°F/230°C 보호 포인트를 확인했습니다. full INCI 전체는 이번 턴에 별도 정리하지 않았습니다.",
+        fullIngredientsSource: "Moroccanoil 공식 PDP / Amazon ingredient listing",
+        fullIngredients: "DIMETHYL ETHER, SD ALCOHOL 40-B (ALCOHOL DENAT.), AQUA/WATER/EAU, BUTYLENE GLYCOL, OCTYLACRYLAMIDE/ACRYLATES/BUTYLAMINOETHYL METHACRYLATE COPOLYMER, ARGANIA SPINOSA (ARGAN) KERNEL OIL, PEG-40 HYDROGENATED CASTOR OIL, PANTHENOL, PPG-12 DIMETHICONE 등",
+        fullIngredientsNote: "공식 페이지에서 argan oil and vitamin-fueled formula, weightless dry aerosol, 450°F/230°C 보호 포인트를 확인했고, Amazon ingredient listing으로 Alcohol Denat.와 PPG-12 Dimethicone 포함도 재확인했습니다.",
         insightBullets: [
           "Olaplex나 Kérastase를 보는 소비자가 같이 비교하기 쉬운 salon-origin heat shield라는 점이 핵심입니다.",
           "구조복구 claim보다도 열기구 루틴 앞단에 끼워 넣는 premium salon finishing 레퍼런스로 보는 편이 맞습니다."
@@ -6250,6 +6274,178 @@
       }
     });
 
+    const FORMULA_FLAG_OVERRIDES = {
+      hairplus: {
+        alcohol: "O",
+        silicone: "O",
+        source: "Hairplus official ingredients"
+      },
+      quickbond: {
+        alcohol: "O",
+        silicone: "O",
+        source: "AMOS official ingredients"
+      },
+      vamood: {
+        alcohol: "X",
+        silicone: "O",
+        source: "Glowpick ingredients tab"
+      },
+      headspa7: {
+        alcohol: "O",
+        silicone: "O",
+        source: "DODOSKIN product page"
+      },
+      miseen: {
+        alcohol: "X",
+        silicone: "X",
+        source: "mise en scene full INCI"
+      },
+      olaplex: {
+        alcohol: "X",
+        silicone: "X",
+        source: "OLAPLEX official ingredients"
+      },
+      livingproof: {
+        alcohol: "X",
+        silicone: "X",
+        source: "Living Proof official ingredients"
+      },
+      k18: {
+        alcohol: "O",
+        silicone: "X",
+        source: "K18 ingredient list"
+      },
+      redken: {
+        alcohol: "X",
+        silicone: "O",
+        source: "Redken full INCI"
+      },
+      alterna: {
+        alcohol: "X",
+        silicone: "O",
+        source: "Alterna full INCI"
+      },
+      sebastian: {
+        alcohol: "O",
+        silicone: "O",
+        source: "Sebastian full INCI"
+      },
+      "nym-toughlove": {
+        alcohol: "O",
+        silicone: "O",
+        source: "Not Your Mother's full INCI"
+      },
+      aveda: {
+        alcohol: "X",
+        silicone: "X",
+        source: "Aveda official ingredients"
+      },
+      bondiboost: {
+        alcohol: "X",
+        silicone: "X",
+        source: "Bondi Boost full INCI"
+      },
+      matrix: {
+        alcohol: "X",
+        silicone: "O",
+        source: "Matrix full INCI"
+      },
+      "ogx-bond": {
+        alcohol: "X",
+        silicone: "O",
+        source: "OGX full INCI"
+      },
+      "sheamoisture-bond": {
+        alcohol: "X",
+        silicone: "X",
+        source: "SheaMoisture full INCI"
+      },
+      "sauce-beauty": {
+        alcohol: "X",
+        silicone: "X",
+        source: "Sauce Beauty full INCI"
+      },
+      wella: {
+        alcohol: "O",
+        silicone: "O",
+        source: "WellaStore full INCI"
+      },
+      "moroccanoil-perfect-defense": {
+        alcohol: "O",
+        silicone: "O",
+        source: "Moroccanoil ingredient listings"
+      }
+    };
+
+    const VOLATILE_ALCOHOL_PATTERNS = [
+      /(^|[,\s])alcohol denat\.?/i,
+      /(^|[,\s])sd alcohol 40-b/i,
+      /(^|[,\s])ethanol([,\s]|$)/i,
+      /(^|[,\s])isopropyl alcohol([,\s]|$)/i,
+      /변성알코올/,
+      /에탄올/,
+      /이소프로필알코올/,
+      /denatured alcohol/i
+    ];
+
+    const SILICONE_PATTERNS = [
+      /amodimethicone/i,
+      /aminopropyl dimethicone/i,
+      /bis-4-pca dimethicone/i,
+      /cyclopentasiloxane/i,
+      /cyclohexasiloxane/i,
+      /dimethicone/i,
+      /dimethiconol/i,
+      /phenyl trimethicone/i,
+      /polysilicone/i,
+      /silicone quaternium/i,
+      /siloxane/i,
+      /trisiloxane/i,
+      /피이지-\d+다이메티콘/,
+      /다이메티콘/,
+      /디메치콘/,
+      /디메티콘/,
+      /아모다이메티콘/,
+      /실록세인/,
+      /실리콘/,
+      /트라이실록세인/,
+      /페닐트라이메티콘/
+    ];
+
+    function hasPatternMatch(text, patterns) {
+      return patterns.some((pattern) => pattern.test(text));
+    }
+
+    function inferFormulaFlagFromCatalog(product, kind) {
+      const catalog = detailCatalog[product.id] || {};
+      const override = FORMULA_FLAG_OVERRIDES[product.id];
+      if (override?.[kind]) return override[kind];
+      const ingredientsText = `${catalog.fullIngredients || ""} ${catalog.fullIngredientsNote || ""}`;
+      const normalizedText = ingredientsText.toLowerCase();
+      const isFull = catalog.ingredientsStatus === "full";
+      if (kind === "silicone") {
+        if (hasPatternMatch(ingredientsText, SILICONE_PATTERNS)) return "O";
+        if (/silicone-free|silicones-free|실리콘 프리/i.test(normalizedText)) return "X";
+        if (isFull) return "X";
+      }
+      if (kind === "alcohol") {
+        if (hasPatternMatch(ingredientsText, VOLATILE_ALCOHOL_PATTERNS)) return "O";
+        if (/alcohol-free|무알코올/i.test(normalizedText)) return "X";
+        if (isFull) return "X";
+      }
+      return null;
+    }
+
+    function refreshFormulaFlags() {
+      products.forEach((product) => {
+        const silicone = inferFormulaFlagFromCatalog(product, "silicone");
+        const alcohol = inferFormulaFlagFromCatalog(product, "alcohol");
+        if (silicone) product.silicone = silicone;
+        if (alcohol) product.alcohol = alcohol;
+      });
+    }
+
+    refreshFormulaFlags();
     applySegmentModel();
 
     const MAP_CORE_LABEL_IDS = new Set([
@@ -6890,6 +7086,20 @@
       };
     }
 
+    function getBondPointNote(product) {
+      const bondInfo = getBondMechanismInfo(product);
+      if (product.bondSegmentId === "silicone-bond") return "+실리콘";
+      if (product.bondSegmentId === "nonbond-conditioning") return "+컨디셔닝";
+      if (product.bondSegmentId === "hair-perfume") return "+향";
+      if (!bondInfo?.type) return product.bondSegmentId === "concept-bond" ? "+본딩성분" : "";
+      if (/3-bond|수소결합 \+ 이온결합 \+ 공유결합/i.test(bondInfo.type)) return "+3-bond";
+      if (/이황화/i.test(bondInfo.type)) return "+이황화";
+      if (/수소결합 \+ 이온결합/i.test(bondInfo.type)) return "+수소·이온";
+      if (/수소결합/i.test(bondInfo.type)) return "+수소결합";
+      if (/maleate|공유결합|케라틴 체인|결합 타입 미공개/i.test(bondInfo.type)) return "+본딩성분";
+      return product.bondSegmentId === "concept-bond" ? "+본딩성분" : "";
+    }
+
     function renderDrawerContent(product) {
       const catalog = detailCatalog[product.id] || {};
       const displaySources = getDisplaySources(product);
@@ -6924,15 +7134,22 @@
       drawerProductSubtitle.textContent = `전반적 세그 ${product.clusterLabel} · 본딩여부 세그 ${product.bondSegmentLabel} · ${product.brandKo} / ${product.brand}${product.metaTags?.length ? ` · ${product.metaTags.join(" / ")}` : ""} · 근거 ${product.tier}`;
       drawerScroll.innerHTML = `
         <section class="drawer-card">
-          <div class="item-heading" style="margin-bottom:12px;">
-            <span class="item-number">${escapeHtml(product.no)}</span>
-            <span class="item-chip ${product.tone}">${escapeHtml(product.clusterLabel)}</span>
-            <span class="item-chip ${product.bondSegmentTone}">${escapeHtml(product.bondSegmentLabel)}</span>
-            <span class="tier-chip tier-${product.tier.toLowerCase()}">${escapeHtml(product.tier)} 근거</span>
+          <div class="drawer-hero-grid">
+            <div class="drawer-hero-media">
+              ${renderProductMedia(product, `drawer-${product.id}`)}
+            </div>
+            <div>
+              <div class="item-heading" style="margin-bottom:12px;">
+                <span class="item-number">${escapeHtml(product.no)}</span>
+                <span class="item-chip ${product.tone}">${escapeHtml(product.clusterLabel)}</span>
+                <span class="item-chip ${product.bondSegmentTone}">${escapeHtml(product.bondSegmentLabel)}</span>
+                <span class="tier-chip tier-${product.tier.toLowerCase()}">${escapeHtml(product.tier)} 근거</span>
+              </div>
+              ${renderProductTagChips(product.metaTags, "compact")}
+              ${driverInfo ? `<div class="usp-driver-row" style="margin:10px 0 0;">${renderUspDriverChip(driverInfo)}</div>` : ""}
+              <div class="drawer-grid tight">${priceRows}</div>
+            </div>
           </div>
-          ${renderProductTagChips(product.metaTags, "compact")}
-          ${driverInfo ? `<div class="usp-driver-row" style="margin:10px 0 0;">${renderUspDriverChip(driverInfo)}</div>` : ""}
-          <div class="drawer-grid">${priceRows}</div>
           ${detailPageRow}
         </section>
         ${driverInfo ? `
@@ -7267,6 +7484,9 @@
         const displaySegmentId = getProductSegmentId(product, currentMode);
         const isMist = isMistNamedProduct(product);
         const driverInfo = getUspDriverInfo(product);
+        const pointMetaLabel = currentMode === "bond"
+          ? getBondPointNote(product)
+          : (driverInfo?.shortLabel || "");
         const labelMarkup = shouldShowPinnedMapLabel(product)
           ? buildMapPinnedLabel(product, cx, cy, toneColor)
           : "";
@@ -7293,7 +7513,7 @@
               stroke-dasharray="${isMist ? "" : "3.4 3.4"}"
             ></circle>
             <text x="${cx}" y="${cy + 4}" text-anchor="middle" font-size="10" font-weight="800" fill="${isMist ? "white" : toneColor}">${escapeHtml(product.no)}</text>
-            ${driverInfo ? `<text x="${cx}" y="${cy + 26}" text-anchor="middle" font-size="9" font-weight="800" fill="${toneColor}">${escapeHtml(driverInfo.shortLabel)}</text>` : ""}
+            ${pointMetaLabel ? `<text x="${cx}" y="${cy + 26}" text-anchor="middle" font-size="9" font-weight="800" fill="${toneColor}">${escapeHtml(pointMetaLabel)}</text>` : ""}
             ${labelMarkup}
             <circle class="map-point-hitarea" cx="${cx}" cy="${cy}" r="18"></circle>
           </g>
@@ -7327,7 +7547,7 @@
         </div>
         <div class="panel-body">
           <div class="map-topline">
-            <p>${escapeHtml(viewMeta.intro)} 가격은 ml당 단가로 통일했고 메시지 강도는 향 중심 ~ direct multi-bond까지 5단계로 정성 점수화했습니다. 숫자 점 위에 마우스를 올리면 미니 카드가, 클릭하면 우측 상세 패널이 열립니다. VAMOOD · OLAPLEX · K18 · Moroccanoil · ChaHong과 더마/약국 세그는 맵에서 기본 라벨이 항상 보이도록 두었고, 점 아래 보조 텍스트는 USP 주역(본딩 / +본딩 / 결·윤기 / 기능)을 뜻합니다.</p>
+            <p>${escapeHtml(viewMeta.intro)} 가격은 ml당 단가로 통일했고 메시지 강도는 향 중심 ~ direct multi-bond까지 5단계로 정성 점수화했습니다. 숫자 점 위에 마우스를 올리면 미니 카드가, 클릭하면 우측 상세 패널이 열립니다. VAMOOD · OLAPLEX · K18 · Moroccanoil · ChaHong과 더마/약국 세그는 맵에서 기본 라벨이 항상 보이도록 두었고, 본딩여부 뷰에서 점 아래 보조 텍스트는 +이황화 / +3-bond / +본딩성분 / +실리콘처럼 어떤 본딩 문법인지 빠르게 읽기 위한 표식입니다.</p>
           </div>
           <div class="view-toggle-row">
             ${toggleItems}
@@ -7352,7 +7572,7 @@
           </div>
           <div class="map-footnotes">
             <div class="mini">해외 SKU는 포지셔닝맵에서 <strong>USD 1,512 / EUR 1,757 / GBP 2,018 KRW</strong> 기준으로 환산했습니다. 현재 보드에는 미국·유럽 약국 유통 SKU가 함께 들어가 있어 통화별 기준을 병기했습니다.</div>
-            <div class="mini">${currentMode === "bond" ? "본딩여부 중심 뷰에서는 Hairplus를 실리콘 코팅형 본딩으로, Matrix를 본딩 기술 중심으로 두어 '본딩 카피 vs 실제 포뮬러' 차이를 바로 읽을 수 있게 했습니다." : "쭈드레님이 3-bond 서사를 가져가면, 목표 좌표는 대체로 claimDepth 4.3~5.0 구간입니다. 차이는 대용량 대중형으로 갈지, 90~100ml premium science형으로 갈지에 따라 갈립니다."}</div>
+            <div class="mini">${currentMode === "bond" ? "본딩여부 중심 뷰에서는 기술적 본딩, 컨셉적 본딩, 실리콘 코팅 본딩을 분리해 '실제 본딩 주역인지, 기능형 본딩인지, 코팅형 본딩인지'를 바로 읽을 수 있게 했습니다." : "쭈드레님이 3-bond 서사를 가져가면, 목표 좌표는 대체로 claimDepth 4.3~5.0 구간입니다. 차이는 대용량 대중형으로 갈지, 90~100ml premium science형으로 갈지에 따라 갈립니다."}</div>
           </div>
         </div>
       `;
