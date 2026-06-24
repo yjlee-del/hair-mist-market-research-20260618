@@ -700,6 +700,57 @@
       opacity: 0.35;
     }
 
+    .view-toggle-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 4px 0 14px;
+    }
+
+    .view-toggle-btn {
+      border: 1px solid rgba(37, 31, 24, 0.12);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.76);
+      color: var(--ink);
+      padding: 10px 14px;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+      cursor: pointer;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease, opacity 0.16s ease;
+    }
+
+    .view-toggle-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .view-toggle-btn strong {
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .view-toggle-btn span {
+      font-size: 11px;
+      line-height: 1.35;
+      color: var(--muted);
+    }
+
+    .view-toggle-btn.is-active {
+      background: rgba(37, 31, 24, 0.94);
+      color: #fffaf4;
+      box-shadow: 0 12px 24px rgba(51, 36, 22, 0.14);
+    }
+
+    .view-toggle-btn.is-active span {
+      color: rgba(255, 250, 244, 0.76);
+    }
+
+    .view-toggle-btn.is-dimmed {
+      opacity: 0.62;
+    }
+
     .section-panel {
       transition: opacity 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
     }
@@ -988,6 +1039,13 @@
 
     .map-preview .preview-copy {
       margin-top: 8px;
+    }
+
+    .map-preview .preview-segment-note {
+      margin-top: 6px;
+      font-size: 11px;
+      line-height: 1.45;
+      color: rgba(65, 53, 42, 0.78);
     }
 
     .drawer-backdrop {
@@ -1285,8 +1343,8 @@
       {
         id: "note-how",
         title: "먼저 볼 것",
-        body: "1) 이번 개편의 기준은 기본적으로 `왜 사는가`입니다.\\n2) 다만 오리진 신뢰가 중요한 경우는 `살롱 오리진`과 `더마/약국 신뢰형`으로 아예 분리했습니다.\\n3) 그래서 지금 구조는 `기능 중심 세그 + 오리진 신뢰 세그`의 혼합형입니다.\\n4) 같은 살롱 브랜드라도 실제 구매 이유가 quick-dry, heat care처럼 기능이면 기능 세그로 보내고, 오리진은 보조 태그로만 남길 수 있습니다.",
-        footer: "즉 브랜드 출신은 참고하되, 최종 세그는 소비자가 실제로 무엇 때문에 사는지에 더 맞췄습니다.",
+        body: "1) 기본 보드 세그는 여전히 `왜 사는가` 기준입니다.\\n2) 다만 포지셔닝맵에서는 `전반적 세그 분류`와 `본딩여부 중심 세그 분류`를 토글해서 볼 수 있습니다.\\n3) 전반적 세그는 구매 이유와 오리진을 함께 본 기본 뷰이고, 본딩여부 중심 세그는 `본딩 카피 vs 실제 포뮬러`를 다시 보는 보조 뷰입니다.\\n4) 그래서 같은 살롱 브랜드라도 전반 세그는 `살롱 오리진`일 수 있고, 본딩여부 세그는 `실리콘 코팅형 본딩`이나 `비본딩 기능형 케어`로 다시 읽힐 수 있습니다.",
+        footer: "즉 브랜드 출신은 참고하되, 본딩 카피가 실제 포뮬러와 맞는지는 맵의 두 번째 보기에서 별도로 검증합니다.",
         x: 70, y: 120, w: 310, h: 280
       },
       {
@@ -4678,6 +4736,17 @@
       , "drybar-hot-toddy"
     ]);
 
+    const MAP_TONE_COLOR_MAP = {
+      sky: "#4f7aa8",
+      olive: "#648249",
+      mint: "#4c7f70",
+      amber: "#b27a2c",
+      teal: "#3f6970",
+      sage: "#6d825d",
+      rose: "#b66377",
+      violet: "#7e63a2"
+    };
+
     const clusterToneMap = {
       "bond-hero": "olive",
       "bond-extended": "mint",
@@ -4761,6 +4830,136 @@
         headerBg: "rgba(251, 248, 255, 0.98)"
       }
     };
+
+    const bondSegments = [
+      {
+        id: "disulfide-bond",
+        title: "이황화 결합 본딩",
+        short: "이황화결합",
+        tone: "olive",
+        color: "#6b8d2a",
+        description: "broken disulfide bonds, disulfide reconformation처럼 이황화결합 복구를 직접 말하고 그 축의 성분/기술 근거가 확인되는 제품"
+      },
+      {
+        id: "bond-tech-core",
+        title: "본딩 기술 중심",
+        short: "본딩기술",
+        tone: "teal",
+        color: "#2e6f77",
+        description: "본딩·내부 구조 강화를 핵심 USP로 밀고, 성분상에도 maleic acid·peptide·FiberHance류·protein repair actives 같은 구조 강화 근거가 보이는 제품"
+      },
+      {
+        id: "silicone-bond-story",
+        title: "실리콘 코팅형 본딩",
+        short: "본딩서사+실리콘",
+        tone: "amber",
+        color: "#b7772f",
+        description: "PDP에서는 본딩을 말하지만, 전성분상 실리콘·컨디셔닝제가 더 전면에 있고 실제 본딩 actives는 제한적으로 보이는 제품"
+      },
+      {
+        id: "nonbond-functional",
+        title: "비본딩 기능형 케어",
+        short: "일반기능",
+        tone: "sky",
+        color: "#4f78b8",
+        description: "본딩보다 열보호, 엉킴 완화, 윤기, 데일리 정돈 같은 기능이 메인인 제품"
+      },
+      {
+        id: "hair-perfume",
+        title: "헤어 퍼퓸 포지셔닝",
+        short: "헤어퍼퓸",
+        tone: "rose",
+        color: "#bf6c8c",
+        description: "케어보다 향과 무드가 먼저 읽히는 제품"
+      }
+    ];
+
+    const bondSegmentAssignments = {
+      "disulfide-bond": [
+        "olaplex", "k18", "epres"
+      ],
+      "bond-tech-core": [
+        "miseen", "quickbond", "vamood", "livingproof", "aveda", "bondiboost",
+        "matrix", "ogx-bond", "sheamoisture-bond", "sauce-beauty", "silktherapy-bond"
+      ],
+      "silicone-bond-story": [
+        "hairplus", "redken", "alterna", "sebastian", "nym-toughlove"
+      ],
+      "nonbond-functional": [
+        "unove", "healingbird", "kundal", "headspa7", "wella", "tricell", "kerastase",
+        "tocobo", "leviemer", "ayunche", "thesaem", "rikera", "kundal-collagen",
+        "bifidolab", "doterra", "growus-nowash", "jennyhouse-quickdry", "daleaf-hairpack-mist",
+        "silktherapy-silkmist", "chahong-keratin-mist", "oribe-runthrough", "bumble-hio-primer",
+        "ouai-leave-in", "phyto-heat-protection", "itsa10-miracle-leave-in", "unite-7seconds",
+        "randco-sun-catcher", "davines-oi-milk", "briogeo-rosarco-milk", "moroccanoil-perfect-defense",
+        "rahua-hydration-detangler", "drunkelephant-wild-marula", "drybar-hot-toddy",
+        "klorane-chamomile-spray", "rene-furterer-naturia", "rene-furterer-thermal",
+        "nuxe-hair-sun-oil", "korres-red-vine-hair-sun"
+      ],
+      "hair-perfume": [
+        "roundaround", "bodyholic-potion", "bodyholic-staynudie", "tone28", "anillo",
+        "moroccanoil", "byredo", "dior", "aromatica", "ratedgreen", "sw19-3pm",
+        "sw19-midnight", "white-sunday", "bellista", "pinkghost", "narca",
+        "dalba-hair-serum", "sennok-babyblusher", "kerasys-caviar"
+      ]
+    };
+
+    const bondSegmentDefaultReasons = {
+      "disulfide-bond": "공식적으로 broken disulfide bonds나 disulfide reconformation처럼 이황화결합 축을 직접 말하는 제품입니다.",
+      "bond-tech-core": "본딩·내부 구조 강화 서사가 제품의 주인공이고, 성분상으로도 구조 강화 근거가 비교적 분명한 편입니다.",
+      "silicone-bond-story": "본딩 카피는 분명하지만, 실제 포뮬러 인상은 실리콘/컨디셔닝 결과감이 더 앞서는 편입니다.",
+      "nonbond-functional": "이 제품은 본딩보다 열보호, 엉킴 완화, 윤기, 정돈 같은 일반 기능 효익이 메인입니다.",
+      "hair-perfume": "이 제품은 본딩·리페어보다 향과 무드, 리프레시 경험이 먼저 읽힙니다."
+    };
+
+    const bondSegmentReasonOverrides = {
+      miseen: "Maleic Acid와 Arginine/Lysine Polypeptide가 확인되고, 확보한 full INCI에서는 실리콘 피막보다 구조 강화 성분 서사가 앞서 보여 본딩 기술 중심으로 유지했습니다.",
+      hairplus: "단백질 본드 네이밍은 강하지만 실제 전성분 인상은 실리콘/컨디셔닝 결과감 쪽이 더 커서 실리콘 코팅형 본딩으로 두었습니다.",
+      quickbond: "PEG-12 Dimethicone은 있지만, 살롱 본딩 라인 USP와 가수분해 케라틴/콜라겐/실크/아미노산 구성이 함께 확인돼 구조 강화형 본딩으로 보았습니다.",
+      vamood: "Moplex/실크아미노산처럼 손상 구조 복구 서사가 제품 중심에 있고, 실리콘 코팅형 결과감만을 파는 구성으로 보이지 않아 본딩 기술 중심으로 두었습니다.",
+      olaplex: "공식적으로 broken disulfide bonds를 직접 언급하는 대표 케이스입니다.",
+      livingproof: "수소결합·이온결합·공유결합의 3-bond 서사가 제품의 주인공입니다.",
+      redken: "Bonding care를 말하지만 Citric Acid 위에 Dimethicone/Amodimethicone 스무딩 인상이 강해 실리콘 코팅형 본딩으로 분류했습니다.",
+      k18: "공식 설명에서 disulfide reconformation까지 직접 언급해 이황화 결합 축이 선명합니다.",
+      epres: "spray가 broken disulfide bonds를 actively repair한다고 직접 설명합니다.",
+      aveda: "Hydroxypropylgluconamide 계열이 확인돼 내부 결합 강화 문법이 비교적 유의미합니다.",
+      alterna: "Bond repair spray지만 실리콘·캐비어 컨디셔닝 무드가 더 강하게 읽혀 실리콘 코팅형 본딩으로 보았습니다.",
+      sebastian: "Bonding spray를 표방하지만 Amodimethicone과 styling polymer로 만드는 즉각적 결과감이 더 앞서 보여 실리콘 코팅형 본딩에 가깝습니다.",
+      bondiboost: "Diethylhexyl Maleate가 보여 maleate 계열 본딩 문법으로 읽을 여지가 있고, 실리콘 프리라 구조 강화 서사 쪽 무게가 더 실립니다.",
+      matrix: "브랜드가 hydrogen bond matrix reform을 FAQ에서 직접 말하고, Citric Acid 기반 내부 강화 서사도 있어 실리콘이 있어도 본딩 기술 중심으로 유지했습니다.",
+      "ogx-bond": "Hydroxypropylgluconamide / Hydroxypropylammonium Gluconate가 확인돼 mass 가격대지만 구조 강화 성분 근거가 분명합니다.",
+      "nym-toughlove": "Active Bonding Technology보다 multi-silicone smoothing system과 할인 mass 포지션이 더 강하게 읽혀 실리콘 코팅형 본딩으로 보았습니다.",
+      "sheamoisture-bond": "FiberHance 계열과 아미노산 블렌드가 함께 보여 구조 강화 서사가 비교적 선명합니다.",
+      "sauce-beauty": "Bond-repair narrative가 메인이고 oxidized keratin / quinoa / protein 축이 보여 본딩 기술 중심 쪽에 더 가깝습니다.",
+      "silktherapy-bond": "전성분은 아직 미확보지만, 공식 보도자료 기준으로 본딩 기술·단백질 침투·큐티클 결합을 제품 핵심으로 말해 본딩 기술 중심 후보로 두었습니다."
+    };
+
+    const generalSegments = sections.map((section) => ({
+      id: section.id,
+      title: clusterLabelMap[section.id] || section.title,
+      short: clusterLabelMap[section.id] || section.title,
+      tone: clusterToneMap[section.id] || "sky",
+      color: MAP_TONE_COLOR_MAP[clusterToneMap[section.id] || "sky"] || "#666",
+      description: segmentDefinitionMap[section.id] || section.blurb
+    }));
+
+    const segmentViewMeta = {
+      general: {
+        title: "전반적 세그 분류",
+        helper: "구매 이유와 브랜드 오리진을 함께 본 기본 뷰",
+        chipTone: "mint",
+        intro: "이 뷰는 소비자가 왜 이 제품을 사는지에 더 가깝게 묶은 기본 세그입니다. 본딩 hero, 기능형, 살롱 오리진, 더마/약국 신뢰형처럼 구매 이유와 채널 신뢰를 함께 반영합니다."
+      },
+      bond: {
+        title: "본딩여부 중심 세그 분류",
+        helper: "본딩 USP와 실제 포뮬러 관계를 다시 보는 보조 뷰",
+        chipTone: "teal",
+        intro: "이 뷰는 본딩 카피와 실제 포뮬러의 관계를 다시 보는 재분류입니다. 같은 제품도 전반적 세그는 살롱 오리진일 수 있지만, 본딩여부 기준에서는 본딩 기술 중심 또는 실리콘 코팅형 본딩으로 다시 읽힐 수 있습니다."
+      }
+    };
+
+    const generalSegmentById = Object.fromEntries(generalSegments.map((segment) => [segment.id, segment]));
+    const bondSegmentById = Object.fromEntries(bondSegments.map((segment) => [segment.id, segment]));
 
     const productTagToneMap = {
       "살롱/헤어드레서": "mint",
@@ -4884,6 +5083,81 @@
             };
           });
       });
+    }
+
+    function applyBondSegmentModel() {
+      const assignmentById = {};
+      const orderById = {};
+
+      Object.entries(bondSegmentAssignments).forEach(([segmentId, ids]) => {
+        ids.forEach((id, index) => {
+          assignmentById[id] = segmentId;
+          orderById[id] = index;
+        });
+      });
+
+      products.forEach((product, index) => {
+        const assignedSegment = assignmentById[product.id] || "nonbond-functional";
+        const meta = bondSegmentById[assignedSegment] || bondSegments[0];
+        product.bondSegmentId = assignedSegment;
+        product.bondSegmentLabel = meta.title;
+        product.bondSegmentShort = meta.short;
+        product.bondSegmentTone = meta.tone;
+        product.bondSegmentColor = meta.color;
+        product.bondSegmentDescription = meta.description;
+        product.bondSegmentOrder = Number.isFinite(orderById[product.id]) ? orderById[product.id] : 1000 + index;
+        product.bondClassificationReason = bondSegmentReasonOverrides[product.id] || bondSegmentDefaultReasons[assignedSegment] || "";
+      });
+    }
+
+    applySegmentModel();
+    applyBondSegmentModel();
+    applyBondSegmentModel();
+
+    function getCurrentSegmentViewMode() {
+      return state.segmentViewMode === "bond" ? "bond" : "general";
+    }
+
+    function getSegmentsForMode(mode = getCurrentSegmentViewMode()) {
+      return mode === "bond" ? bondSegments : generalSegments;
+    }
+
+    function getSegmentMetaByMode(mode = getCurrentSegmentViewMode(), segmentId) {
+      const source = mode === "bond" ? bondSegmentById : generalSegmentById;
+      return source[segmentId] || null;
+    }
+
+    function getProductSegmentId(product, mode = getCurrentSegmentViewMode()) {
+      return mode === "bond" ? product.bondSegmentId : product.cluster;
+    }
+
+    function getProductSegmentLabel(product, mode = getCurrentSegmentViewMode()) {
+      return mode === "bond" ? product.bondSegmentLabel : product.clusterLabel;
+    }
+
+    function getProductSegmentTone(product, mode = getCurrentSegmentViewMode()) {
+      return mode === "bond" ? product.bondSegmentTone : product.tone;
+    }
+
+    function getProductSegmentDescription(product, mode = getCurrentSegmentViewMode()) {
+      if (mode === "bond") return product.bondSegmentDescription || "";
+      return sections.find((section) => section.id === product.cluster)?.blurb || "";
+    }
+
+    function getProductSegmentReason(product) {
+      return product.bondClassificationReason || "";
+    }
+
+    function getActiveSegmentId(mode = getCurrentSegmentViewMode()) {
+      return state.activeSegmentFilters?.[mode] || null;
+    }
+
+    function setActiveSegmentId(mode, value) {
+      if (!state.activeSegmentFilters) {
+        state.activeSegmentFilters = { general: null, bond: null };
+      }
+      state.activeSegmentFilters[mode] = value;
+      state.activeSegmentId = state.activeSegmentFilters.general || null;
     }
 
     const detailCatalog = {
@@ -6149,23 +6423,28 @@
     }
 
     function getMapColorMap() {
-      return {
-        sky: "#4f7aa8",
-        olive: "#648249",
-        mint: "#4c7f70",
-        amber: "#b27a2c",
-        teal: "#3f6970",
-        sage: "#6d825d",
-        rose: "#b66377",
-        violet: "#7e63a2"
-      };
+      return MAP_TONE_COLOR_MAP;
     }
 
-    function buildSegmentLegendButtons(colorMap) {
-      return sections.map((section) => `
-        <button type="button" class="legend-chip" data-segment-filter="${escapeHtml(section.id)}" aria-pressed="false">
-          <span class="legend-dot" style="background:${colorMap[clusterToneMap[section.id]] || "#666"}"></span>
-          ${escapeHtml(clusterLabelMap[section.id] || section.title)}
+    function buildSegmentLegendButtons(mode = getCurrentSegmentViewMode()) {
+      return getSegmentsForMode(mode).map((segment) => {
+        const count = products.filter((product) => getProductSegmentId(product, mode) === segment.id).length;
+        const color = segment.color || MAP_TONE_COLOR_MAP[segment.tone] || "#666";
+        return `
+          <button type="button" class="legend-chip" data-segment-filter="${escapeHtml(segment.id)}" data-segment-mode="${escapeHtml(mode)}" aria-pressed="false">
+            <span class="legend-dot" style="background:${color}"></span>
+            ${escapeHtml(segment.title)} · ${count}개
+          </button>
+        `;
+      }).join("");
+    }
+
+    function buildSegmentViewToggleButtons() {
+      const activeMode = getCurrentSegmentViewMode();
+      return Object.entries(segmentViewMeta).map(([mode, meta]) => `
+        <button type="button" class="view-toggle-btn${mode === activeMode ? " is-active" : ""}${mode !== activeMode ? " is-dimmed" : ""}" data-segment-view-mode="${escapeHtml(mode)}" aria-pressed="${mode === activeMode ? "true" : "false"}">
+          <strong>${escapeHtml(meta.title)}</strong>
+          <span>${escapeHtml(meta.helper)}</span>
         </button>
       `).join("");
     }
@@ -6306,7 +6585,12 @@
           noteBodies: parsed.noteBodies || {},
           userNotes: parsed.userNotes || [],
           selectedProductId: parsed.selectedProductId || null,
-          activeSegmentId: parsed.activeSegmentId || null,
+          segmentViewMode: parsed.segmentViewMode === "bond" ? "bond" : "general",
+          activeSegmentFilters: {
+            general: parsed.activeSegmentFilters?.general ?? parsed.activeSegmentId ?? null,
+            bond: parsed.activeSegmentFilters?.bond ?? null
+          },
+          activeSegmentId: parsed.activeSegmentFilters?.general ?? parsed.activeSegmentId ?? null,
           tableSort: parsed.tableSort || {
             core: { key: "no", direction: "asc" },
             extended: { key: "no", direction: "asc" }
@@ -6321,6 +6605,11 @@
           noteBodies: {},
           userNotes: [],
           selectedProductId: null,
+          segmentViewMode: "general",
+          activeSegmentFilters: {
+            general: null,
+            bond: null
+          },
           activeSegmentId: null,
           tableSort: {
             core: { key: "no", direction: "asc" },
@@ -6331,6 +6620,7 @@
     }
 
     function saveState() {
+      state.activeSegmentId = state.activeSegmentFilters?.general || null;
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     }
 
@@ -6486,6 +6776,7 @@
         product.brand,
         product.brandKo,
         product.clusterLabel,
+        product.bondSegmentLabel,
         product.productLabel,
         product.concept,
         (product.metaTags || []).join(" "),
@@ -6502,6 +6793,7 @@
         detailCatalog[product.id]?.bondMechanismType || "",
         detailCatalog[product.id]?.bondMechanismSummary || "",
         (detailCatalog[product.id]?.bondMechanismDetails || []).join(" "),
+        product.bondClassificationReason || "",
         driverInfo?.label || "",
         driverInfo?.note || ""
       ].join(" ").toLowerCase();
@@ -6604,6 +6896,8 @@
       const reviewSummary = getReviewSummary(product);
       const bondInfo = getBondMechanismInfo(product);
       const driverInfo = getUspDriverInfo(product);
+      const generalSegmentMeta = getSegmentMetaByMode("general", product.cluster);
+      const bondSegmentMeta = getSegmentMetaByMode("bond", product.bondSegmentId);
       const fullIngredientsText = catalog.fullIngredients || "";
       const fullIngredientsSource = catalog.fullIngredientsSource || "";
       const fullIngredientsNote = catalog.fullIngredientsNote || "";
@@ -6627,12 +6921,13 @@
         <div class="drawer-metric"><strong>ml당 단가</strong><span>${escapeHtml(formatUnit(product.unitPriceKrwMl))}</span></div>
       `;
       drawerProductTitle.textContent = product.title;
-      drawerProductSubtitle.textContent = `${clusterLabelMap[product.cluster]} · ${product.brandKo} / ${product.brand}${product.metaTags?.length ? ` · ${product.metaTags.join(" / ")}` : ""} · 근거 ${product.tier}`;
+      drawerProductSubtitle.textContent = `전반적 세그 ${product.clusterLabel} · 본딩여부 세그 ${product.bondSegmentLabel} · ${product.brandKo} / ${product.brand}${product.metaTags?.length ? ` · ${product.metaTags.join(" / ")}` : ""} · 근거 ${product.tier}`;
       drawerScroll.innerHTML = `
         <section class="drawer-card">
           <div class="item-heading" style="margin-bottom:12px;">
             <span class="item-number">${escapeHtml(product.no)}</span>
             <span class="item-chip ${product.tone}">${escapeHtml(product.clusterLabel)}</span>
+            <span class="item-chip ${product.bondSegmentTone}">${escapeHtml(product.bondSegmentLabel)}</span>
             <span class="tier-chip tier-${product.tier.toLowerCase()}">${escapeHtml(product.tier)} 근거</span>
           </div>
           ${renderProductTagChips(product.metaTags, "compact")}
@@ -6655,8 +6950,16 @@
           </section>
         ` : ""}
         <section class="drawer-card">
-          <h3>세그 정의와 해석</h3>
-          <p class="drawer-text">${escapeHtml(sections.find((section) => section.id === product.cluster)?.blurb || "")}</p>
+          <h3>세그 분류 2가지 보기</h3>
+          <div class="item-heading">
+            <span class="item-chip ${product.tone}">전반적 · ${escapeHtml(product.clusterLabel)}</span>
+            <span class="item-chip ${product.bondSegmentTone}">본딩여부 · ${escapeHtml(product.bondSegmentLabel)}</span>
+          </div>
+          <ul class="drawer-list">
+            <li><strong>전반적 세그 정의</strong> ${escapeHtml(generalSegmentMeta?.description || getProductSegmentDescription(product, "general"))}</li>
+            <li><strong>본딩여부 세그 정의</strong> ${escapeHtml(bondSegmentMeta?.description || getProductSegmentDescription(product, "bond"))}</li>
+            <li><strong>본딩여부 분류 이유</strong> ${escapeHtml(getProductSegmentReason(product))}</li>
+          </ul>
         </section>
         <section class="drawer-card">
           <h3>핵심 USP / 성분 해석</h3>
@@ -6730,6 +7033,12 @@
       const product = getProductById(productId);
       if (!product) return;
       const driverInfo = getUspDriverInfo(product);
+      const currentMode = getCurrentSegmentViewMode();
+      const activeSegmentLabel = getProductSegmentLabel(product, currentMode);
+      const activeSegmentTone = getProductSegmentTone(product, currentMode);
+      const secondarySegmentLabel = currentMode === "bond"
+        ? `전반적 세그 · ${product.clusterLabel}`
+        : `본딩여부 세그 · ${product.bondSegmentLabel}`;
       mapPreview.classList.add("visible");
       mapPreview.setAttribute("aria-hidden", "false");
       mapPreview.innerHTML = `
@@ -6737,10 +7046,11 @@
         <div class="preview-body">
           <div class="item-heading">
             <span class="item-number">${escapeHtml(product.no)}</span>
-            <span class="item-chip ${product.tone}">${escapeHtml(product.clusterLabel)}</span>
+            <span class="item-chip ${activeSegmentTone}">${escapeHtml(activeSegmentLabel)}</span>
           </div>
           <div class="preview-title">${escapeHtml(product.title)}</div>
           <div class="preview-meta">${escapeHtml(formatKrw(getSalePriceKrw(product)))} · ${escapeHtml(product.volumeMl)}ml · ${escapeHtml(formatUnit(product.unitPriceKrwMl))}</div>
+          <div class="preview-segment-note">${escapeHtml(secondarySegmentLabel)}</div>
           ${driverInfo ? `<div class="preview-driver">${renderUspDriverChip(driverInfo)}</div>` : ""}
           <div class="preview-copy">${escapeHtml(product.concept)}</div>
         </div>
@@ -6862,6 +7172,7 @@
         if (state.selectedProductId === product.id) node.classList.add("highlight");
         node.dataset.itemId = product.id;
         node.dataset.cluster = product.cluster;
+        node.dataset.bondCluster = product.bondSegmentId;
         node.dataset.searchIndex = getCardText(product);
         node.setAttribute("role", "button");
         node.setAttribute("tabindex", "0");
@@ -6933,21 +7244,27 @@
         { value: 4, label: "단백질/bond adjacent" },
         { value: 5, label: "direct multi-bond" }
       ];
-      const colorMap = getMapColorMap();
-
-      const segmentDefinitions = sections.map((section) => `
+      const currentMode = getCurrentSegmentViewMode();
+      const viewMeta = segmentViewMeta[currentMode];
+      const segmentDefinitions = getSegmentsForMode(currentMode).map((segment) => {
+        const count = products.filter((product) => getProductSegmentId(product, currentMode) === segment.id).length;
+        return `
         <div class="segment-definition">
-          <strong>${escapeHtml(clusterLabelMap[section.id] || section.title)}</strong>
-          <p>${escapeHtml(segmentDefinitionMap[section.id] || section.blurb)}</p>
+          <strong>${escapeHtml(segment.title)} · ${count}개</strong>
+          <p>${escapeHtml(segment.description)}</p>
         </div>
-      `).join("");
+      `;
+      }).join("");
 
-      const legendItems = buildSegmentLegendButtons(colorMap);
+      const legendItems = buildSegmentLegendButtons(currentMode);
+      const toggleItems = buildSegmentViewToggleButtons();
 
       const dots = eligible.map((product) => {
         const cx = xPos(product.unitPriceKrwMl);
         const cy = yPos(product.claimDepth);
-        const toneColor = colorMap[product.tone] || "#666";
+        const tone = getProductSegmentTone(product, currentMode);
+        const toneColor = MAP_TONE_COLOR_MAP[tone] || "#666";
+        const displaySegmentId = getProductSegmentId(product, currentMode);
         const isMist = isMistNamedProduct(product);
         const driverInfo = getUspDriverInfo(product);
         const labelMarkup = shouldShowPinnedMapLabel(product)
@@ -6958,6 +7275,8 @@
             class="map-point"
             data-product-id="${escapeHtml(product.id)}"
             data-cluster="${escapeHtml(product.cluster)}"
+            data-bond-cluster="${escapeHtml(product.bondSegmentId)}"
+            data-active-segment="${escapeHtml(displaySegmentId)}"
             data-map-cx="${cx}"
             data-map-cy="${cy}"
             style="cursor:pointer"
@@ -6999,6 +7318,7 @@
         <div class="drag-handle" data-drag-handle="true">
           <div class="item-heading">
             <span class="item-chip mint">포지셔닝맵</span>
+            <span class="item-chip ${escapeHtml(viewMeta.chipTone)}">세그 기준 · ${escapeHtml(viewMeta.title)}</span>
             <span class="item-chip amber">x = ml당 단가</span>
             <span class="item-chip rose">y = 본딩/리페어 과학 소구 강도</span>
             <span class="item-chip olive">점선 원 = 두피/세럼/밤 등 비-헤어미스트 제형</span>
@@ -7007,7 +7327,10 @@
         </div>
         <div class="panel-body">
           <div class="map-topline">
-            <p>가격은 ml당 단가로 통일했고 메시지 강도는 향 중심 ~ direct multi-bond까지 5단계로 정성 점수화했습니다. 숫자 점 위에 마우스를 올리면 미니 카드가, 클릭하면 우측 상세 패널이 열립니다. VAMOOD · OLAPLEX · K18 · Moroccanoil · ChaHong과 더마/약국 세그는 맵에서 기본 라벨이 항상 보이도록 두었고, 점 아래 보조 텍스트는 USP 주역(본딩 / +본딩 / 결·윤기 / 기능)을 뜻합니다.</p>
+            <p>${escapeHtml(viewMeta.intro)} 가격은 ml당 단가로 통일했고 메시지 강도는 향 중심 ~ direct multi-bond까지 5단계로 정성 점수화했습니다. 숫자 점 위에 마우스를 올리면 미니 카드가, 클릭하면 우측 상세 패널이 열립니다. VAMOOD · OLAPLEX · K18 · Moroccanoil · ChaHong과 더마/약국 세그는 맵에서 기본 라벨이 항상 보이도록 두었고, 점 아래 보조 텍스트는 USP 주역(본딩 / +본딩 / 결·윤기 / 기능)을 뜻합니다.</p>
+          </div>
+          <div class="view-toggle-row">
+            ${toggleItems}
           </div>
           <div class="segment-definition-grid">
             ${segmentDefinitions}
@@ -7029,7 +7352,7 @@
           </div>
           <div class="map-footnotes">
             <div class="mini">해외 SKU는 포지셔닝맵에서 <strong>USD 1,512 / EUR 1,757 / GBP 2,018 KRW</strong> 기준으로 환산했습니다. 현재 보드에는 미국·유럽 약국 유통 SKU가 함께 들어가 있어 통화별 기준을 병기했습니다.</div>
-            <div class="mini">쭈드레님이 3-bond 서사를 가져가면, 목표 좌표는 대체로 <strong>claimDepth 4.3~5.0</strong> 구간입니다. 차이는 대용량 대중형으로 갈지, 90~100ml premium science형으로 갈지에 따라 갈립니다.</div>
+            <div class="mini">${currentMode === "bond" ? "본딩여부 중심 뷰에서는 Hairplus를 실리콘 코팅형 본딩으로, Matrix를 본딩 기술 중심으로 두어 '본딩 카피 vs 실제 포뮬러' 차이를 바로 읽을 수 있게 했습니다." : "쭈드레님이 3-bond 서사를 가져가면, 목표 좌표는 대체로 claimDepth 4.3~5.0 구간입니다. 차이는 대용량 대중형으로 갈지, 90~100ml premium science형으로 갈지에 따라 갈립니다."}</div>
           </div>
         </div>
       `;
@@ -7049,6 +7372,7 @@
           class="map-point"
           data-product-id="${escapeHtml(product.id)}"
           data-cluster="${escapeHtml(product.cluster)}"
+          data-bond-cluster="${escapeHtml(product.bondSegmentId)}"
           data-map-cx="${cx}"
           data-map-cy="${cy}"
           style="cursor:pointer"
@@ -7099,7 +7423,8 @@
         product.volumeMl > 0 &&
         Number.isFinite(yValueAccessor(product))
       ));
-      const colorMap = getMapColorMap();
+      const currentMode = getCurrentSegmentViewMode();
+      const viewMeta = segmentViewMeta[currentMode];
       const width = 1460;
       const height = 430;
       const pad = { left: 110, right: 50, top: 46, bottom: 82 };
@@ -7116,12 +7441,12 @@
       const yPos = (value) => pad.top + (1 - (value / Math.max(1, yMax))) * plotHeight;
       const xTicks = Array.from({ length: Math.floor(xMax / xStep) + 1 }, (_, idx) => idx * xStep);
       const yTicks = Array.from({ length: Math.floor(yMax / yStep) + 1 }, (_, idx) => idx * yStep);
-      const legendItems = buildSegmentLegendButtons(colorMap);
+      const legendItems = buildSegmentLegendButtons(currentMode);
 
       const dots = eligible.map((product) => {
         const cx = xPos(product.volumeMl);
         const cy = yPos(yValueAccessor(product));
-        const toneColor = colorMap[product.tone] || "#666";
+        const toneColor = MAP_TONE_COLOR_MAP[getProductSegmentTone(product, currentMode)] || "#666";
         return buildDistributionMapDot(product, cx, cy, toneColor);
       }).join("");
 
@@ -7143,6 +7468,7 @@
         <div class="drag-handle" data-drag-handle="true">
           <div class="item-heading">
             <span class="item-chip mint">${escapeHtml(titleChip)}</span>
+            <span class="item-chip ${escapeHtml(viewMeta.chipTone)}">세그 기준 · ${escapeHtml(viewMeta.title)}</span>
             <span class="item-chip sky">x = 전체 용량</span>
             <span class="item-chip amber">${escapeHtml(yChip)}</span>
             <span class="item-chip olive">점선 = 본딩 히어로 비미스트 참고점</span>
@@ -7465,25 +7791,30 @@
 
     function applyBoardFilters() {
       const keyword = searchInput.value.trim().toLowerCase();
+      const currentMode = getCurrentSegmentViewMode();
+      const activeSegmentId = getActiveSegmentId(currentMode);
       document.querySelectorAll(".product-card").forEach((card) => {
         const haystack = card.dataset.searchIndex || "";
         const matchesSearch = !keyword || haystack.includes(keyword);
-        const matchesSegment = !state.activeSegmentId || card.dataset.cluster === state.activeSegmentId;
+        const segmentValue = currentMode === "bond" ? card.dataset.bondCluster : card.dataset.cluster;
+        const matchesSegment = !activeSegmentId || segmentValue === activeSegmentId;
         card.classList.toggle("dimmed", !(matchesSearch && matchesSegment));
       });
       document.querySelectorAll(".map-point").forEach((point) => {
-        const matchesSegment = !state.activeSegmentId || point.dataset.cluster === state.activeSegmentId;
+        const segmentValue = currentMode === "bond" ? point.dataset.bondCluster : point.dataset.cluster;
+        const matchesSegment = !activeSegmentId || segmentValue === activeSegmentId;
         point.classList.toggle("dimmed", !matchesSegment);
       });
       document.querySelectorAll(".section-panel").forEach((panel) => {
-        const isActive = !!state.activeSegmentId && panel.dataset.sectionId === state.activeSegmentId;
-        const isDimmed = !!state.activeSegmentId && !isActive;
+        const isActive = currentMode === "general" && !!activeSegmentId && panel.dataset.sectionId === activeSegmentId;
+        const isDimmed = currentMode === "general" && !!activeSegmentId && !isActive;
         panel.classList.toggle("is-active", isActive);
         panel.classList.toggle("dimmed", isDimmed);
       });
       document.querySelectorAll("[data-segment-filter]").forEach((button) => {
-        const isActive = button.dataset.segmentFilter === state.activeSegmentId;
-        const isDimmed = !!state.activeSegmentId && !isActive;
+        const buttonMode = button.dataset.segmentMode || currentMode;
+        const isActive = buttonMode === currentMode && button.dataset.segmentFilter === activeSegmentId;
+        const isDimmed = buttonMode === currentMode && !!activeSegmentId && !isActive;
         button.classList.toggle("is-active", isActive);
         button.classList.toggle("is-dimmed", isDimmed);
         button.setAttribute("aria-pressed", isActive ? "true" : "false");
@@ -7647,10 +7978,19 @@
 
     world.addEventListener("click", (event) => {
       if (suppressClick) return;
+      const viewModeButton = event.target.closest("[data-segment-view-mode]");
+      if (viewModeButton) {
+        state.segmentViewMode = viewModeButton.dataset.segmentViewMode === "bond" ? "bond" : "general";
+        saveState();
+        renderAll();
+        return;
+      }
       const segmentFilterButton = event.target.closest("[data-segment-filter]");
       if (segmentFilterButton) {
         const nextId = segmentFilterButton.dataset.segmentFilter;
-        state.activeSegmentId = state.activeSegmentId === nextId ? null : nextId;
+        const mode = segmentFilterButton.dataset.segmentMode || getCurrentSegmentViewMode();
+        const currentId = getActiveSegmentId(mode);
+        setActiveSegmentId(mode, currentId === nextId ? null : nextId);
         saveState();
         applyBoardFilters();
         return;
