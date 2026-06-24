@@ -205,12 +205,18 @@
       cursor: pointer;
     }
     .map-point circle {
-      transition: transform 0.16s ease, filter 0.16s ease, stroke-width 0.16s ease;
-      transform-origin: center;
+      transition: filter 0.16s ease, stroke-width 0.16s ease, opacity 0.16s ease;
+      vector-effect: non-scaling-stroke;
     }
-    .map-point:hover circle,
-    .map-point.is-active circle {
-      transform: scale(1.12);
+    .point-marker {
+      transform-box: fill-box;
+      transform-origin: center center;
+    }
+    .point-label {
+      pointer-events: none;
+    }
+    .map-point:hover .point-marker,
+    .map-point.is-active .point-marker {
       filter: drop-shadow(0 10px 18px rgba(43,36,29,0.18));
       stroke-width: 4;
     }
@@ -613,6 +619,7 @@
             stroke-width="0"
           ></circle>
           <circle
+            class="point-marker"
             cx="${x}"
             cy="${y}"
             r="11"
@@ -622,7 +629,7 @@
             stroke-width="${product.isMist ? "3" : "2.6"}"
             stroke-dasharray="${product.isMist ? "" : "3.6 3.6"}"
           ></circle>
-          <text x="${x}" y="${y + 4}" text-anchor="middle" font-size="10" font-weight="800" fill="${textColor}">${product.no}</text>
+          <text class="point-label" x="${x}" y="${y + 4}" text-anchor="middle" font-size="10" font-weight="800" fill="${textColor}">${product.no}</text>
         </g>
       `;
     }
